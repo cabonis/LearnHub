@@ -20,9 +20,13 @@ builder.Services.AddDbContext<LearnDbContext>(
 builder.Services.ConfigureHttpJsonOptions(
 	opt => opt.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+builder.Services.AddAutoMapper((s, m) =>
+		m.AddProfile(new DtoMapperProfile(s.GetService<IPasswordHasher>())), typeof(DtoMapperProfile));
+
 builder.Services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
 
 var app = builder.Build();
 

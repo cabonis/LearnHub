@@ -46,7 +46,7 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetCourses(int id)
 		{
-			List<CourseInfoDto>? courses = await _userRepository.GetCoursesForUserAsync(id);
+			List<CourseInfoDto>? courses = await _userRepository.GetCoursesAsync(id);
 
 			if (courses != null)
 			{
@@ -69,13 +69,13 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpPut("{id}/role")]
+		[HttpPut("")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> UpdateUserRole(int id, [FromBody] Role role)
+		public async Task<IActionResult> UpdateUser([FromBody] UserInfoDto userInfoDto)
 		{
-			if (await _userRepository.UpdateRoleAsync(id, role))
+			if (await _userRepository.UpdateAsync(userInfoDto))
 			{
 				return Ok();
 			}

@@ -1,4 +1,4 @@
-﻿using LearnHub.Data.Domain;
+﻿using LearnHub.Server.Dtos;
 using LearnHub.Server.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +11,11 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly ICourseRepository _courseRepository;
 
-		[HttpGet("all")]
+		[HttpGet("")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public async Task<List<Course>> GetCourses()
+		public async Task<IActionResult> GetCourses()
 		{
-			return await _courseRepository.GetAllAsync();
+			return Ok(await _courseRepository.GetAllAsync());
 		}
 
 		[HttpGet("{id}")]
@@ -25,12 +25,45 @@ namespace LearnHub.Server.Controllers
 		{
 			var course = await _courseRepository.GetByIdAsync(id);
 
-			if (course == null)
+			if (course != null)
 			{
-				return NotFound();
+				return Ok(course);
 			}
 
-			return Ok(course);
+			return NotFound();
+		}
+
+		[HttpPost("")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<IActionResult> AddCourse([FromBody] CourseInfoDto courseInfoDto)
+		{
+			return Ok(await _courseRepository.AddAsync(courseInfoDto));
+		}
+
+		[HttpPut("")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> UpdateCourse([FromBody] CourseInfoDto courseInfoDto)
+		{
+			if (await _courseRepository.UpdateAsync(courseInfoDto))
+			{
+				return Ok();
+			}
+
+			return NotFound();
+		}
+
+		[HttpDelete("{id}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> DeleteCourse(int id)
+		{
+			if (await _courseRepository.DeleteAsync(id))
+			{
+				return Ok();
+			}
+
+			return NotFound();
 		}
 
 		public CourseController(ICourseRepository courseRepository)
