@@ -1,11 +1,35 @@
+using System.Text.Json.Serialization;
+using LearnHub.Data.Database;
+using LearnHub.Server.Helpers;
+using LearnHub.Server.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllers()
+	.AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+builder.Services.AddDbContext<LearnDbContext>(
+	opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("LearnDbConnection"))
+	.EnableSensitiveDataLogging()
+	.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+
+builder.Services.ConfigureHttpJsonOptions(
+	opt => opt.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+builder.Services.AddAutoMapper((s, m) =>
+		m.AddProfile(new DtoMapperProfile(s.GetService<IPasswordHasher>())), typeof(DtoMapperProfile));
+
+builder.Services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
+builder.Services.AddSingleton<IContentHelper, ContentStorageHelper>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
+builder.Services.AddScoped<IContentRepository, ContentRepository>();
 
 var app = builder.Build();
 
@@ -16,15 +40,18 @@ app.UseStaticFiles();
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
-	app.UseSwaggerUI();
+	app.UseSwaggerUI(options =>
+	{
+		options.DefaultModelsExpandDepth(-1);
+		options.EnableTryItOutByDefault();
+	});
 }
 
+//app.UseAuthentication()
+//app.UseAuthorization();
+
 app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
 app.MapControllers();
-
 app.MapFallbackToFile("/index.html");
 
 app.Run();
