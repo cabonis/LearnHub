@@ -1,5 +1,4 @@
-﻿using LearnHub.Data.Domain;
-using LearnHub.Server.Dtos;
+﻿using LearnHub.Server.Dtos;
 using LearnHub.Server.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -98,7 +97,7 @@ namespace LearnHub.Server.Controllers
 
 		[HttpGet("role/{role}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public async Task<IActionResult> GetUsersByRole(Role role)
+		public async Task<IActionResult> GetUsersByRole(RoleDto role)
 		{
 			return Ok(await _userRepository.GetByRoleAsync(role));
 		}

@@ -26,10 +26,10 @@ namespace LearnHub.Server.Repositories
 				.Select(u => _mapper.Map<UserInfoDto>(u))
 				.ToListAsync();
 		}
-		public async Task<List<UserInfoDto>> GetByRoleAsync(Role role)
+		public async Task<List<UserInfoDto>> GetByRoleAsync(RoleDto role)
 		{
 			return await _dbContext.Users
-				.Where(u => u.Role == role)
+				.Where(u => u.Role == _mapper.Map<Role>(role))
 				.Select(u => _mapper.Map<UserInfoDto>(u))
 				.ToListAsync();
 		}
@@ -77,7 +77,7 @@ namespace LearnHub.Server.Repositories
 			int count = await _dbContext.Users
 				.Where(user => user.Id == userInfoDto.Id)
 				.ExecuteUpdateAsync(setters => setters
-					.SetProperty(u => u.Role, userInfoDto.Role)
+					.SetProperty(u => u.Role, _mapper.Map<Role>(userInfoDto.Role))
 					.SetProperty(u => u.FirstName, userInfoDto.FirstName)
 					.SetProperty(u => u.LastName, userInfoDto.LastName));
 			return count > 0;
@@ -97,7 +97,7 @@ namespace LearnHub.Server.Repositories
 	{
 		Task<List<UserInfoDto>> GetAllAsync();
 
-		Task<List<UserInfoDto>> GetByRoleAsync(Role role);
+		Task<List<UserInfoDto>> GetByRoleAsync(RoleDto role);
 
 		Task<UserInfoDto?> GetByIdAsync(int id);
 

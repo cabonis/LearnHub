@@ -11,6 +11,7 @@ namespace LearnHub.Server.Helpers
 		public DtoMapperProfile(IPasswordHasher hasher)
 		{
 			CreateMap<User, UserInfoDto>().ReverseMap();
+			CreateMap<Role, RoleDto>().ReverseMap();
 
 			CreateMap<Content, ContentInfoDto>();
 			CreateMap<Module, ModuleInfoDto>();

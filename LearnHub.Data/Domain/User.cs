@@ -13,8 +13,8 @@
 
 	public enum Role
 	{
-		Student = 0,
-		Instructor = 1,
-		Administrator = 2
+		Student,
+		Instructor,
+		Administrator
 	}
 }
