@@ -11,20 +11,31 @@ namespace LearnHub.Server.Helpers
 		public DtoMapperProfile(IPasswordHasher hasher)
 		{
 			CreateMap<User, UserInfoDto>().ReverseMap();
-			CreateMap<UserRegistrationDto, User>()
-				.ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => hasher.Hash(src.Password)));
 
-			CreateMap<CourseFile, FileDto>();
-			CreateMap<CourseModule, ModuleDto>();
+			CreateMap<Content, ContentInfoDto>();
+			CreateMap<Module, ModuleInfoDto>();
+			CreateMap<Module, ModuleDetailDto>();
 			CreateMap<Announcement, AnnouncementDto>();
 			CreateMap<Course, CourseDetailDto>();
 			CreateMap<Course, CourseInfoDto>();
 
-			CreateMap<AnnouncementDto, Announcement>()
+			CreateMap<UserRegistrationDto, User>()
+				.ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => hasher.Hash(src.Password)));
+
+			CreateMap<AnnouncementInfoDto, Announcement>()
 				.ForMember(dest => dest.Id, opt => opt.Ignore())
 				.ForMember(dest => dest.DateTime, opt => opt.MapFrom(src => DateTime.Now));
+
 			CreateMap<CourseInfoDto, Course>()
 				.ForMember(dest => dest.Id, opt => opt.Ignore());
+
+			CreateMap<ModuleInfoDto, Module>()
+				.ForMember(dest => dest.Id, opt => opt.Ignore());
+
+			CreateMap<ContentUplaodDto, Content>()
+				.ForMember(dest => dest.Id, opt => opt.Ignore())
+				.ForMember(dest => dest.SystemFileName, opt => opt.MapFrom(src => Guid.NewGuid().ToString()))
+				.ForMember(dest => dest.OriginalFileName, opt => opt.MapFrom(src => src.DataFile.FileName));
 		}
 	}
 }

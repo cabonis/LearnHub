@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LearnHub.Server.Controllers
 {
 	[ApiController]
-	[Route("/api/course/{courseId}/announcement")]
+	[Route("/api/announcement")]
 	public class AnnouncementController : ControllerBase
 	{
 		private readonly IAnnouncementRepository _announcementRepository;
@@ -14,9 +14,9 @@ namespace LearnHub.Server.Controllers
 		[HttpPost("")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> AddAsync([FromRoute] int courseId, [FromBody] AnnouncementDto announcementDto)
+		public async Task<IActionResult> AddAsync([FromBody] AnnouncementInfoDto announcementInfoDto)
 		{
-			var announcementWithId = await _announcementRepository.AddAsync(courseId, announcementDto);
+			var announcementWithId = await _announcementRepository.AddAsync(announcementInfoDto);
 
 			if (announcementWithId != null)
 			{
@@ -29,9 +29,9 @@ namespace LearnHub.Server.Controllers
 		[HttpDelete("{id}")]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> DeleteAnnouncement([FromRoute] int courseId, int id)
+		public async Task<IActionResult> DeleteAsync(int id)
 		{
-			if (await _announcementRepository.DeleteAsync(courseId, id))
+			if (await _announcementRepository.DeleteAsync(id))
 			{
 				return Ok();
 			}

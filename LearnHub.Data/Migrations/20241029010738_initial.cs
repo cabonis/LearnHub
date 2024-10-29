@@ -53,7 +53,7 @@ namespace LearnHub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Announcement",
+                name: "Announcements",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -61,33 +61,13 @@ namespace LearnHub.Data.Migrations
                     Priority = table.Column<int>(type: "int", nullable: false),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Announcement", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Announcement_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CourseModule",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseModule", x => x.Id);
+                    table.PrimaryKey("PK_Announcements", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseModule_Courses_CourseId",
+                        name: "FK_Announcements_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
@@ -119,7 +99,28 @@ namespace LearnHub.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseFile",
+                name: "Modules",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Modules_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Content",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -127,17 +128,18 @@ namespace LearnHub.Data.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModuleId = table.Column<int>(type: "int", nullable: false),
-                    FileLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseModuleId = table.Column<int>(type: "int", nullable: true)
+                    OriginalFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SystemFileName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseFile", x => x.Id);
+                    table.PrimaryKey("PK_Content", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CourseFile_CourseModule_CourseModuleId",
-                        column: x => x.CourseModuleId,
-                        principalTable: "CourseModule",
-                        principalColumn: "Id");
+                        name: "FK_Content_Modules_ModuleId",
+                        column: x => x.ModuleId,
+                        principalTable: "Modules",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -171,19 +173,14 @@ namespace LearnHub.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Announcement_CourseId",
-                table: "Announcement",
+                name: "IX_Announcements_CourseId",
+                table: "Announcements",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseFile_CourseModuleId",
-                table: "CourseFile",
-                column: "CourseModuleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseModule_CourseId",
-                table: "CourseModule",
-                column: "CourseId");
+                name: "IX_Content_ModuleId",
+                table: "Content",
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_InstructorId",
@@ -196,6 +193,11 @@ namespace LearnHub.Data.Migrations
                 column: "UsersId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Modules_CourseId",
+                table: "Modules",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_UserName",
                 table: "Users",
                 column: "UserName",
@@ -206,16 +208,16 @@ namespace LearnHub.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Announcement");
+                name: "Announcements");
 
             migrationBuilder.DropTable(
-                name: "CourseFile");
+                name: "Content");
 
             migrationBuilder.DropTable(
                 name: "CourseUser");
 
             migrationBuilder.DropTable(
-                name: "CourseModule");
+                name: "Modules");
 
             migrationBuilder.DropTable(
                 name: "Courses");

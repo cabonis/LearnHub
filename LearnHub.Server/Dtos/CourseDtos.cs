@@ -13,7 +13,7 @@
 	{
 		public UserInfoDto Instructor { get; init; }
 
-		public List<ModuleDto> Modules { get; init; }
+		public List<ModuleInfoDto> Modules { get; init; }
 
 		public List<AnnouncementDto> Announcements { get; init; }
 	}

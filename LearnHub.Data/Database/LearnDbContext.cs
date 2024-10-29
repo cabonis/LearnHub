@@ -7,6 +7,9 @@ namespace LearnHub.Data.Database
 	public class LearnDbContext : DbContext
 	{
 		public DbSet<Course> Courses { get; set; }
+		public DbSet<Module> Modules { get; set; }
+		public DbSet<Content> Content { get; set; }
+		public DbSet<Announcement> Announcements { get; set; }
 		public DbSet<User> Users { get; set; }
 
 		public LearnDbContext() : base() { }

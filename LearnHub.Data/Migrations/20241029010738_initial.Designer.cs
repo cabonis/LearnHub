@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LearnHub.Data.Migrations
 {
     [DbContext(typeof(LearnDbContext))]
-    [Migration("20241023225857_initial")]
+    [Migration("20241029010738_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace LearnHub.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CourseId")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateTime")
@@ -82,7 +82,41 @@ namespace LearnHub.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Announcement");
+                    b.ToTable("Announcements");
+                });
+
+            modelBuilder.Entity("LearnHub.Data.Domain.Content", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SystemFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("Content");
                 });
 
             modelBuilder.Entity("LearnHub.Data.Domain.Course", b =>
@@ -134,40 +168,7 @@ namespace LearnHub.Data.Migrations
                         });
                 });
 
-            modelBuilder.Entity("LearnHub.Data.Domain.CourseFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CourseModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FileLocation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ModuleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseModuleId");
-
-                    b.ToTable("CourseFile");
-                });
-
-            modelBuilder.Entity("LearnHub.Data.Domain.CourseModule", b =>
+            modelBuilder.Entity("LearnHub.Data.Domain.Module", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -190,7 +191,7 @@ namespace LearnHub.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseModule");
+                    b.ToTable("Modules");
                 });
 
             modelBuilder.Entity("LearnHub.Data.Domain.User", b =>
@@ -277,9 +278,24 @@ namespace LearnHub.Data.Migrations
 
             modelBuilder.Entity("LearnHub.Data.Domain.Announcement", b =>
                 {
-                    b.HasOne("LearnHub.Data.Domain.Course", null)
+                    b.HasOne("LearnHub.Data.Domain.Course", "Course")
                         .WithMany("Announcements")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("LearnHub.Data.Domain.Content", b =>
+                {
+                    b.HasOne("LearnHub.Data.Domain.Module", "Module")
+                        .WithMany("Content")
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("LearnHub.Data.Domain.Course", b =>
@@ -293,20 +309,15 @@ namespace LearnHub.Data.Migrations
                     b.Navigation("Instructor");
                 });
 
-            modelBuilder.Entity("LearnHub.Data.Domain.CourseFile", b =>
+            modelBuilder.Entity("LearnHub.Data.Domain.Module", b =>
                 {
-                    b.HasOne("LearnHub.Data.Domain.CourseModule", null)
-                        .WithMany("Content")
-                        .HasForeignKey("CourseModuleId");
-                });
-
-            modelBuilder.Entity("LearnHub.Data.Domain.CourseModule", b =>
-                {
-                    b.HasOne("LearnHub.Data.Domain.Course", null)
+                    b.HasOne("LearnHub.Data.Domain.Course", "Course")
                         .WithMany("Modules")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("LearnHub.Data.Domain.Course", b =>
@@ -316,7 +327,7 @@ namespace LearnHub.Data.Migrations
                     b.Navigation("Modules");
                 });
 
-            modelBuilder.Entity("LearnHub.Data.Domain.CourseModule", b =>
+            modelBuilder.Entity("LearnHub.Data.Domain.Module", b =>
                 {
                     b.Navigation("Content");
                 });

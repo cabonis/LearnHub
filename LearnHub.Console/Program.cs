@@ -1,19 +1,25 @@
 ﻿using LearnHub.Data.Database;
 using LearnHub.Data.Domain;
+using Microsoft.EntityFrameworkCore;
 
 Console.WriteLine("Hello World!");
 
 LearnDbContext context = new LearnDbContext();
 
-Course course = new()
+Course? course = await context.Courses.AsNoTracking()
+				.Include(c => c.Modules)
+				.Where(c => c.Id == 1)
+				.FirstOrDefaultAsync();
+
+//context.Update(course);
+
+Module module = new Module
 {
-	//Id = 10,
-	Title = "CIS 602",
-	Description = "Advanced AI",
-	InstructorId = 1
+	Title = "Module1",
+	Description = "Description 1"
 };
 
-context.Courses.Add(course);
+course.Modules.Add(module);
 context.SaveChanges();
 
 Console.ReadLine();

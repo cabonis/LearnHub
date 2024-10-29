@@ -24,9 +24,12 @@ builder.Services.AddAutoMapper((s, m) =>
 		m.AddProfile(new DtoMapperProfile(s.GetService<IPasswordHasher>())), typeof(DtoMapperProfile));
 
 builder.Services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
+builder.Services.AddSingleton<IContentHelper, ContentStorageHelper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
+builder.Services.AddScoped<IContentRepository, ContentRepository>();
 
 var app = builder.Build();
 

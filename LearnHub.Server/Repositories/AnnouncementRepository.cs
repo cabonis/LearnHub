@@ -11,49 +11,34 @@ namespace LearnHub.Server.Repositories
 		private readonly LearnDbContext _dbContext;
 		private readonly IMapper _mapper;
 
-		private async Task<Course?> FindCourse(int courseId)
-		{
-			return await _dbContext.Courses
-				.Include(c => c.Announcements)
-				.Where(c => c.Id == courseId)
-				.FirstOrDefaultAsync();
-		}
-
 		public AnnouncementRepository(LearnDbContext dbContext, IMapper mapper)
 		{
 			_dbContext = dbContext;
 			_mapper = mapper;
 		}
 
-		public async Task<AnnouncementDto?> AddAsync(int courseId, AnnouncementDto announcementDto)
+		public async Task<AnnouncementDto> AddAsync(AnnouncementInfoDto announcementInfoDto)
 		{
-			Course? course = await FindCourse(courseId);
-
-			if (course == null)
-				return null;
-
-			Announcement announcement = _mapper.Map<Announcement>(announcementDto);
-			course.Announcements.Add(announcement);
+			Announcement announcement = _mapper.Map<Announcement>(announcementInfoDto);
+			_dbContext.Announcements.Add(announcement);
 			await _dbContext.SaveChangesAsync();
 			return _mapper.Map<AnnouncementDto>(announcement);
 		}
 
-		public async Task<bool> DeleteAsync(int courseId, int announcementId)
+		public async Task<bool> DeleteAsync(int announcementId)
 		{
-			Course? course = await FindCourse(courseId);
+			int count = await _dbContext.Announcements
+				.Where(a => a.Id == announcementId)
+				.ExecuteDeleteAsync();
 
-			if (course == null)
-				return false;
-
-			course.Announcements.RemoveAll(a => a.Id == announcementId);
-			await _dbContext.SaveChangesAsync();
-			return true;
+			return count > 0;
 		}
 	}
 
 	public interface IAnnouncementRepository
 	{
-		Task<AnnouncementDto?> AddAsync(int courseId, AnnouncementDto announcementDto);
-		Task<bool> DeleteAsync(int courseId, int announcementId);
+		Task<AnnouncementDto> AddAsync(AnnouncementInfoDto announcementInfoDto);
+
+		Task<bool> DeleteAsync(int announcementId);
 	}
 }
