@@ -13,7 +13,7 @@
 
 	public enum Role
 	{
-		Student,
+		User,
 		Instructor,
 		Administrator
 	}

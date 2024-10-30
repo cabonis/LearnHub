@@ -1,5 +1,10 @@
-﻿using LearnHub.Server.Dtos;
+﻿using System.Security.Claims;
+using LearnHub.Server.Dtos;
+using LearnHub.Server.Helpers;
 using LearnHub.Server.Repositories;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearnHub.Server.Controllers
@@ -10,79 +15,107 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly IUserRepository _userRepository;
 
-		[HttpGet("")]
+		[HttpPost("login")]
+		public async Task<IActionResult> Login([FromBody] UserLoginDto userLogonDto)
+		{
+			UserInfoDto? user = await _userRepository.GetByUserLoginAsync(userLogonDto);
+
+			if (user == null)
+				return Unauthorized();
+
+			var claims = new List<Claim>
+			{
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(ClaimTypes.Role, user.Role.ToString())
+			};
+
+			var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+			var principal = new ClaimsPrincipal(identity);
+
+			await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal,
+				new AuthenticationProperties { IsPersistent = userLogonDto.IsPersistent });
+
+			return Ok();
+		}
+
+		[HttpPost("logout")]
+		[Authorize]
+		public async Task<IActionResult> Logout()
+		{
+			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+			return Ok();
+		}
+
+		[HttpPost("register")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		public async Task<IActionResult> RegisterUser([FromBody] UserRegistrationDto userDto)
+		{
+			await _userRepository.AddAsync(userDto);
+			return Ok();
+		}
+
+		[HttpGet]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetUser()
+		{
+			string? userName = User.Identity?.Name;
+
+			if (!string.IsNullOrEmpty(userName))
+			{
+				UserInfoDto? userInfoDto = await _userRepository.GetByUserNameAsync(userName);
+
+				if (userInfoDto != null)
+				{
+					return Ok(userInfoDto);
+				}
+			}
+
+			return NotFound();
+		}
+
+		[HttpGet("all")]
+		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetUsers()
 		{
 			return Ok(await _userRepository.GetAllAsync());
 		}
 
-		[HttpPost("")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> AddUser([FromBody] UserRegistrationDto userDto)
-		{
-			return Ok(await _userRepository.AddAsync(userDto));
-		}
 
-		[HttpGet("{id}")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetUser(int id)
-		{
-			UserInfoDto? userInfoDto = await _userRepository.GetByIdAsync(id);
+		//[HttpPut]
+		//[ProducesResponseType(StatusCodes.Status200OK)]
+		//[ProducesResponseType(StatusCodes.Status404NotFound)]
+		//public async Task<IActionResult> UpdateUserPassword([FromBody] string password)
+		//{
 
-			if (userInfoDto != null)
-			{
-				return Ok(userInfoDto);
-			}
+		//	if (await _userRepository.UpdatePasswordAsync(id, password))
+		//	{
+		//		return Ok();
+		//	}
 
-			return NotFound();
-		}
+		//	return NotFound();
+		//}
 
-		[HttpGet("{id}/courses")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetCourses(int id)
-		{
-			List<CourseInfoDto>? courses = await _userRepository.GetCoursesAsync(id);
+		//[HttpPut("")]
+		//[ProducesResponseType(StatusCodes.Status200OK)]
+		//[ProducesResponseType(StatusCodes.Status400BadRequest)]
+		//[ProducesResponseType(StatusCodes.Status404NotFound)]
+		//public async Task<IActionResult> UpdateUser([FromBody] UserInfoDto userInfoDto)
+		//{
+		//	if (await _userRepository.UpdateAsync(userInfoDto))
+		//	{
+		//		return Ok();
+		//	}
 
-			if (courses != null)
-			{
-				return Ok(courses);
-			}
-
-			return NotFound();
-		}
-
-		[HttpPut("{id}/pw")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> UpdateUserPassword(int id, [FromBody] string password)
-		{
-			if (await _userRepository.UpdatePasswordAsync(id, password))
-			{
-				return Ok();
-			}
-
-			return NotFound();
-		}
-
-		[HttpPut("")]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status400BadRequest)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> UpdateUser([FromBody] UserInfoDto userInfoDto)
-		{
-			if (await _userRepository.UpdateAsync(userInfoDto))
-			{
-				return Ok();
-			}
-
-			return NotFound();
-		}
+		//	return NotFound();
+		//}
 
 		[HttpDelete("{id}")]
+		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteUser(int id)
@@ -96,11 +129,27 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("role/{role}")]
+		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetUsersByRole(RoleDto role)
 		{
 			return Ok(await _userRepository.GetByRoleAsync(role));
 		}
+
+		//[HttpGet("{id}/courses")]
+		//[ProducesResponseType(StatusCodes.Status200OK)]
+		//[ProducesResponseType(StatusCodes.Status404NotFound)]
+		//public async Task<IActionResult> GetCourses(int id)
+		//{
+		//	List<CourseInfoDto>? courses = await _userRepository.GetCoursesAsync(id);
+
+		//	if (courses != null)
+		//	{
+		//		return Ok(courses);
+		//	}
+
+		//	return NotFound();
+		//}
 
 		public UserController(IUserRepository userRepository)
 		{

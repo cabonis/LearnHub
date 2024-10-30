@@ -12,6 +12,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
 	.AddJsonOptions(opts => opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
+builder.Services.AddCustomAuthentication();
+builder.Services.AddCustomAuthorization();
+
 builder.Services.AddDbContext<LearnDbContext>(
 	opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("LearnDbConnection"))
 	.EnableSensitiveDataLogging()
@@ -47,9 +50,8 @@ if (app.Environment.IsDevelopment())
 	});
 }
 
-//app.UseAuthentication()
-//app.UseAuthorization();
-
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
 app.MapFallbackToFile("/index.html");
