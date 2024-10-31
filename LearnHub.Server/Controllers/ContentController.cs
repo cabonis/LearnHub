@@ -1,5 +1,7 @@
 ﻿using LearnHub.Server.Dtos;
+using LearnHub.Server.Helpers;
 using LearnHub.Server.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearnHub.Server.Controllers
@@ -10,7 +12,8 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly IContentRepository _contentRepository;
 
-		[HttpPost("")]
+		[HttpPost]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[RequestSizeLimit(10000000)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -26,6 +29,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetContent(int id)
@@ -41,6 +45,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteContent(int id)

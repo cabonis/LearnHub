@@ -40,7 +40,7 @@ namespace LearnHub.Server.Helpers
 
 			services.AddAuthorizationBuilder()
 				.AddPolicy(AuthPolicies.AdminPolicy, p => p.RequireClaim(ClaimTypes.Role, RoleDto.Administrator.ToString()))
-				.AddPolicy(AuthPolicies.InstructorPolicy, p => p.RequireClaim(ClaimTypes.Role, RoleDto.Instructor.ToString()));
+				.AddPolicy(AuthPolicies.InstructorPolicy, p => p.RequireClaim(ClaimTypes.Role, RoleDto.Instructor.ToString(), RoleDto.Administrator.ToString()));
 		}
 	}
 }

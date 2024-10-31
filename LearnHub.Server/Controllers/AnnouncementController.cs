@@ -1,5 +1,7 @@
 ﻿using LearnHub.Server.Dtos;
+using LearnHub.Server.Helpers;
 using LearnHub.Server.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -12,6 +14,7 @@ namespace LearnHub.Server.Controllers
 		private readonly IAnnouncementRepository _announcementRepository;
 
 		[HttpPost("")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> AddAsync([FromBody] AnnouncementInfoDto announcementInfoDto)
@@ -27,6 +30,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteAsync(int id)

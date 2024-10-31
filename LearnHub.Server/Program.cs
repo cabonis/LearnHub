@@ -54,6 +54,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
+//app.MapControllers().AllowAnonymous();
 app.MapFallbackToFile("/index.html");
 
 app.Run();
