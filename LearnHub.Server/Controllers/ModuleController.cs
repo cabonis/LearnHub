@@ -1,5 +1,7 @@
 ﻿using LearnHub.Server.Dtos;
+using LearnHub.Server.Helpers;
 using LearnHub.Server.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -11,7 +13,8 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly IModuleRepository _moduleRepository;
 
-		[HttpPost("")]
+		[HttpPost]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> AddAsync([FromBody] ModuleInfoDto moduleInfoDto)
@@ -27,6 +30,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetAsync(int id)
@@ -42,6 +46,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteAsync(int id)

@@ -20,6 +20,27 @@ namespace LearnHub.Server.Repositories
 			_mapper = mapper;
 		}
 
+		public async Task<UserInfoDto?> GetByUserLoginAsync(UserLoginDto userLogonDto)
+		{
+			User? user = await _dbContext.Users
+				.Where(u => u.UserName == userLogonDto.UserName)
+				.FirstOrDefaultAsync();
+
+			if (user != null && _passwordHasher.Verify(userLogonDto.Password, user.PasswordHash))
+			{
+				return _mapper.Map<UserInfoDto>(user);
+			}
+
+			return null;
+		}
+
+		public async Task AddAsync(UserRegistrationDto userRegistrationDto)
+		{
+			User user = _mapper.Map<User>(userRegistrationDto);
+			_dbContext.Users.Add(user);
+			await _dbContext.SaveChangesAsync();
+		}
+
 		public async Task<List<UserInfoDto>> GetAllAsync()
 		{
 			return await _dbContext.Users
@@ -42,6 +63,14 @@ namespace LearnHub.Server.Repositories
 				.FirstOrDefaultAsync();
 		}
 
+		public async Task<UserInfoDto?> GetByUserNameAsync(string userName)
+		{
+			return await _dbContext.Users
+				.Where(u => u.UserName == userName)
+				.Select(u => _mapper.Map<UserInfoDto>(u))
+				.FirstOrDefaultAsync();
+		}
+
 		public async Task<List<CourseInfoDto>?> GetCoursesAsync(int id)
 		{
 			return await _dbContext.Users
@@ -51,15 +80,6 @@ namespace LearnHub.Server.Repositories
 				.SelectMany(u => u.Courses)
 				.Select(c => _mapper.Map<CourseInfoDto>(c))
 				.ToListAsync();
-		}
-
-		public async Task<UserInfoDto> AddAsync(UserRegistrationDto userRegistrationDto)
-		{
-			User user = _mapper.Map<User>(userRegistrationDto);
-			_dbContext.Users.Add(user);
-			await _dbContext.SaveChangesAsync();
-
-			return _mapper.Map<UserInfoDto>(user);
 		}
 
 		public async Task<bool> UpdatePasswordAsync(int id, string password)
@@ -95,15 +115,19 @@ namespace LearnHub.Server.Repositories
 
 	public interface IUserRepository
 	{
+		Task<UserInfoDto?> GetByUserLoginAsync(UserLoginDto userLogonDto);
+
 		Task<List<UserInfoDto>> GetAllAsync();
 
 		Task<List<UserInfoDto>> GetByRoleAsync(RoleDto role);
 
 		Task<UserInfoDto?> GetByIdAsync(int id);
 
+		Task<UserInfoDto?> GetByUserNameAsync(string userName);
+
 		Task<List<CourseInfoDto>?> GetCoursesAsync(int id);
 
-		Task<UserInfoDto> AddAsync(UserRegistrationDto userRegistrationDto);
+		Task AddAsync(UserRegistrationDto userRegistrationDto);
 
 		Task<bool> UpdatePasswordAsync(int id, string password);
 

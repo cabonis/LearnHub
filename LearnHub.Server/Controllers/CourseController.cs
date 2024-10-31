@@ -1,5 +1,7 @@
 ﻿using LearnHub.Server.Dtos;
+using LearnHub.Server.Helpers;
 using LearnHub.Server.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -11,7 +13,8 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly ICourseRepository _courseRepository;
 
-		[HttpGet("")]
+		[HttpGet]
+		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetCourses()
 		{
@@ -19,6 +22,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("{id}")]
+		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetCourse(int id)
@@ -33,14 +37,16 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpPost("")]
+		[HttpPost]
+		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> AddCourse([FromBody] CourseInfoDto courseInfoDto)
 		{
 			return Ok(await _courseRepository.AddAsync(courseInfoDto));
 		}
 
-		[HttpPut("")]
+		[HttpPut]
+		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> UpdateCourse([FromBody] CourseInfoDto courseInfoDto)
@@ -54,6 +60,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpDelete("{id}")]
+		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteCourse(int id)
