@@ -12,6 +12,7 @@ import AdminUsers from "./scenes/adminusers";
 import AdminCourses from "./scenes/admincourses";
 import CourseEdit from './scenes/admincourses/CourseEdit';
 
+
 //import Home from './pages/Home.jsx';
 //import Login from './pages/Login.jsx';
 //import Register from './pages/Register.jsx';
@@ -27,18 +28,20 @@ function App() {
                 <CssBaseline />
                 <div className="app">
                     <NavBar />
-                    <main className="content">
+                    <div className="content">
                         <Topbar />
-                        <Routes>
-                            <Route path="/" element={<Dashboard />} />
-                            <Route path="/courses" element={<Courses />} />
-                            <Route path="/announcements" element={<Announcements />} /> 
-                            <Route path="/calendar" element={<Calendar />} />
-                            <Route path="/admin/users" element={<AdminUsers />} />
-                            <Route path="/admin/courses" element={<AdminCourses />} />
-                            <Route path="/admin/course/:id" element={<CourseEdit />} />
-                        </Routes>
-                    </main>
+                        <main className="view">
+                            <Routes>
+                                <Route path="/" element={<Dashboard />} />
+                                <Route path="courses" element={<Courses />} />
+                                <Route path="announcements" element={<Announcements />} /> 
+                                <Route path="calendar" element={<Calendar />} />
+                                <Route path="admin/users" element={<AdminUsers />} />
+                                <Route path="admin/courses" element={<AdminCourses />} />
+                                <Route path="admin/course/:id" element={<CourseEdit />} />
+                            </Routes>
+                        </main>
+                    </div>
                 </div>
             </ThemeProvider>
         </ColorModeContext.Provider>

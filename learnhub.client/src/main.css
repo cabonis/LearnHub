@@ -10,6 +10,19 @@ body,
 	font-family: "Roboto", sans-serif;
 }
 
+:root {
+	--navHeight: 65px;
+}
+
+.header {
+	height: var(--navHeight);
+}
+
+.view {
+	height: calc(100% - var(--navHeight));
+	padding: 20px;
+}
+
 .app {
 	display: flex;
 	position: relative;

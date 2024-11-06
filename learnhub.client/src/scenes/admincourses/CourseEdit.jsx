@@ -1,87 +1,88 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
+import { useState, useRef, useEffect  } from 'react';
 import Box from '@mui/material/Box';
 import CourseInfo from './CourseInfo';
 import CourseEnrollment from './CourseEnrollment';
-import { useParams } from 'react-router-dom';
+import CourseModules from './CourseModules'
+import CourseAnnouncements from './CourseAnnouncements'
+import { useParams, useBlocker } from 'react-router-dom';
 import { mockCourseData } from "../../data/mockData";
 import Header from "../../components/Header";
-import Stack from '@mui/material/Stack';
+import SaveCancel from "../../components/SaveCancel";
+import TabView from "../../components/TabView";
+import ConfirmDialog from '../../components/ConfirmDialog';
 
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function tabProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 export default function CourseEdit() {
   
-  const [tab, setTab] = useState(0);
   const { id } = useParams();
+  const submitRef = useRef(); 
+  const [isDirty, setDirty] = useState(true);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
+  const blocker = useBlocker(isDirty);
+
+  useEffect(() => {
+    setDialogOpen(blocker.state === "blocked");
+  }, [blocker]);
+
 
   const course = mockCourseData.find((course) => course.id === id);
 
-  const handleChange = (event, newTab) => {
-    setTab(newTab);
-  };
+  const props = {
+    course: course,
+    submitRef, submitRef,
+    setDirty: setDirty,    
+  }
+
+  const handleClose = (value) => {
+    if(value)
+      blocker.proceed();
+    else {
+      blocker.reset();
+      setDialogOpen(false);
+    }
+  }
+
+  const onSaveClick = () => {
+    submitRef.current.requestSubmit();
+  }
+
+  const onCancelClick = () => {};
 
   return (
-    
-    
-    <Box m="20px" display="flex">
-        <Stack sx={{ width: '100%' }}>
-            <Box display="flex" justifyContent="space-between">
-                <Header title="Course Editor" subtitle="" />
-            </Box>
-            <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider'}}>
-                    <Tabs 
-                        value={tab} 
-                        onChange={handleChange} 
-                        aria-label="basic tabs example"
-                        textColor="secondary"
-                        indicatorColor="secondary">
-                        <Tab label="Information" {...tabProps(0)} />
-                        <Tab label="Enrollment" {...tabProps(1)} />
-                        <Tab label="Modules" {...tabProps(2)} />
-                    </Tabs>
-                </Box>
-                <CustomTabPanel value={tab} index={0}>
-                    <CourseInfo course={course} />
-                </CustomTabPanel>
-                <CustomTabPanel value={tab} index={1}>
-                    <CourseEnrollment course={course} />
-                </CustomTabPanel>
-                <CustomTabPanel value={tab} index={2}>
-                    Edit modules here.
-                </CustomTabPanel>
-            </Box>
-        </Stack>
-    </Box>
+        <Box sx={{ display: "flex", flexDirection: "column"}}>
+            
+            <Header title="Course Editor" subtitle="" />
+            
+            <TabView tabs={[
+                { label: "Information", component: (<CourseInfo {...props} />) },
+                { label: "Enrollment", component: (<CourseEnrollment />) },
+                { label: "Announcements", component: (<CourseAnnouncements />) },
+                { label: "Modules", component: (<CourseModules />) }
+              ]}
+            />
+
+          <ConfirmDialog open={isDialogOpen} onClose={handleClose} />
+
+          {/* {blocker.state === "blocked" ? (
+                  <div>
+                    <p>Are you sure you want to leave?</p>
+                    <button onClick={() => blocker.proceed()}>
+                      Proceed
+                    </button>
+                    <button onClick={() => blocker.reset()}>
+                      Cancel
+                    </button>
+                  </div>
+                ) : null} */}
+
+            <SaveCancel 
+              isSaveShown={isDirty} 
+              isCancelShown={true}
+              saveClicked={onSaveClick}
+              cancelClicked={onCancelClick}
+              sx={{ position: 'absolute', right: 15, bottom: 15}}
+            />            
+        </Box>
   );
 }

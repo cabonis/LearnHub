@@ -43,7 +43,7 @@ const FormInputDropdown = ({ name, control, label, sx, options, optionsConverter
                 const key = optionsConverter.key(option);
                 const label = optionsConverter.label(option);
                 return (
-                    <MenuItem key={key} value={`${option}`}>
+                    <MenuItem key={key} value={`${key}`}>
                         {label}
                     </MenuItem>
                 )})}
