@@ -1,37 +1,38 @@
 import { useState, useRef, useEffect  } from 'react';
-import Box from '@mui/material/Box';
-import CourseInfo from './CourseInfo';
-import CourseEnrollment from './CourseEnrollment';
-import CourseModules from './CourseModules'
-import CourseAnnouncements from './CourseAnnouncements'
-import { useParams, useBlocker } from 'react-router-dom';
+import { useParams, useBlocker, useNavigate, Outlet } from 'react-router-dom';
 import { mockCourseData } from "../../data/mockData";
+import Box from '@mui/material/Box';
 import Header from "../../components/Header";
 import SaveCancel from "../../components/SaveCancel";
-import TabView from "../../components/TabView";
 import ConfirmDialog from '../../components/ConfirmDialog';
+import TabViewRouted from "../../components/TabViewRouted";
 
 
 export default function CourseEdit() {
   
   const { id } = useParams();
   const submitRef = useRef(); 
-  const [isDirty, setDirty] = useState(true);
+  const [isDirty, setDirty] = useState(false);
   const [isDialogOpen, setDialogOpen] = useState(false);
-
   const blocker = useBlocker(isDirty);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setDialogOpen(blocker.state === "blocked");
   }, [blocker]);
 
+  const numId = parseInt(id);
+  const course = mockCourseData.find((c) => c.id === numId);
 
-  const course = mockCourseData.find((course) => course.id === id);
 
-  const props = {
+  const dirtyChanged = (isdirty) => {
+    setDirty(isdirty);
+  }
+
+  const context = {
     course: course,
     submitRef, submitRef,
-    setDirty: setDirty,    
+    setDirty: dirtyChanged,    
   }
 
   const handleClose = (value) => {
@@ -47,34 +48,26 @@ export default function CourseEdit() {
     submitRef.current.requestSubmit();
   }
 
-  const onCancelClick = () => {};
+  const onCancelClick = () => {
+    navigate("/admin/courses");
+  };
 
   return (
-        <Box sx={{ display: "flex", flexDirection: "column"}}>
+        <Box m="10px" sx={{ display: "flex", flexDirection: "column"}}>
             
-            <Header title="Course Editor" subtitle="" />
-            
-            <TabView tabs={[
-                { label: "Information", component: (<CourseInfo {...props} />) },
-                { label: "Enrollment", component: (<CourseEnrollment />) },
-                { label: "Announcements", component: (<CourseAnnouncements />) },
-                { label: "Modules", component: (<CourseModules />) }
+            <Header title="Course Editor" subtitle="Edit your course" />
+
+            <TabViewRouted tabChanged={() => setDirty(false)} tabs={[
+                { label: "Information", path: "" },
+                { label: "Enrollment", path: "enrollment" },
+                { label: "Announcements", path: "announcements" },
+                { label: "Modules", path: "modules" }
               ]}
             />
 
-          <ConfirmDialog open={isDialogOpen} onClose={handleClose} />
+            <Outlet context={context} />
 
-          {/* {blocker.state === "blocked" ? (
-                  <div>
-                    <p>Are you sure you want to leave?</p>
-                    <button onClick={() => blocker.proceed()}>
-                      Proceed
-                    </button>
-                    <button onClick={() => blocker.reset()}>
-                      Cancel
-                    </button>
-                  </div>
-                ) : null} */}
+            <ConfirmDialog open={isDialogOpen} onClose={handleClose} text={"Unsaved changes will be lost. Are you sure you wish to continue?"} />
 
             <SaveCancel 
               isSaveShown={isDirty} 
@@ -82,7 +75,8 @@ export default function CourseEdit() {
               saveClicked={onSaveClick}
               cancelClicked={onCancelClick}
               sx={{ position: 'absolute', right: 15, bottom: 15}}
-            />            
+            />     
+
         </Box>
   );
 }

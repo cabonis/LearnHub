@@ -11,6 +11,10 @@ import Announcements from "./scenes/announcements";
 import AdminUsers from "./scenes/adminusers";
 import AdminCourses from "./scenes/admincourses";
 import CourseEdit from './scenes/admincourses/CourseEdit';
+import CourseInfo from './scenes/admincourses/CourseInfo';
+import CourseEnrollment from './scenes/admincourses/CourseEnrollment';
+import CourseAnnouncements from './scenes/admincourses/CourseAnnouncements';
+import CourseModules from './scenes/admincourses/CourseModules';
 
 
 //import Home from './pages/Home.jsx';
@@ -38,7 +42,12 @@ function App() {
                                 <Route path="calendar" element={<Calendar />} />
                                 <Route path="admin/users" element={<AdminUsers />} />
                                 <Route path="admin/courses" element={<AdminCourses />} />
-                                <Route path="admin/course/:id" element={<CourseEdit />} />
+                                <Route path="admin/course/:id" element={<CourseEdit />}>
+                                    <Route index element={<CourseInfo />} />
+                                    <Route path="enrollment" element={<CourseEnrollment />} />
+                                    <Route path="announcements" element={<CourseAnnouncements />} />
+                                    <Route path="modules" element={<CourseModules />} />
+                                </Route>
                             </Routes>
                         </main>
                     </div>

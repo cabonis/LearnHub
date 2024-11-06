@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import { mockDataUsers } from "../../data/mockData";
 import dayjs from "dayjs";
 import * as yup from "yup";
+import { useOutletContext } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FormInputText from "../../components/FormInputText";
 import FormInputDropdown from "../../components/FormInputDropdown";
@@ -24,30 +25,19 @@ const validationSchema = yup.object({
 
 
 
-const CourseInfo = ({course, submitRef, setDirty}) => {
-    
-    const courseInfo = course ?? {
-        id: 1,
-        title: "Physics 101",
-        description: "Some course description",
-        startdate: "2024-11-5",
-        enddate: "2024-12-25",
-        instructor: {
-            id: 5,
-            firstName: "John",
-            lastName: "Smith"
-        }
-    };
+const CourseInfo = () => {
+
+    const {course, submitRef, setDirty} = useOutletContext();
 
     const { handleSubmit, control, reset, formState } = useForm({
         mode: "onSubmit",
         resolver: yupResolver(validationSchema),
             defaultValues: {
-            title: courseInfo.title,
-            description: courseInfo.description,
-            instructor: courseInfo.instructor.id,
-            coursestart: dayjs(courseInfo.startdate),
-            courseend: dayjs(courseInfo.enddate)
+                title: course?.title ?? "",
+                description: course?.description ?? "",
+                instructor: course?.instructor ? course.instructor.id : "",
+                coursestart: course?.startdate ? dayjs(course.startdate) : null,
+                courseend: course?.enddate ? dayjs(course.enddate) : null    
             },
       });
 
@@ -62,7 +52,7 @@ const CourseInfo = ({course, submitRef, setDirty}) => {
     const onSubmit = () => {
         if(formState.isValid) {
             reset(null, { keepValues: true});
-            setDirty(false);
+            //setDirty(false);
         }
     }
 

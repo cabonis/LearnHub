@@ -173,11 +173,14 @@ export const mockCourseData = [
     {
         id: 5,
         title: "Physics 101",
+        instructorId: 1,
         instructor: {
             id: 1,
             firstName: "First1",
             lastName: "Last1"
         },
+        startdate: "2024-11-01",
+        enddate: "2024-11-30",
         users: [
             {
                 id: 6,

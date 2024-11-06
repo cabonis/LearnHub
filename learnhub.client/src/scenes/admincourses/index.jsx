@@ -32,7 +32,7 @@ const AdminCourses = () => {
 	};
 
 	return (
-	  <Box m="20px">
+	  <Box m="10px">
 		<Box display="flex" justifyContent="space-between">
 			<Header title="Course Catalog" subtitle="Manage course catalog" />
 		</Box>
