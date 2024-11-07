@@ -1,27 +1,21 @@
-import { TextField, FormControl } from "@mui/material";
-import { Controller } from "react-hook-form";
+import { TextField } from "@mui/material";
 
-const FormInputText = ({ name, control, label, sx, props }) => {
+const FormInputText = ({ name, label, formik, sx, props }) => {
     return (
-      <Controller
-        name={name}
-        control={control}
-        render={(renderProps) => (
-            <TextField
-              {...props}  
-              onChange={renderProps.field.onChange}
-              value={renderProps.field.value}
-              error={!!renderProps.fieldState.error}
-              helperText={renderProps.fieldState.error?.message ?? null}
-              fullWidth
-              color="secondary"
-              label={label}
-              sx={{
-                ...sx,
-                backgroundColor: 'primary.main'
-              }}            
-            />
-        )}
+      <TextField
+                {...props}
+                fullWidth
+                variant="filled"
+                type="text"
+                color="secondary"
+                label={label}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values[name]}
+                name={name}
+                error={!!formik.touched[name] && !!formik.errors[name]}
+                helperText={formik.touched[name] && formik.errors[name]}
+                sx={sx}
       />
     );
   };

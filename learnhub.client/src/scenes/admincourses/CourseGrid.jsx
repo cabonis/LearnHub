@@ -1,49 +1,28 @@
 import { useState } from 'react';
-import { Box, useTheme } from "@mui/material";
-import { GridRowModes, DataGrid, GridToolbarContainer, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
+import { Box } from "@mui/material";
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
-import { tokens } from "../../theme";
+import Header from "../../components/Header";
+import { mockCourseData } from "../../data/mockData";
 import { useNavigate } from 'react-router-dom';
+import { gridStyle, buttonHoverStyle } from "../global/ComponentStyles"
+import DataGridAddButton from '../../components/DataGridAddButton';
 
-const CourseGrid = ({ gridData }) => {
+const CourseGrid = () => {
 	
-    const theme = useTheme();
-	  const colors = tokens(theme.palette.mode);
-
     const navigate = useNavigate();
 
-    const [rowModesModel, setRowModesModel] = useState({});
-
-    const handleRowEditStop = (params, event) => {
-        if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-          event.defaultMuiPrevented = true;
-        }
-      };
+    const [rows, setRows] = useState(mockCourseData);
     
       const handleEditClick = (id) => () => {
         navigate(`/admin/course/${id}`); 
         //setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
       };
     
-      const handleSaveClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-      };
-    
       const handleDeleteClick = (id) => () => {
-        //setRows(rows.filter((row) => row.id !== id));
-      };
-    
-      const handleCancelClick = (id) => () => {
-        setRowModesModel({
-          ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true },
-        });
-      };
-
-      const handleRowModesModelChange = (newRowModesModel) => {
-        setRowModesModel(newRowModesModel);
+        // Do delete
+        setRows(rows.filter((row) => row.id !== id));
       };
 
 	const columns = [
@@ -66,30 +45,7 @@ const CourseGrid = ({ gridData }) => {
         headerName: 'Actions',
         cellClassName: 'actions',
         minWidth: 100,
-        getActions: ({ id }) => {
-          
-          const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-  
-          if (isInEditMode) {
-            return [
-              <GridActionsCellItem
-                icon={<SaveIcon />}
-                label="Save"
-                sx={{
-                  color: 'primary.main',
-                }}
-                onClick={handleSaveClick(id)}
-              />,
-              <GridActionsCellItem
-                icon={<CancelIcon />}
-                label="Cancel"
-                className="textPrimary"
-                onClick={handleCancelClick(id)}
-                color="inherit"
-              />,
-            ];
-          }
-  
+        getActions: ({ id }) => {      
           return [
             <GridActionsCellItem
               icon={<EditIcon />}
@@ -97,12 +53,14 @@ const CourseGrid = ({ gridData }) => {
               className="textPrimary"
               onClick={handleEditClick(id)}
               color="inherit"
+              sx={buttonHoverStyle}
             />,
             <GridActionsCellItem
               icon={<DeleteIcon />}
               label="Delete"
               onClick={handleDeleteClick(id)}
               color="inherit"
+              sx={buttonHoverStyle}
             />,
           ];
         },
@@ -114,47 +72,33 @@ const CourseGrid = ({ gridData }) => {
       },
 	];
   
-	return (	  
-        <Box
-            m="40px 0 0 0"
-            p="0 0 20px 0"
-            height="75vh"
-            sx={{
-            "& .MuiDataGrid-root": {
-                border: "none",
-            },
-            "& .MuiDataGrid-cell": {
-                borderBottom: "none",
-            },
-            "& .MuiDataGrid-cell:focus": {
-                outline: "none !important",
-                },
-            "& .MuiDataGrid-columnHeader":{
-                backgroundColor: colors.grey[400],
-            },
-            "& .MuiDataGrid-virtualScroller": {
-                backgroundColor: colors.primary[400],
-            },
-            "& .MuiDataGrid-footerContainer": {
-                borderTop: "none",
-                backgroundColor: colors.grey[400],
-            },
-            "& .MuiCheckbox-root": {
-                color: `${colors.greenAccent[200]} !important`,
-            },
+	return (
+    <Box m="10px">
+      <Box display="flex" justifyContent="space-between">
+        <Header title="Course Catalog" subtitle="Manage course catalog" />
+      </Box>
+      <Box
+          m="40px 0 0 0"
+          p="0 0 20px 0"
+          height="75vh"
+          sx={gridStyle}
+      >
+        <DataGrid 
+            rows={rows} 
+            columns={columns}
+            rowHeight={40}
+            disableColumnMenu 
+            slots={{
+              toolbar: DataGridAddButton,
             }}
-        >
-            <DataGrid 
-                rows={gridData} 
-                columns={columns}
-                //editMode="row"
-                //rowModesModel={rowModesModel}
-                //onRowModesModelChange={handleRowModesModelChange}
-                //onRowEditStop={handleRowEditStop}
-                disableColumnMenu 
-            />
-        </Box>
+            slotProps={{
+              toolbar: { navigate, text: "Add Course" },
+            }}
+        />
+        
+      </Box>
+    </Box>
 	);
-  };
+};
 
 export default CourseGrid;

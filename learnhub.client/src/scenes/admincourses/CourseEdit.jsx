@@ -24,7 +24,6 @@ export default function CourseEdit() {
   const numId = parseInt(id);
   const course = mockCourseData.find((c) => c.id === numId);
 
-
   const dirtyChanged = (isdirty) => {
     setDirty(isdirty);
   }
@@ -55,13 +54,13 @@ export default function CourseEdit() {
   return (
         <Box m="10px" sx={{ display: "flex", flexDirection: "column"}}>
             
-            <Header title="Course Editor" subtitle="Edit your course" />
+            <Header title="Course Editor" subtitle={course ? "Edit your course" : "Add new course"} />
 
             <TabViewRouted tabChanged={() => setDirty(false)} tabs={[
                 { label: "Information", path: "" },
-                { label: "Enrollment", path: "enrollment" },
-                { label: "Announcements", path: "announcements" },
-                { label: "Modules", path: "modules" }
+                ... course ? { label: "Enrollment", path: "enrollment" } : [],
+                ... course ? { label: "Announcements", path: "announcements" } : [],
+                ... course ? { label: "Modules", path: "modules" } : []
               ]}
             />
 

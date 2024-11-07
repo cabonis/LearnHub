@@ -8,8 +8,8 @@ import Dashboard from "./scenes/dashboard";
 import Courses from "./scenes/courses";
 import Calendar from "./scenes/calendar";
 import Announcements from "./scenes/announcements";
-import AdminUsers from "./scenes/adminusers";
-import AdminCourses from "./scenes/admincourses";
+import UserGrid from "./scenes/adminusers/UserGrid";
+import CourseGrid from "./scenes/admincourses/CourseGrid";
 import CourseEdit from './scenes/admincourses/CourseEdit';
 import CourseInfo from './scenes/admincourses/CourseInfo';
 import CourseEnrollment from './scenes/admincourses/CourseEnrollment';
@@ -40,9 +40,9 @@ function App() {
                                 <Route path="courses" element={<Courses />} />
                                 <Route path="announcements" element={<Announcements />} /> 
                                 <Route path="calendar" element={<Calendar />} />
-                                <Route path="admin/users" element={<AdminUsers />} />
-                                <Route path="admin/courses" element={<AdminCourses />} />
-                                <Route path="admin/course/:id" element={<CourseEdit />}>
+                                <Route path="admin/users" element={<UserGrid />} />
+                                <Route path="admin/courses" element={<CourseGrid />} />
+                                <Route path="admin/course/:id?" element={<CourseEdit />}>
                                     <Route index element={<CourseInfo />} />
                                     <Route path="enrollment" element={<CourseEnrollment />} />
                                     <Route path="announcements" element={<CourseAnnouncements />} />

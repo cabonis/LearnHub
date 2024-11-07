@@ -22,20 +22,12 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: '#fcfcfc',
+  bgcolor: 'neutral.light',
   border: '2px solid #000',
   borderRadius: "10px",
   boxShadow: 24,
   p: 2,
 };
-
-const titleStyle = {
-  backgroundColor: "primary.light",
-}
-
-const contentStyle = {
-  backgroundColor: "#fcfcfc",  
-}
 
 const buttonStyle = {
   width: 100,

@@ -107,7 +107,7 @@ const NavBar = () => {
                                 <img
                                     width="100px"
                                     height="100px"
-                                    src={"src/assets/default-avatar.png"}
+                                    src={"/src/assets/default-avatar.png"}
                                     style={{ cursor: "pointer", borderRadius: "50%" }}
                                 />
                             </Box>

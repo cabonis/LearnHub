@@ -3,61 +3,48 @@ import { TextField, FormControl } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Controller } from "react-hook-form";
+import { useField, useFormikContext } from "formik";
 import dayjs from "dayjs";
 
-const FormInputDatePicker = ({ name, control, label, sx, props }) => {
+const FormInputDatePicker = ({ name, label, formik, sx, props }) => {
         
     return (
-      <Controller
-        name={name}
-        control={control}
-        render={(renderProps) => (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker 
-                    {...props}
-                    onChange={(date) =>{renderProps.field.onChange(date)}}
-                    defaultValue={null}
-                    value={renderProps.field.value}
-                    label={label}
-                    slots={{
-                        textField: (params) => 
-                            <TextField
-                                {...params}
-                                varient='filled' 
-                                color='secondary'
-                                onKeyDown={(e) => e.preventDefault()}
-                                error={!!renderProps.fieldState.error}
-                                helperText={renderProps.fieldState.error?.message ?? null}
-                                sx={{
-                                    ...sx,
-                                    backgroundColor: 'primary.main'
-                                }}   
-                            />
-                    }}
-                    slotProps={{
-                        popper: {
-                            sx: {
-                                '& .MuiPaper-root': {
-                                backgroundColor: 'primary.light',
-                                },
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+                {...props}
+                label={label}
+                name={name}
+                color="secondary"
+                value={formik.values[name]}
+                onChange={(value) => formik.setFieldValue(name, value, true)}
+                slotProps={{
+                    textField: {
+                        color: "secondary",
+                        variant: "filled",
+                        onBlur: () => formik.setFieldTouched(name),
+                        error: !!formik.touched[name] && !!formik.errors[name],
+                        helperText: formik.touched[name] && formik.errors[name]
+                    },
+                    popper: {
+                        sx: {
+                            '& .MuiPaper-root': {
+                            backgroundColor: 'primary.light',
                             },
                         },
-                        day: {
-                            sx: {
-                            '&.MuiPickersDay-root.Mui-selected': {
-                                backgroundColor: 'secondary.main',
-                            },
-                            }
+                    },
+                    day: {
+                        sx: {
+                        '&.MuiPickersDay-root.Mui-selected': {
+                            backgroundColor: 'secondary.main',
                         },
-                    }}
-                    sx={{
-                        ...sx
-                      }}   
-                />   
-            </LocalizationProvider>
-        )}
-      />
+                        }
+                    },
+                }}
+                sx={{
+                    ...sx
+                    }}  
+            />
+        </LocalizationProvider>
     );
   };
 
