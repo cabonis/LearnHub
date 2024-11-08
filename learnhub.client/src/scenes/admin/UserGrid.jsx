@@ -7,29 +7,32 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Header from "../../components/Header";
+import Tooltip from '@mui/material/Tooltip';
 import { mockDataUsers } from "../../data/mockData";
 import { gridStyle, buttonHoverStyle } from "../global/ComponentStyles"
+import useConfirm from "../../hooks/useConfirm";
 
 const UserGrid = () => {
 
 	const [rowModesModel, setRowModesModel] = useState({});
 	const [rows, setRows] = useState(mockDataUsers);
 	const { setDirty } = useOutletContext();
+	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
 
 	const updateRowModel = (rowModel) => {
 		setRowModesModel(rowModel);
 		setDirty(Object.values(rowModel).some((row) => row.mode === GridRowModes.Edit));
 	}
 
-	const handleEditClick = (id) => () => {
+	const handleEditClick = (id) => {
 		updateRowModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
 	};
 
-	const handleSaveClick = (id) => () => {
+	const handleSaveClick = (id) => {
 		updateRowModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
 	};
 
-	const handleCancelClick = (id) => () => {
+	const handleCancelClick = (id) => {
 		updateRowModel({
 			...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true },
 		});
@@ -45,9 +48,11 @@ const UserGrid = () => {
 		}
 	};
 
-	const handleDeleteClick = (id) => () => {
-		// Do delete
-		setRows(rows.filter((row) => row.id !== id));
+	const handleDeleteClick = async (id) => {
+		if (await confirmDelete("Confirm", "Are you sure you wish to delete this user?")) {
+			// Do delete
+			setRows(rows.filter((row) => row.id !== id));
+		}
 	};
 
 	const columns = [
@@ -86,39 +91,47 @@ const UserGrid = () => {
 
 				if (isInEditMode) {
 					return [
-						<GridActionsCellItem
-							icon={<SaveIcon />}
-							label="Save"
-							color='secondary'
-							onClick={handleSaveClick(id)}
-						/>,
-						<GridActionsCellItem
-							icon={<CancelIcon />}
-							label="Cancel"
-							className="textPrimary"
-							onClick={handleCancelClick(id)}
-							color="inherit"
-							sx={buttonHoverStyle}
-						/>,
+						<Tooltip title="Save">
+							<GridActionsCellItem
+								icon={<SaveIcon />}
+								label="Save"
+								color='secondary'
+								onClick={() => handleSaveClick(id)}
+							/>
+						</Tooltip>,
+						<Tooltip title="Cancel">
+							<GridActionsCellItem
+								icon={<CancelIcon />}
+								label="Cancel"
+								className="textPrimary"
+								onClick={() => handleCancelClick(id)}
+								color="inherit"
+								sx={buttonHoverStyle}
+							/>
+						</Tooltip>,
 					];
 				}
 
 				return [
-					<GridActionsCellItem
-						icon={<EditIcon />}
-						label="Edit"
-						className="textPrimary"
-						onClick={handleEditClick(id)}
-						color="inherit"
-						sx={buttonHoverStyle}
-					/>,
-					<GridActionsCellItem
-						icon={<DeleteIcon />}
-						label="Delete"
-						onClick={handleDeleteClick(id)}
-						color="inherit"
-						sx={buttonHoverStyle}
-					/>,
+					<Tooltip title="Edit">
+						<GridActionsCellItem
+							icon={<EditIcon />}
+							label="Edit"
+							className="textPrimary"
+							onClick={() => handleEditClick(id)}
+							color="inherit"
+							sx={buttonHoverStyle}
+						/>
+					</Tooltip>,
+					<Tooltip title="Delete">
+						<GridActionsCellItem
+							icon={<DeleteIcon />}
+							label="Delete"
+							onClick={() => handleDeleteClick(id)}
+							color="inherit"
+							sx={buttonHoverStyle}
+						/>
+					</Tooltip>,
 				];
 			},
 		},
@@ -151,6 +164,7 @@ const UserGrid = () => {
 					disableColumnMenu
 				/>
 			</Box>
+			<ConfirmDeleteDialog />
 		</Box>
 	);
 };
