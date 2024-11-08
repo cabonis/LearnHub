@@ -65,66 +65,66 @@ const CourseInfo = () => {
 
                     setTimeout(() => setDirty(formik.dirty), 0);
 
-                    return      (
-                        <form ref={submitRef} onSubmit={formik.handleSubmit}>
-                            <Box
-                                display="grid"
-                                gap="30px"
-                                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-                            >
-                            
-                                <FormInputText
-                                    name="title"               
-                                    label="Course Title"
-                                    formik={formik}
-                                    sx={{ gridColumn: "span 4" }}
-                                />
+                    return (
+                            <form ref={submitRef} onSubmit={formik.handleSubmit}>
+                                <Box
+                                    display="grid"
+                                    gap="30px"
+                                    gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                                >
+                                
+                                    <FormInputText
+                                        name="title"               
+                                        label="Course Title"
+                                        formik={formik}
+                                        sx={{ gridColumn: "span 4" }}
+                                    />
 
-                                <FormInputText
-                                    name="description"
-                                    label="Course Description"
-                                    formik={formik}
-                                    sx={{ gridColumn: "span 4" }}
-                                    props={{
-                                        multiline: true,
-                                        minRows: 4,
-                                        maxRows: 4
-                                        }}
-                                />
+                                    <FormInputText
+                                        name="description"
+                                        label="Course Description"
+                                        formik={formik}
+                                        sx={{ gridColumn: "span 4" }}
+                                        props={{
+                                            multiline: true,
+                                            minRows: 4,
+                                            maxRows: 4
+                                            }}
+                                    />
 
-                                <FormInputDatePicker 
-                                    name="startdate"
-                                    label="Course Start Date"
-                                    formik={formik}
-                                    sx={{ gridColumn: "span 1", minWidth: "200px" }}
-                                />
+                                    <FormInputDatePicker 
+                                        name="startdate"
+                                        label="Course Start Date"
+                                        formik={formik}
+                                        sx={{ gridColumn: "span 1", minWidth: "200px" }}
+                                    />
 
-                                <FormInputDatePicker 
-                                    name="enddate"
-                                    label="Course End Date"
-                                    formik={formik}
-                                    sx={{ gridColumn: "span 1" }}
-                                />
+                                    <FormInputDatePicker 
+                                        name="enddate"
+                                        label="Course End Date"
+                                        formik={formik}
+                                        sx={{ gridColumn: "span 1" }}
+                                    />
 
-                                <FormInputDropdown
-                                    name="instructor"
-                                    label="Instructor"
-                                    formik={formik}
-                                    options={mockDataUsers}
-                                    sx={{ gridColumn: "span 1" }}
-                                    optionsConverter={{
-                                        key: (user) => {
-                                            return `${user.id.toString()}`;
-                                        },
-                                        label: (user) => {
-                                            return `${user.firstName} ${user.lastName}`;
-                                        }
-                                    }}                        
-                                />
+                                    <FormInputDropdown
+                                        name="instructor"
+                                        label="Instructor"
+                                        formik={formik}
+                                        options={mockDataUsers}
+                                        sx={{ gridColumn: "span 1" }}
+                                        optionsConverter={{
+                                            key: (user) => {
+                                                return `${user.id.toString()}`;
+                                            },
+                                            label: (user) => {
+                                                return `${user.firstName} ${user.lastName}`;
+                                            }
+                                        }}                        
+                                    />
 
-                            </Box>
-                        </form>
-                        )
+                                </Box>
+                            </form>
+                            )
                     }
                 }
 

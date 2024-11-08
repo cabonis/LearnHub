@@ -8,18 +8,14 @@ import Dashboard from "./scenes/dashboard";
 import Courses from "./scenes/courses";
 import Calendar from "./scenes/calendar";
 import Announcements from "./scenes/announcements";
+import Admin from "./scenes/admin/Admin"
 import UserGrid from "./scenes/admin/UserGrid";
 import CourseGrid from "./scenes/admin/CourseGrid";
-import CourseEdit from './scenes/admin/course/CourseEdit';
+import Course from './scenes/admin/course/Course';
 import CourseInfo from './scenes/admin/course/CourseInfo';
 import CourseEnrollment from './scenes/admin/course/CourseEnrollment';
 import CourseAnnouncements from './scenes/admin/course/CourseAnnouncements';
 import CourseModules from './scenes/admin/course/CourseModules';
-
-
-//import Home from './pages/Home.jsx';
-//import Login from './pages/Login.jsx';
-//import Register from './pages/Register.jsx';
 
 
 function App() {
@@ -40,14 +36,16 @@ function App() {
                                 <Route path="courses" element={<Courses />} />
                                 <Route path="announcements" element={<Announcements />} /> 
                                 <Route path="calendar" element={<Calendar />} />
-                                <Route path="admin/users" element={<UserGrid />} />
-                                <Route path="admin/courses" element={<CourseGrid />} />
-                                <Route path="admin/course/:id?" element={<CourseEdit />}>
-                                    <Route index element={<CourseInfo />} />
-                                    <Route path="enrollment" element={<CourseEnrollment />} />
-                                    <Route path="announcements" element={<CourseAnnouncements />} />
-                                    <Route path="modules" element={<CourseModules />} />
-                                </Route>
+                                <Route path="admin" element={<Admin />}>
+                                    <Route path="users" element={<UserGrid />} />
+                                    <Route path="courses" element={<CourseGrid />} />
+                                    <Route path="course/:id?" element={<Course />}>
+                                        <Route index element={<CourseInfo />} />
+                                        <Route path="enrollment" element={<CourseEnrollment />} />
+                                        <Route path="announcements" element={<CourseAnnouncements />} />
+                                        <Route path="modules" element={<CourseModules />} />
+                                    </Route>
+                                </Route>                                
                             </Routes>
                         </main>
                     </div>
@@ -58,12 +56,3 @@ function App() {
 
 }
 export default App;
-
-
-
-
-//<Routes>
-//    <Route path="/login" element={<Login />} />
-//    <Route path="/register" element={<Register />} />
-//    <Route path="/" element={<Home />} />
-//</Routes>

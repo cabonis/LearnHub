@@ -1,32 +1,17 @@
-import { useState, useRef, useEffect  } from 'react';
-import { useParams, useBlocker, useNavigate, Outlet } from 'react-router-dom';
+import { useRef  } from 'react';
+import { useParams, useNavigate, useOutletContext, Outlet } from 'react-router-dom';
 import { mockCourseData } from "../../../data/mockData";
 import Box from '@mui/material/Box';
 import Header from "../../../components/Header";
 import SaveCancel from "../../../components/SaveCancel";
 import TabViewRouted from "../../../components/TabViewRouted";
 
-import useConfirm from "../../../hooks/useConfirm";
-
-export default function CourseEdit() {
+const Course = () => {
   
   const { id } = useParams();
   const submitRef = useRef(); 
-  const [isDirty, setDirty] = useState(false);
-  const blocker = useBlocker(isDirty);
   const navigate = useNavigate();
-
-  const [ConfirmNavigateDialog, confirmNavigate] = useConfirm();
-
-  useEffect(() => {
-    if(blocker.state === "blocked")
-      (async () => {
-        if(await confirmNavigate("Confirm", "You have unsaved changes. Are you sure you want to leave?"))
-          blocker.proceed();
-        else 
-          blocker.reset();
-      })();
-  }, [blocker]);
+  const { isDirty, setDirty } = useOutletContext();
 
   const numId = parseInt(id);
   const course = mockCourseData.find((c) => c.id === numId);
@@ -59,8 +44,6 @@ export default function CourseEdit() {
               }} 
             />
 
-            <ConfirmNavigateDialog />
-
             <SaveCancel 
               isSaveShown={isDirty} 
               isCancelShown={true}
@@ -72,3 +55,5 @@ export default function CourseEdit() {
         </Box>
   );
 }
+
+export default Course;
