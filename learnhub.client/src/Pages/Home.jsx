@@ -1,6 +1,6 @@
-import CurrentUser from "../Components/CurrentUser.jsx";
-import LogoutLink from "../Components/LogoutLink.jsx";
-import AuthorizeView, { AuthorizedUser } from "../Components/AuthorizeView.jsx";
+import CurrentUser from "../components/CurrentUser.jsx";
+import LogoutLink from "../components/LogoutLink.jsx";
+import AuthorizeView, { AuthorizedUser } from "../components/AuthorizeView.jsx";
 
 function Home() {
     return (
