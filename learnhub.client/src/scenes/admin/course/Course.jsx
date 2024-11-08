@@ -1,4 +1,4 @@
-import { useRef  } from 'react';
+import { useState, useRef } from 'react';
 import { useParams, useNavigate, useOutletContext, Outlet } from 'react-router-dom';
 import { mockCourseData } from "../../../data/mockData";
 import Box from '@mui/material/Box';
@@ -7,15 +7,16 @@ import SaveCancel from "../../../components/SaveCancel";
 import TabViewRouted from "../../../components/TabViewRouted";
 
 const Course = () => {
-  
+
   const { id } = useParams();
-  const submitRef = useRef(); 
+  const submitRef = useRef();
   const navigate = useNavigate();
   const { isDirty, setDirty } = useOutletContext();
+  const [isSaveCancel, setSaveCancel] = useState(true);
 
   const numId = parseInt(id);
   const course = mockCourseData.find((c) => c.id === numId);
-  
+
   const onSaveClick = () => {
     submitRef.current.requestSubmit();
   };
@@ -24,35 +25,41 @@ const Course = () => {
     navigate("/admin/courses");
   };
 
+  const onTabChanged = () => {
+    setDirty(false);
+    setSaveCancel(true);
+  }
+
   return (
-        <Box m="10px" sx={{ display: "flex", flexDirection: "column"}}>
-            
-            <Header title="Course Editor" subtitle={course ? "Edit your course" : "Add new course"} />
+    <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
 
-            <TabViewRouted tabChanged={() => setDirty(false)} tabs={[
-                { label: "Information", path: "" },
-                ... course ? [{ label: "Enrollment", path: "enrollment" }] : [],
-                ... course ? [{ label: "Announcements", path: "announcements" }] : [],
-                ... course ? [{ label: "Modules", path: "modules" }] : []
-              ]}
-            />
+      <Header title="Course Editor" subtitle={course ? course.title : "Add new course"} />
 
-            <Outlet context={{
-                course: course,
-                submitRef, submitRef,
-                setDirty: setDirty,    
-              }} 
-            />
+      <TabViewRouted tabChanged={() => onTabChanged()} tabs={[
+        { label: "Information", path: "" },
+        ...course ? [{ label: "Enrollment", path: "enrollment" }] : [],
+        ...course ? [{ label: "Announcements", path: "announcements" }] : [],
+        ...course ? [{ label: "Modules", path: "modules" }] : []
+      ]}
+      />
 
-            <SaveCancel 
-              isSaveShown={isDirty} 
-              isCancelShown={true}
-              saveClicked={onSaveClick}
-              cancelClicked={onCancelClick}
-              sx={{ position: 'absolute', right: 15, bottom: 15}}
-            />
+      <Outlet context={{
+        course: course,
+        submitRef, submitRef,
+        setDirty: setDirty,
+        setSaveCancel: setSaveCancel
+      }}
+      />
 
-        </Box>
+      <SaveCancel
+        isSaveShown={isSaveCancel && isDirty}
+        isCancelShown={isSaveCancel && isDirty}
+        saveClicked={onSaveClick}
+        cancelClicked={onCancelClick}
+        sx={{ position: 'absolute', right: 15, bottom: 15 }}
+      />
+
+    </Box>
   );
 }
 

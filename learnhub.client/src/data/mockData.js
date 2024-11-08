@@ -1,3 +1,5 @@
+import { Description } from "@mui/icons-material";
+
 export const mockDataUsers = [
     {
         id: 1,
@@ -181,6 +183,39 @@ export const mockCourseData = [
         },
         startdate: "2024-11-01",
         enddate: "2024-11-30",
+        modules: [
+            {
+                id: 1,
+                title: "Intro to Physics",
+                Description: "Blah blah blah"
+            },
+            {
+                id: 2,
+                title: "Understanding Mass",
+                Description: "Blah blah blah"
+            },
+            {
+                id: 3,
+                title: "Understanding Acceleration",
+                Description: "Blah blah blah"
+            },
+        ],
+        announcements: [
+            {
+                id: 1,
+                courseid: 1,
+                priority: "Low",
+                datetime: "2024-11-06 08:30:00:00Z",
+                text: "Some announcement text"
+            },
+            {
+                id: 2,
+                courseid: 1,
+                priority: "High",
+                datetime: "2024-11-06 10:00:00:00Z",
+                text: "Some high priority announcement text!"
+            },
+        ],
         users: [
             {
                 id: 6,

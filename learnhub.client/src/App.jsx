@@ -16,6 +16,9 @@ import CourseInfo from './scenes/admin/course/CourseInfo';
 import CourseEnrollment from './scenes/admin/course/CourseEnrollment';
 import CourseAnnouncements from './scenes/admin/course/CourseAnnouncements';
 import CourseModules from './scenes/admin/course/CourseModules';
+import Module from './scenes/admin/module/Module';
+import ModuleInfo from './scenes/admin/module/ModuleInfo';
+import ModuleContent from './scenes/admin/module/ModuleContent';
 
 
 function App() {
@@ -34,7 +37,7 @@ function App() {
                             <Routes>
                                 <Route path="/" element={<Dashboard />} />
                                 <Route path="courses" element={<Courses />} />
-                                <Route path="announcements" element={<Announcements />} /> 
+                                <Route path="announcements" element={<Announcements />} />
                                 <Route path="calendar" element={<Calendar />} />
                                 <Route path="admin" element={<Admin />}>
                                     <Route path="users" element={<UserGrid />} />
@@ -45,7 +48,11 @@ function App() {
                                         <Route path="announcements" element={<CourseAnnouncements />} />
                                         <Route path="modules" element={<CourseModules />} />
                                     </Route>
-                                </Route>                                
+                                    <Route path="module/:courseid/:moduleid?" element={<Module />} >
+                                        <Route index element={<ModuleInfo />} />
+                                        <Route path="content" element={<ModuleContent />} />
+                                    </Route>
+                                </Route>
                             </Routes>
                         </main>
                     </div>

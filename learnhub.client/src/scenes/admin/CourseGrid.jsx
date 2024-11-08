@@ -33,7 +33,7 @@ const CourseGrid = () => {
     {
       field: "title",
       headerName: "Title",
-      minWidth: 150
+      minWidth: 200, flex: 0
     },
     {
       field: "instructor",
@@ -48,6 +48,9 @@ const CourseGrid = () => {
       type: 'actions',
       headerName: 'Actions',
       cellClassName: 'actions',
+      headerAlign: 'left',
+      align: 'left',
+      flex: 1,
       minWidth: 100,
       getActions: ({ id }) => {
         return [
@@ -72,12 +75,7 @@ const CourseGrid = () => {
           </Tooltip>,
         ];
       },
-    },
-    {
-      field: '\u2800',
-      sortable: false,
-      flex: 1
-    },
+    }
   ];
 
   return (
@@ -95,12 +93,11 @@ const CourseGrid = () => {
           rows={rows}
           columns={columns}
           rowHeight={40}
-          disableColumnMenu
           slots={{
             toolbar: DataGridAddButton,
           }}
           slotProps={{
-            toolbar: { navigate, text: "Add Course" },
+            toolbar: { text: "Add Course", onClick: () => navigate(`/admin/course/`) },
           }}
         />
 

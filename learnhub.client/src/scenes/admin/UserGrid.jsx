@@ -84,6 +84,9 @@ const UserGrid = () => {
 			type: 'actions',
 			headerName: 'Actions',
 			cellClassName: 'actions',
+			headerAlign: 'left',
+			align: 'left',
+			flex: 1,
 			minWidth: 100,
 			getActions: ({ id }) => {
 
@@ -134,11 +137,6 @@ const UserGrid = () => {
 					</Tooltip>,
 				];
 			},
-		},
-		{
-			field: '\u2800',
-			sortable: false,
-			flex: 1
 		}
 	];
 
@@ -161,7 +159,6 @@ const UserGrid = () => {
 					rowModesModel={rowModesModel}
 					onRowModesModelChange={handleRowModesModelChange}
 					onRowEditStop={handleRowEditStop}
-					disableColumnMenu
 				/>
 			</Box>
 			<ConfirmDeleteDialog />
