@@ -4,48 +4,36 @@ import { mockCourseData } from "../../data/mockData";
 import Box from '@mui/material/Box';
 import Header from "../../components/Header";
 import SaveCancel from "../../components/SaveCancel";
-import ConfirmDialog from '../../components/ConfirmDialog';
 import TabViewRouted from "../../components/TabViewRouted";
 
+import useConfirm from "../../hooks/useConfirm";
 
 export default function CourseEdit() {
   
   const { id } = useParams();
   const submitRef = useRef(); 
   const [isDirty, setDirty] = useState(false);
-  const [isDialogOpen, setDialogOpen] = useState(false);
   const blocker = useBlocker(isDirty);
   const navigate = useNavigate();
 
+  const [ConfirmNavigateDialog, confirmNavigate] = useConfirm();
+
   useEffect(() => {
-    setDialogOpen(blocker.state === "blocked");
+    if(blocker.state === "blocked")
+      (async () => {
+        if(await confirmNavigate("Confirm", "You have unsaved changes. Are you sure you want to leave?"))
+          blocker.proceed();
+        else 
+          blocker.reset();
+      })();
   }, [blocker]);
 
   const numId = parseInt(id);
   const course = mockCourseData.find((c) => c.id === numId);
-
-  const dirtyChanged = (isdirty) => {
-    setDirty(isdirty);
-  }
-
-  const context = {
-    course: course,
-    submitRef, submitRef,
-    setDirty: dirtyChanged,    
-  }
-
-  const handleClose = (value) => {
-    if(value)
-      blocker.proceed();
-    else {
-      blocker.reset();
-      setDialogOpen(false);
-    }
-  }
-
+  
   const onSaveClick = () => {
     submitRef.current.requestSubmit();
-  }
+  };
 
   const onCancelClick = () => {
     navigate("/admin/courses");
@@ -58,15 +46,20 @@ export default function CourseEdit() {
 
             <TabViewRouted tabChanged={() => setDirty(false)} tabs={[
                 { label: "Information", path: "" },
-                ... course ? { label: "Enrollment", path: "enrollment" } : [],
-                ... course ? { label: "Announcements", path: "announcements" } : [],
-                ... course ? { label: "Modules", path: "modules" } : []
+                ... course ? [{ label: "Enrollment", path: "enrollment" }] : [],
+                ... course ? [{ label: "Announcements", path: "announcements" }] : [],
+                ... course ? [{ label: "Modules", path: "modules" }] : []
               ]}
             />
 
-            <Outlet context={context} />
+            <Outlet context={{
+                course: course,
+                submitRef, submitRef,
+                setDirty: setDirty,    
+              }} 
+            />
 
-            <ConfirmDialog open={isDialogOpen} onClose={handleClose} text={"Unsaved changes will be lost. Are you sure you wish to continue?"} />
+            <ConfirmNavigateDialog />
 
             <SaveCancel 
               isSaveShown={isDirty} 
@@ -74,7 +67,7 @@ export default function CourseEdit() {
               saveClicked={onSaveClick}
               cancelClicked={onCancelClick}
               sx={{ position: 'absolute', right: 15, bottom: 15}}
-            />     
+            />
 
         </Box>
   );
