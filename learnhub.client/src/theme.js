@@ -151,6 +151,7 @@ export const themeSettings = (mode) => {
                     // palette values for light mode
                     primary: {
                         main: colors.primary[100],
+                        light: colors.primary[400],
                     },
                     secondary: {
                         main: colors.greenAccent[500],
