@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
-import SearchableTransferList from "../../components/SearchableTransferList";
-import { mockDataUsers } from "../../data/mockData";
-import { mockCourseData } from "../../data/mockData";
+import SearchableTransferList from "../../../components/SearchableTransferList";
+import { mockDataUsers } from "../../../data/mockData";
+import { mockCourseData } from "../../../data/mockData";
 
 
 const CourseEnrollment = ({course}) => {

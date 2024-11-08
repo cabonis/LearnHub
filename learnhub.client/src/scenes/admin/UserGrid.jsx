@@ -7,13 +7,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Header from "../../components/Header";
 import { mockDataUsers } from "../../data/mockData";
-import { useNavigate } from 'react-router-dom';
 import { gridStyle, buttonHoverStyle } from "../global/ComponentStyles"
 
 const UserGrid = () => {
 	
-    const navigate = useNavigate();
-
     const [rowModesModel, setRowModesModel] = useState({});
     const [rows, setRows] = useState(mockDataUsers);
 

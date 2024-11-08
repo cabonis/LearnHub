@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect  } from 'react';
 import { useParams, useBlocker, useNavigate, Outlet } from 'react-router-dom';
-import { mockCourseData } from "../../data/mockData";
+import { mockCourseData } from "../../../data/mockData";
 import Box from '@mui/material/Box';
-import Header from "../../components/Header";
-import SaveCancel from "../../components/SaveCancel";
-import TabViewRouted from "../../components/TabViewRouted";
+import Header from "../../../components/Header";
+import SaveCancel from "../../../components/SaveCancel";
+import TabViewRouted from "../../../components/TabViewRouted";
 
-import useConfirm from "../../hooks/useConfirm";
+import useConfirm from "../../../hooks/useConfirm";
 
 export default function CourseEdit() {
   

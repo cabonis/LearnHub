@@ -8,13 +8,13 @@ import Dashboard from "./scenes/dashboard";
 import Courses from "./scenes/courses";
 import Calendar from "./scenes/calendar";
 import Announcements from "./scenes/announcements";
-import UserGrid from "./scenes/adminusers/UserGrid";
-import CourseGrid from "./scenes/admincourses/CourseGrid";
-import CourseEdit from './scenes/admincourses/CourseEdit';
-import CourseInfo from './scenes/admincourses/CourseInfo';
-import CourseEnrollment from './scenes/admincourses/CourseEnrollment';
-import CourseAnnouncements from './scenes/admincourses/CourseAnnouncements';
-import CourseModules from './scenes/admincourses/CourseModules';
+import UserGrid from "./scenes/admin/UserGrid";
+import CourseGrid from "./scenes/admin/CourseGrid";
+import CourseEdit from './scenes/admin/course/CourseEdit';
+import CourseInfo from './scenes/admin/course/CourseInfo';
+import CourseEnrollment from './scenes/admin/course/CourseEnrollment';
+import CourseAnnouncements from './scenes/admin/course/CourseAnnouncements';
+import CourseModules from './scenes/admin/course/CourseModules';
 
 
 //import Home from './pages/Home.jsx';
