@@ -7,13 +7,14 @@ import { useOutletContext } from "react-router-dom";
 import FormInputText from "../../../components/FormInputText";
 import FormInputDropdown from "../../../components/FormInputDropdown";
 import FormInputDatePicker from "../../../components/FormInputDatePicker";
+import { useAddCourse, useUpdateCourse } from '../../../hooks/CourseHooks';
 
 
 const Required = "Required";
 
 const validationSchema = yup.object({
     title: yup.string().required(Required).min(6, "Title must be at least 6 characters."),
-    instructor: yup.string().required(Required),
+    instructorid: yup.string().required(Required),
     startdate: yup.date().required(Required),
     enddate: yup.date().required(Required)
     // .when("startdate", {
@@ -26,11 +27,14 @@ const validationSchema = yup.object({
 const CourseInfo = () => {
 
     const { course, submitRef, setDirty } = useOutletContext();
+    const addCourse = useAddCourse();
+    const updateCourse = useUpdateCourse();
 
     const defaultCourse = {
+        id: "0",
         title: "",
         description: "",
-        instructor: "",
+        instructorid: "",
         startdate: null,
         enddate: null,
     };
@@ -38,9 +42,10 @@ const CourseInfo = () => {
     const getCourse = () => {
         if (course) {
             return {
+                id: course.id,
                 title: course.title,
                 description: course.description,
-                instructor: course.instructor.id,
+                instructorid: course.instructor.id,
                 startdate: course.startdate ? dayjs(course.startdate) : null,
                 enddate: course.enddate ? dayjs(course.enddate) : null
             }
@@ -50,7 +55,12 @@ const CourseInfo = () => {
     }
 
     const handleFormSubmit = (values, submitProps) => {
-        console.log(values);
+        const mutation = course ? updateCourse : addCourse;
+        mutation.mutate({
+            ...values,
+            startdate: values.startdate.format("YYYY-MM-DD"),
+            enddate: values.enddate.format("YYYY-MM-DD")
+        });
         submitProps.resetForm({ values });
     };
 
@@ -107,7 +117,7 @@ const CourseInfo = () => {
                                 />
 
                                 <FormInputDropdown
-                                    name="instructor"
+                                    name="instructorid"
                                     label="Instructor"
                                     formik={formik}
                                     options={mockDataUsers}

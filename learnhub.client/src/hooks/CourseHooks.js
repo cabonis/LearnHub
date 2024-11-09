@@ -18,7 +18,8 @@ const useAddCourse = () => {
         mutationFn: (course) => axios.post(`/api/course`, course),
         onSuccess: (_, course) => {
             queryClient.invalidateQueries({ queryKey: ["course"] });
-            nav(`/admin/course/${course.id}`);
+            //nav(`/admin/course/${course.id}`);
+            nav(`/admin/course/`);
         },
     });
 };
