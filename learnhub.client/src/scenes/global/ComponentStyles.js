@@ -7,8 +7,8 @@ export const gridStyle = {
     },
     "& .MuiDataGrid-cell:focus": {
         outline: "none !important",
-        },
-    "& .MuiDataGrid-columnHeader":{
+    },
+    "& .MuiDataGrid-columnHeader": {
         backgroundColor: "primary.light",
         fontSize: "16px"
     },
@@ -22,8 +22,10 @@ export const gridStyle = {
     "& .MuiCheckbox-root": {
         color: `secondary !important`,
     },
-  };
+};
 
-export const buttonHoverStyle =  {'&:hover': {
-    backgroundColor: 'secondary.main'
-}}
+export const buttonHoverStyle = {
+    '&:hover': {
+        backgroundColor: 'secondary.main'
+    }
+}

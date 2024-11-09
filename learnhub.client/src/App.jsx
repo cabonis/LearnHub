@@ -1,5 +1,6 @@
 import { Routes, Route, Outlet, useOutletContext } from 'react-router-dom';
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ColorModeContext, useMode } from "./theme";
 
 import Topbar from "./scenes/global/TopBar";
@@ -27,58 +28,63 @@ import ModuleContent from './scenes/admin/course/module/ModuleContent';
 function App() {
 
     const [theme, colorMode] = useMode();
+    const queryClient = new QueryClient();
 
     return (
-        <ColorModeContext.Provider value={colorMode}>
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <div className="app">
-                    <NavBar />
-                    <div className="content">
-                        <Topbar />
-                        <main className="view">
-                            <Routes>
-                                <Route path="/" element={<Dashboard />} />
-                                <Route path="courses" element={<Courses />} />
-                                <Route path="announcements" element={<Announcements />} />
-                                <Route path="calendar" element={<Calendar />} />
+        <QueryClientProvider client={queryClient}>
+            <ColorModeContext.Provider value={colorMode}>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <div className="app">
+                        <NavBar />
+                        <div className="content">
+                            <Topbar />
+                            <main className="view">
+                                <Routes>
+                                    <Route path="/" element={<Dashboard />} />
+                                    <Route path="courses" element={<Courses />} />
+                                    <Route path="announcements" element={<Announcements />} />
+                                    <Route path="calendar" element={<Calendar />} />
 
-                                <Route path="admin" element={<Admin />}>
+                                    <Route path="admin" element={<Admin />}>
 
-                                    <Route path="user" element={<UserGrid />} />
+                                        <Route path="user" element={<UserGrid />} />
 
-                                    <Route path="course">
+                                        <Route path="course">
 
-                                        <Route index element={<CourseGrid />} />
-                                        <Route path="add" element={<CourseAdd />} />
-
-                                        <Route path=":id" element={<Course />}>
-
-                                            <Route path="" element={<CourseEdit />}>
+                                            <Route index element={<CourseGrid />} />
+                                            <Route path="add" element={<CourseAdd />}>
                                                 <Route index element={<CourseInfo />} />
-                                                <Route path="enrollment" element={<CourseEnrollment />} />
-                                                <Route path="announcements" element={<CourseAnnouncements />} />
-                                                <Route path="modules" element={<CourseModules />} />
                                             </Route>
 
-                                            <Route path="add" element={<ModuleAdd />} />
+                                            <Route path=":id" element={<Course />}>
 
-                                            <Route path=":moduleid" element={<ModuleEdit />} >
-                                                <Route index element={<ModuleInfo />} />
-                                                <Route path="content" element={<ModuleContent />} />
+                                                <Route path="" element={<CourseEdit />}>
+                                                    <Route index element={<CourseInfo />} />
+                                                    <Route path="enrollment" element={<CourseEnrollment />} />
+                                                    <Route path="announcements" element={<CourseAnnouncements />} />
+                                                    <Route path="modules" element={<CourseModules />} />
+                                                </Route>
+
+                                                <Route path="add" element={<ModuleAdd />} />
+
+                                                <Route path=":moduleid" element={<ModuleEdit />} >
+                                                    <Route index element={<ModuleInfo />} />
+                                                    <Route path="content" element={<ModuleContent />} />
+                                                </Route>
+
                                             </Route>
 
                                         </Route>
 
                                     </Route>
-
-                                </Route>
-                            </Routes>
-                        </main>
+                                </Routes>
+                            </main>
+                        </div>
                     </div>
-                </div>
-            </ThemeProvider>
-        </ColorModeContext.Provider>
+                </ThemeProvider>
+            </ColorModeContext.Provider>
+        </QueryClientProvider>
     );
 
 }

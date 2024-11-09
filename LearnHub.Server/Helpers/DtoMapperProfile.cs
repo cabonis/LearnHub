@@ -18,6 +18,7 @@ namespace LearnHub.Server.Helpers
 			CreateMap<Module, ModuleDetailDto>();
 			CreateMap<Announcement, AnnouncementDto>();
 			CreateMap<Course, CourseDetailDto>();
+			CreateMap<Course, CoruseInstructorInfo>();
 			CreateMap<Course, CourseInfoDto>();
 
 			CreateMap<UserRegistrationDto, User>()

@@ -54,9 +54,9 @@ namespace LearnHub.Data.Database
 
 			modelBuilder.Entity<Course>().HasData(
 				[
-					new Course{ Id = 1, Title = "Physics 101", Description = "", InstructorId = 1 },
-					new Course{ Id = 2, Title = "Math 101", Description = "", InstructorId = 1 },
-					new Course{ Id = 3, Title = "English 101", Description = "", InstructorId = 1 }
+					new Course{ Id = 1, Title = "Physics 101", Description = "", StartDate = new DateOnly(2024, 11, 1), EndDate = new DateOnly(2024, 12, 31), InstructorId = 1 },
+					new Course{ Id = 2, Title = "Math 101", Description = "", StartDate = new DateOnly(2024, 11, 1), EndDate = new DateOnly(2024, 12, 31), InstructorId = 1 },
+					new Course{ Id = 3, Title = "English 101", Description = "", StartDate = new DateOnly(2024, 11, 1), EndDate = new DateOnly(2024, 12, 31), InstructorId = 1 }
 				]);
 
 			modelBuilder.Entity<Course>()

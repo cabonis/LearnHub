@@ -1,22 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Header from "../../../components/Header";
-import { mockCourseData } from "../../../data/mockData";
 import { useNavigate } from 'react-router-dom';
 import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
+import { useFetchCourses, useDeleteCourse } from '../../../hooks/CourseHooks';
 
 const CourseGrid = () => {
 
   const navigate = useNavigate();
 
-  const [rows, setRows] = useState(mockCourseData);
+  const { data, status, isSuccess } = useFetchCourses();
+  const deleteCourse = useDeleteCourse();
+  const [rows, setRows] = useState([]);
   const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
+
+  useEffect(() => {
+    setRows(data);
+  }, [data]);
 
   const handleEditClick = (id) => {
     navigate(`/admin/course/${id}`);
@@ -24,7 +30,7 @@ const CourseGrid = () => {
 
   const handleDeleteClick = async (id) => {
     if (await confirmDelete("Confirm", "Are you sure you wish to delete this course?")) {
-      // Do delete
+      deleteCourse.mutate(id);
       setRows(rows.filter((row) => row.id !== id));
     }
   };

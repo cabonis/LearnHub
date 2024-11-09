@@ -39,6 +39,8 @@ namespace LearnHub.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     InstructorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -106,6 +108,7 @@ namespace LearnHub.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -147,19 +150,19 @@ namespace LearnHub.Data.Migrations
                 columns: new[] { "Id", "FirstName", "LastName", "PasswordHash", "Role", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "Joe", "Dirt", "$2b$11$cmttKuuLuaJhPucqV4VZouXJsa4DqNSWnJMXBwp.6rQ1laUbGnoNS", 0, "user1" },
+                    { 1, "LearnHub", "Admin", "$2b$11$tqmJtna2R3Wr9dqe9.btr.R8Tz3XDam6Lxv3hoTyWCBYueY0tWx7e", 2, "admin" },
                     { 2, "Frank", "Grass", "$2b$11$O1koiBK9QzggikA0OcgJ3eEsD90VMgByEZJ1mfp6mtv51BtrGK2/G", 0, "user2" },
                     { 3, "John", "Mud", "$2b$11$OBdI.gJYHCSh3R/6MqKwsuHzvp28a8crwTGNSFvBqAGmnFff6htk.", 0, "user3" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Courses",
-                columns: new[] { "Id", "Description", "InstructorId", "Title" },
+                columns: new[] { "Id", "Description", "EndDate", "InstructorId", "StartDate", "Title" },
                 values: new object[,]
                 {
-                    { 1, "", 1, "Physics 101" },
-                    { 2, "", 1, "Math 101" },
-                    { 3, "", 1, "English 101" }
+                    { 1, "", new DateOnly(2024, 12, 31), 1, new DateOnly(2024, 11, 1), "Physics 101" },
+                    { 2, "", new DateOnly(2024, 12, 31), 1, new DateOnly(2024, 11, 1), "Math 101" },
+                    { 3, "", new DateOnly(2024, 12, 31), 1, new DateOnly(2024, 11, 1), "English 101" }
                 });
 
             migrationBuilder.InsertData(

@@ -17,7 +17,7 @@ const CourseEdit = () => {
   };
 
   const onCancelClick = () => {
-    navigate("/admin/courses");
+    navigate("/admin/course");
   };
 
   const onTabChanged = () => {
