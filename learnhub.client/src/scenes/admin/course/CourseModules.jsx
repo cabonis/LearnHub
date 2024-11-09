@@ -18,7 +18,7 @@ const CourseModules = () => {
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
 
 	const handleEditClick = (moduleId) => {
-		navigate(`/admin/module/${course.id}/${moduleId}`);
+		navigate(`/admin/course/${course.id}/${moduleId}`);
 	};
 
 	const handleDeleteClick = async (id) => {
@@ -84,7 +84,7 @@ const CourseModules = () => {
 						toolbar: DataGridAddButton,
 					}}
 					slotProps={{
-						toolbar: { text: "Add Module", onClick: () => navigate(`/admin/course/${course.id}/module`) },
+						toolbar: { text: "Add Module", onClick: () => navigate(`/admin/course/${course.id}/add`) },
 					}}
 				/>
 

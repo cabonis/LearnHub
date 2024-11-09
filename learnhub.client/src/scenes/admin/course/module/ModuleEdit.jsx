@@ -1,21 +1,21 @@
 import { useState, useRef } from 'react';
 import { useParams, useNavigate, useOutletContext, Outlet } from 'react-router-dom';
-import { mockCourseData } from "../../../data/mockData";
+import { mockCourseData } from "../../../../data/mockData";
 import Box from '@mui/material/Box';
-import Header from "../../../components/Header";
-import SaveCancel from "../../../components/SaveCancel";
-import TabViewRouted from "../../../components/TabViewRouted";
+import Header from "../../../../components/Header";
+import SaveCancel from "../../../../components/SaveCancel";
+import TabViewRouted from "../../../../components/TabViewRouted";
 
-const Module = () => {
+const ModuleEdit = () => {
 
-    const { courseid, moduleid } = useParams();
+    const { id, moduleid } = useParams();
     const submitRef = useRef();
     const navigate = useNavigate();
     const { isDirty, setDirty } = useOutletContext();
     const [isSaveCancel, setSaveCancel] = useState(true);
 
-    const courseNumId = parseInt(courseid);
-    const course = mockCourseData.find((c) => c.id === courseNumId);
+    const numId = parseInt(id);
+    const course = mockCourseData.find((c) => c.id === numId);
     const moduleNumId = parseInt(moduleid);
     const module = course.modules.find((m) => m.id === moduleNumId);
 
@@ -64,4 +64,4 @@ const Module = () => {
     )
 }
 
-export default Module;
+export default ModuleEdit;
