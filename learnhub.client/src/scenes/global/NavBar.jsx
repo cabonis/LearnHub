@@ -35,50 +35,50 @@ const NavBar = () => {
 
     const menuItemStyles = {
         icon: {
-          color: colors.grey[100],
+            color: colors.grey[100],
         },
         SubMenuExpandIcon: {
-          color: colors.grey[100],
-          '&:hover': {
-            color: colors.primary[800],
-          },
+            color: colors.grey[100],
+            '&:hover': {
+                color: colors.primary[800],
+            },
         },
         subMenuContent: ({ level }) => ({
-          backgroundColor:
-            level === 0
-              ? colors.primary[400]
-              : 'transparent',
+            backgroundColor:
+                level === 0
+                    ? colors.primary[400]
+                    : 'transparent',
         }),
         button: {
             color: colors.grey[100],
             '&:hover': {
-            backgroundColor: colors.grey[300],
-            color: colors.primary[400],
-          },
+                backgroundColor: colors.grey[300],
+                color: colors.primary[400],
+            },
         }
-      };
+    };
 
-      const headerStyle = {
+    const headerStyle = {
         icon: {
-          color: colors.grey[100],
+            color: colors.grey[100],
         },
         button: {
-          '&:hover': {
-            backgroundColor: colors.primary[400],
-            color: colors.grey[100],
-          },
+            '&:hover': {
+                backgroundColor: colors.primary[400],
+                color: colors.grey[100],
+            },
         }
-      };
+    };
 
-	return (	
-        <Sidebar collapsed={isCollapsed}  backgroundColor={colors.primary[400]}>
-            
+    return (
+        <Sidebar collapsed={isCollapsed} backgroundColor={colors.primary[400]}>
+
             <Menu menuItemStyles={headerStyle}>
                 <MenuItem
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
                     style={{
-                        margin: "10px 0 70px 0",                   
+                        margin: "10px 0 70px 0",
                     }}
                 >
                     {!isCollapsed && (
@@ -100,32 +100,32 @@ const NavBar = () => {
             </Menu>
 
             <Menu menuItemStyles={menuItemStyles}>
-              
+
                 {!isCollapsed && (
-                        <Box mb="25px">
-                            <Box display="flex" justifyContent="center" alignItems="center">
-                                <img
-                                    width="100px"
-                                    height="100px"
-                                    src={"/src/assets/default-avatar.png"}
-                                    style={{ cursor: "pointer", borderRadius: "50%" }}
-                                />
-                            </Box>
-                            <Box textAlign="center">
-                                <Typography
-                                    variant="h2"
-                                    color={colors.grey[100]}
-                                    fontWeight="bold"
-                                    sx={{ m: "10px 0 0 0" }}
-                                >
-                                    Chris Bonis
-                                </Typography>
-                                <Typography variant="h5" color="secondary.main">
-                                    Admin
-                                </Typography>
-                            </Box>
+                    <Box mb="25px">
+                        <Box display="flex" justifyContent="center" alignItems="center">
+                            <img
+                                width="100px"
+                                height="100px"
+                                src={"/src/assets/default-avatar.png"}
+                                style={{ cursor: "pointer", borderRadius: "50%" }}
+                            />
                         </Box>
-                    )}
+                        <Box textAlign="center">
+                            <Typography
+                                variant="h2"
+                                color={colors.grey[100]}
+                                fontWeight="bold"
+                                sx={{ m: "10px 0 0 0" }}
+                            >
+                                Chris Bonis
+                            </Typography>
+                            <Typography variant="h5" color="secondary.main">
+                                Admin
+                            </Typography>
+                        </Box>
+                    </Box>
+                )}
 
                 <NavMenuItem
                     title="Dashboard"
@@ -140,7 +140,7 @@ const NavBar = () => {
                     color={colors.grey[300]}
                     sx={{ m: "25px 0 5px 20px" }}
                 >
-                    {!isCollapsed && (  "Academics" )}
+                    {!isCollapsed && ("Academics")}
                 </Typography>
 
                 <NavMenuItem
@@ -166,18 +166,18 @@ const NavBar = () => {
                     selected={selected}
                     setSelected={setSelected}
                 />
-                
+
                 <Typography
                     variant="h6"
                     color={colors.grey[300]}
                     sx={{ m: "25px 0 5px 20px" }}
                 >
-                  {!isCollapsed && (  "Admin" )}
+                    {!isCollapsed && ("Admin")}
                 </Typography>
 
                 <NavMenuItem
                     title="Users"
-                    to="/admin/users"
+                    to="/admin/user"
                     icon={<PersonOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
@@ -185,15 +185,15 @@ const NavBar = () => {
 
                 <NavMenuItem
                     title="Course Catalog"
-                    to="/admin/courses"
+                    to="/admin/course"
                     icon={<LibraryBooksOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
                 />
 
             </Menu>
-        </Sidebar>	
-	)
+        </Sidebar>
+    )
 }
 
 export default NavBar;

@@ -3,13 +3,13 @@ import { Box } from "@mui/material";
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import Header from "../../components/Header";
-import { mockCourseData } from "../../data/mockData";
+import Header from "../../../components/Header";
+import { mockCourseData } from "../../../data/mockData";
 import { useNavigate } from 'react-router-dom';
-import { gridStyle, buttonHoverStyle } from "../global/ComponentStyles"
-import DataGridAddButton from '../../components/DataGridAddButton';
+import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
+import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
-import useConfirm from "../../hooks/useConfirm";
+import useConfirm from "../../../hooks/useConfirm";
 
 const CourseGrid = () => {
 
@@ -97,7 +97,7 @@ const CourseGrid = () => {
             toolbar: DataGridAddButton,
           }}
           slotProps={{
-            toolbar: { text: "Add Course", onClick: () => navigate(`/admin/course/`) },
+            toolbar: { text: "Add Course", onClick: () => navigate(`/admin/course/add`) },
           }}
         />
 

@@ -6,11 +6,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import Header from "../../components/Header";
+import Header from "../../../components/Header";
 import Tooltip from '@mui/material/Tooltip';
-import { mockDataUsers } from "../../data/mockData";
-import { gridStyle, buttonHoverStyle } from "../global/ComponentStyles"
-import useConfirm from "../../hooks/useConfirm";
+import { mockDataUsers } from "../../../data/mockData";
+import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
+import useConfirm from "../../../hooks/useConfirm";
 
 const UserGrid = () => {
 
