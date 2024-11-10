@@ -4,7 +4,7 @@ import axios from "axios";
 
 const useFetchCourses = () => {
     return useQuery({
-        queryKey: ["course"],
+        queryKey: ["courses"],
         queryFn: () =>
             axios.get(`/api/course`)
                 .then((resp) => resp.data),
@@ -17,7 +17,7 @@ const useAddCourse = () => {
     return useMutation({
         mutationFn: (course) => axios.post(`/api/course`, course),
         onSuccess: (_, course) => {
-            queryClient.invalidateQueries({ queryKey: ["course"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
             //nav(`/admin/course/${course.id}`);
             nav(`/admin/course/`);
         },
@@ -29,7 +29,7 @@ const useUpdateCourse = () => {
     return useMutation({
         mutationFn: (course) => axios.put(`/api/course`, course),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["course"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
         },
     });
 };
@@ -39,7 +39,7 @@ const useDeleteCourse = () => {
     return useMutation({
         mutationFn: (id) => axios.delete(`/api/course/${id}`),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["course"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
         },
     });
 };

@@ -37,7 +37,7 @@ namespace LearnHub.Data.Database
 
 			modelBuilder.Entity<User>().HasData(
 				[
-					new User{ Id = 1, UserName = "admin", FirstName = "LearnHub", LastName = "Admin", Role = Role.Administrator, PasswordHash = "$2b$11$tqmJtna2R3Wr9dqe9.btr.R8Tz3XDam6Lxv3hoTyWCBYueY0tWx7e" },
+					new User{ Id = 1, UserName = "admin", FirstName = "LearnHub", LastName = "Admin", Role = Role.Admin, PasswordHash = "$2b$11$tqmJtna2R3Wr9dqe9.btr.R8Tz3XDam6Lxv3hoTyWCBYueY0tWx7e" },
 					new User{ Id = 2, UserName = "user2", FirstName = "Frank", LastName = "Grass", PasswordHash = "$2b$11$O1koiBK9QzggikA0OcgJ3eEsD90VMgByEZJ1mfp6mtv51BtrGK2/G" },
 					new User{ Id = 3, UserName = "user3", FirstName = "John", LastName = "Mud", PasswordHash = "$2b$11$OBdI.gJYHCSh3R/6MqKwsuHzvp28a8crwTGNSFvBqAGmnFff6htk." },
 				]);

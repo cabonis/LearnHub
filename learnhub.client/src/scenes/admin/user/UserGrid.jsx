@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
 import { useOutletContext } from 'react-router-dom';
 import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
@@ -8,16 +8,24 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Header from "../../../components/Header";
 import Tooltip from '@mui/material/Tooltip';
-import { mockDataUsers } from "../../../data/mockData";
 import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
 import useConfirm from "../../../hooks/useConfirm";
+import { useFetchUsers, useUpdateUserRole, useDeleteUser } from '../../../hooks/UserHooks';
 
 const UserGrid = () => {
 
+	const { data, status, isSuccess } = useFetchUsers();
+	const updateUserRole = useUpdateUserRole();
+	const deleteUser = useDeleteUser();
+
 	const [rowModesModel, setRowModesModel] = useState({});
-	const [rows, setRows] = useState(mockDataUsers);
+	const [rows, setRows] = useState([]);
 	const { setDirty } = useOutletContext();
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
+
+	useEffect(() => {
+		setRows(data);
+	}, [data]);
 
 	const updateRowModel = (rowModel) => {
 		setRowModesModel(rowModel);
@@ -50,9 +58,14 @@ const UserGrid = () => {
 
 	const handleDeleteClick = async (id) => {
 		if (await confirmDelete("Confirm", "Are you sure you wish to delete this user?")) {
-			// Do delete
+			deleteUser.mutate(id);
 			setRows(rows.filter((row) => row.id !== id));
 		}
+	};
+
+	const processRowUpdate = (row) => {
+		updateUserRole.mutate(row);
+		return row;
 	};
 
 	const columns = [
@@ -156,6 +169,8 @@ const UserGrid = () => {
 					columns={columns}
 					rowHeight={40}
 					editMode="row"
+					processRowUpdate={processRowUpdate}
+					experimentalFeatures={{ newEditingApi: true }}
 					rowModesModel={rowModesModel}
 					onRowModesModelChange={handleRowModesModelChange}
 					onRowEditStop={handleRowEditStop}

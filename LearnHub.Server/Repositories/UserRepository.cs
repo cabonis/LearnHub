@@ -92,14 +92,12 @@ namespace LearnHub.Server.Repositories
 			return count > 0;
 		}
 
-		public async Task<bool> UpdateAsync(UserInfoDto userInfoDto)
+		public async Task<bool> UpdateRoleAsync(int id, RoleDto userRole)
 		{
 			int count = await _dbContext.Users
-				.Where(user => user.Id == userInfoDto.Id)
+				.Where(user => user.Id == id)
 				.ExecuteUpdateAsync(setters => setters
-					.SetProperty(u => u.Role, _mapper.Map<Role>(userInfoDto.Role))
-					.SetProperty(u => u.FirstName, userInfoDto.FirstName)
-					.SetProperty(u => u.LastName, userInfoDto.LastName));
+					.SetProperty(u => u.Role, _mapper.Map<Role>(userRole)));
 			return count > 0;
 		}
 
@@ -131,7 +129,7 @@ namespace LearnHub.Server.Repositories
 
 		Task<bool> UpdatePasswordAsync(int id, string password);
 
-		Task<bool> UpdateAsync(UserInfoDto userInfoDto);
+		Task<bool> UpdateRoleAsync(int id, RoleDto userRole);
 
 		Task<bool> DeleteAsync(int id);
 	}

@@ -15,6 +15,6 @@
 	{
 		User,
 		Instructor,
-		Administrator
+		Admin
 	}
 }
