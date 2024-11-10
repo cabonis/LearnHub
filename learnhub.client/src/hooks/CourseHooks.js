@@ -11,6 +11,15 @@ const useFetchCourses = () => {
     });
 };
 
+const useFetchCourseInfo = (id) => {
+    return useQuery({
+        queryKey: ["course", id],
+        queryFn: () =>
+            axios.get(`/api/course/${id}`)
+                .then((resp) => resp.data),
+    });
+};
+
 const useAddCourse = () => {
     const queryClient = useQueryClient();
     const nav = useNavigate();
@@ -45,4 +54,4 @@ const useDeleteCourse = () => {
 };
 
 
-export { useFetchCourses, useAddCourse, useUpdateCourse, useDeleteCourse }
+export { useFetchCourses, useFetchCourseInfo, useAddCourse, useUpdateCourse, useDeleteCourse }

@@ -58,14 +58,26 @@ const UserGrid = () => {
 
 	const handleDeleteClick = async (id) => {
 		if (await confirmDelete("Confirm", "Are you sure you wish to delete this user?")) {
-			deleteUser.mutate(id);
+			deleteUser.mutate(id, {
+				onError: () => {
+					setRows([
+						...rows
+					]);
+				}
+			});
 			setRows(rows.filter((row) => row.id !== id));
 		}
 	};
 
-	const processRowUpdate = (row) => {
-		updateUserRole.mutate(row);
-		return row;
+	const processRowUpdate = (newRow, oldrow, { rowId }) => {
+		updateUserRole.mutate(newRow, {
+			onError: () => {
+				setRows(rows => rows.map(row =>
+					row.id === rowId ? oldrow : row)
+				);
+			}
+		});
+		return newRow;
 	};
 
 	const columns = [

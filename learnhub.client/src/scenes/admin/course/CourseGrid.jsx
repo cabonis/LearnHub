@@ -30,7 +30,13 @@ const CourseGrid = () => {
 
   const handleDeleteClick = async (id) => {
     if (await confirmDelete("Confirm", "Are you sure you wish to delete this course?")) {
-      deleteCourse.mutate(id);
+      deleteCourse.mutate(id, {
+        onError: () => {
+          setRows([
+            ...rows
+          ]);
+        }
+      });
       setRows(rows.filter((row) => row.id !== id));
     }
   };

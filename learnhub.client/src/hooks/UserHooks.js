@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const useFetchUsers = () => {
@@ -10,19 +9,6 @@ const useFetchUsers = () => {
                 .then((resp) => resp.data),
     });
 };
-
-// const useAddCourse = () => {
-//     const queryClient = useQueryClient();
-//     const nav = useNavigate();
-//     return useMutation({
-//         mutationFn: (course) => axios.post(`/api/course`, course),
-//         onSuccess: (_, course) => {
-//             queryClient.invalidateQueries({ queryKey: ["course"] });
-//             //nav(`/admin/course/${course.id}`);
-//             nav(`/admin/course/`);
-//         },
-//     });
-// };
 
 const useUpdateUserRole = () => {
     const queryClient = useQueryClient();
