@@ -1,22 +1,22 @@
 import { Box } from "@mui/material";
-import { mockDataUsers } from "../../../data/mockData";
 import { Formik } from "formik";
 import dayjs from "dayjs";
 import * as yup from "yup";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import FormInputText from "../../../components/FormInputText";
 import FormInputDropdown from "../../../components/FormInputDropdown";
 import FormInputDatePicker from "../../../components/FormInputDatePicker";
 import { useAddCourse, useUpdateCourse } from '../../../hooks/CourseHooks';
+import { useFetchUsersByRole } from '../../../hooks/UserHooks';
 
 
 const Required = "Required";
 
 const validationSchema = yup.object({
     title: yup.string().required(Required).min(6, "Title must be at least 6 characters."),
-    instructorid: yup.string().required(Required),
-    startdate: yup.date().required(Required),
-    enddate: yup.date().required(Required)
+    instructorId: yup.string().required(Required),
+    startDate: yup.date().required(Required),
+    endDate: yup.date().required(Required)
     // .when("startdate", {
     //     is: (start) => start != null,
     //     then: (end) =>
@@ -27,44 +27,59 @@ const validationSchema = yup.object({
 const CourseInfo = () => {
 
     const { course, submitRef, setDirty } = useOutletContext();
+    const { data: instructors, status, isSuccess } = useFetchUsersByRole("Instructor");
+    const navigate = useNavigate();
     const addCourse = useAddCourse();
     const updateCourse = useUpdateCourse();
 
-    const defaultCourse = {
+    const isEdit = !!course;
+
+    const newCourse = {
         id: "0",
         title: "",
         description: "",
-        instructorid: "",
-        startdate: null,
-        enddate: null,
+        instructorId: "",
+        startDate: null,
+        endDate: null,
     };
 
     const getCourse = () => {
-        if (course) {
+        if (isEdit) {
             return {
-                id: course.id,
                 title: course.title,
                 description: course.description,
-                instructorid: course.instructor.id,
-                startdate: course.startdate ? dayjs(course.startdate) : null,
-                enddate: course.enddate ? dayjs(course.enddate) : null
+                instructorId: course.instructorId,
+                startDate: course.startDate ? dayjs(course.startDate) : null,
+                endDate: course.endDate ? dayjs(course.endDate) : null
             }
         }
-
-        return defaultCourse;
+        return newCourse;
     }
 
     const handleFormSubmit = (values, submitProps) => {
-        const mutation = course ? updateCourse : addCourse;
-        mutation.mutate({
+        const formValues = {
             ...values,
-            startdate: values.startdate.format("YYYY-MM-DD"),
-            enddate: values.enddate.format("YYYY-MM-DD")
-        });
-        submitProps.resetForm({ values });
-    };
+            startDate: values.startDate.format("YYYY-MM-DD"),
+            endDate: values.endDate.format("YYYY-MM-DD")
+        };
 
-    return (
+        if (isEdit) {
+            updateCourse.mutate(formValues, {
+                onSuccess: () => {
+                    submitProps.resetForm({ values });
+                }
+            });
+        }
+        else {
+            addCourse.mutate(formValues, {
+                onSuccess: ({ data: newCourse }) => {
+                    navigate(`/admin/course/${newCourse.id}`);
+                }
+            });
+        }
+    }
+
+    return (instructors &&
         <Box m="20px">
             <Formik
                 onSubmit={handleFormSubmit}
@@ -103,24 +118,24 @@ const CourseInfo = () => {
                                 />
 
                                 <FormInputDatePicker
-                                    name="startdate"
+                                    name="startDate"
                                     label="Course Start Date"
                                     formik={formik}
                                     sx={{ gridColumn: "span 1", minWidth: "200px" }}
                                 />
 
                                 <FormInputDatePicker
-                                    name="enddate"
+                                    name="endDate"
                                     label="Course End Date"
                                     formik={formik}
                                     sx={{ gridColumn: "span 1" }}
                                 />
 
                                 <FormInputDropdown
-                                    name="instructorid"
+                                    name="instructorId"
                                     label="Instructor"
                                     formik={formik}
-                                    options={mockDataUsers}
+                                    options={instructors}
                                     sx={{ gridColumn: "span 1" }}
                                     optionsConverter={{
                                         key: (user) => {

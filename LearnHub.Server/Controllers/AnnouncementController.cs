@@ -13,7 +13,23 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly IAnnouncementRepository _announcementRepository;
 
-		[HttpPost("")]
+		[HttpGet("course/{courseId}")]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetByCourseAsync(int courseId)
+		{
+			var announcementWithId = await _announcementRepository.GetByCourseIdAsync(courseId);
+
+			if (announcementWithId != null)
+			{
+				return Ok(announcementWithId);
+			}
+
+			return NotFound();
+		}
+
+		[HttpPost()]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -24,6 +40,20 @@ namespace LearnHub.Server.Controllers
 			if (announcementWithId != null)
 			{
 				return Ok(announcementWithId);
+			}
+
+			return NotFound();
+		}
+
+		[HttpPut()]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> UpdateAsync([FromBody] AnnouncementInfoDto announcementInfoDto)
+		{
+			if (await _announcementRepository.UpdateAsync(announcementInfoDto))
+			{
+				return Ok();
 			}
 
 			return NotFound();

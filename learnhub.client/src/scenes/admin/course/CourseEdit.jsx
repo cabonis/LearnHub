@@ -28,7 +28,7 @@ const CourseEdit = () => {
   return (
     <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
 
-      <Header title="Course Editor" subtitle={course ? course.title : "Add new course"} />
+      <Header title="Course Editor" subtitle={course.title} />
 
       <TabViewRouted tabChanged={() => onTabChanged()} tabs={[
         { label: "Information", path: "" },
@@ -41,6 +41,7 @@ const CourseEdit = () => {
       <Outlet context={{
         course: course,
         submitRef, submitRef,
+        isDirty: isDirty,
         setDirty: setDirty,
         setSaveCancel: setSaveCancel
       }}

@@ -10,6 +10,15 @@ const useFetchUsers = () => {
     });
 };
 
+const useFetchUsersByRole = (role) => {
+    return useQuery({
+        queryKey: ["users", role],
+        queryFn: () =>
+            axios.get(`/api/user/role/${role}`)
+                .then((resp) => resp.data),
+    });
+};
+
 const useUpdateUserRole = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -31,4 +40,4 @@ const useDeleteUser = () => {
 };
 
 
-export { useFetchUsers, useUpdateUserRole, useDeleteUser }
+export { useFetchUsers, useFetchUsersByRole, useUpdateUserRole, useDeleteUser }

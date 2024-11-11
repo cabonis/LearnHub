@@ -136,6 +136,7 @@ namespace LearnHub.Server.Controllers
 			return Ok(await _userRepository.GetByRoleAsync(role));
 		}
 
+
 		public UserController(IUserRepository userRepository)
 		{
 			_userRepository = userRepository;

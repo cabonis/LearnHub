@@ -33,9 +33,9 @@ const Scenes = () => {
                 <Route path="course">
 
                     <Route index element={<CourseGrid />} />
-                    {/* <Route path="add" element={<CourseAdd />}>
+                    <Route path="add" element={<CourseAdd />}>
                         <Route index element={<CourseInfo />} />
-                    </Route> */}
+                    </Route>
 
                     <Route path=":id" element={<Course />}>
 

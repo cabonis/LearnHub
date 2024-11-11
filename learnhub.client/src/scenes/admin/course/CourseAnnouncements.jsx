@@ -11,15 +11,26 @@ import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
+import { useFetchCourseAnnouncements, useAddAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement } from "../../../hooks/AnnouncementHooks";
 
 const CourseAnnouncements = () => {
 
 	const { course, setDirty, setSaveCancel } = useOutletContext();
-	const [rows, setRows] = useState(course.announcements);
+
+	const { data: announcements, status, isSuccess } = useFetchCourseAnnouncements(course.id);
+	const addAnnouncement = useAddAnnouncement();
+	const updateAnnouncement = useUpdateAnnouncement();
+	const deleteAnnouncement = useDeleteAnnouncement();
+
+	const [rows, setRows] = useState([]);
 	const [rowModesModel, setRowModesModel] = useState({});
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
 
 	setSaveCancel(false);
+
+	useEffect(() => {
+		setRows(announcements);
+	}, [announcements]);
 
 	useEffect(() => {
 		setDirty(Object.values(rowModesModel).some((row) => row.mode === GridRowModes.Edit));
@@ -28,7 +39,13 @@ const CourseAnnouncements = () => {
 
 	const handleDeleteClick = async (id) => {
 		if (await confirmDelete("Confirm", "Are you sure you wish to delete this announcement?")) {
-			// Do delete
+			deleteAnnouncement.mutate(id, course.id, {
+				onError: () => {
+					setRows([
+						...rows
+					]);
+				}
+			});
 			setRows(rows.filter((row) => row.id !== id));
 		}
 	};
@@ -76,6 +93,52 @@ const CourseAnnouncements = () => {
 		}
 	};
 
+	const processRowAdd = (row) => {
+		addAnnouncement.mutate({
+			courseId: course.id,
+			text: row.text,
+			priority: row.priority
+		}, {
+			onSuccess: ({ data: announcement }) => {
+				setRows(rows => rows.map(r =>
+					r.id === row.id ? {
+						...r,
+						id: announcement.id,
+						datetime: announcement.datetime
+					} : r)
+				);
+			},
+			onError: () => {
+				setRows(rows.filter((row) => row.id !== newRow.id));
+			}
+		});
+	}
+
+	const processRowEdit = (row, oldRow) => {
+		updateAnnouncement.mutate({
+			id: row.id,
+			courseId: course.id,
+			text: row.text,
+			priority: row.priority
+		}, {
+			onError: () => {
+				setRows(rows => rows.map(r =>
+					r.id === row.id ? oldRow : r)
+				);
+			}
+		});
+	}
+
+	const processRowUpdate = (row, oldRow) => {
+		if (row.isNew) {
+			processRowAdd(row);
+		}
+		else {
+			processRowEdit(row, oldRow);
+		}
+		return row;
+	};
+
 	const columns = [
 		{
 			field: "text",
@@ -92,13 +155,13 @@ const CourseAnnouncements = () => {
 			minWidth: 100,
 		},
 		{
-			field: "datetime",
+			field: "dateTime",
 			headerName: "Time Stamp",
 			minWidth: 200,
 			renderCell: (params) => (
 				<Box>
-					{params.row.datetime ?
-						dayjs(params.row.datetime).format("MMM D, YYYY h:mm A") :
+					{params.row.dateTime ?
+						dayjs(params.row.dateTime).format("MMM D, YYYY h:mm A") :
 						""}
 				</Box>
 			),
@@ -178,6 +241,8 @@ const CourseAnnouncements = () => {
 					columns={columns}
 					rowHeight={40}
 					editMode="row"
+					processRowUpdate={processRowUpdate}
+					experimentalFeatures={{ newEditingApi: true }}
 					rowModesModel={rowModesModel}
 					onRowModesModelChange={handleRowModesModelChange}
 					onRowEditStop={handleRowEditStop}

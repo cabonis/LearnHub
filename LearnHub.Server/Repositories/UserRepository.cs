@@ -50,7 +50,7 @@ namespace LearnHub.Server.Repositories
 		public async Task<List<UserInfoDto>> GetByRoleAsync(RoleDto role)
 		{
 			return await _dbContext.Users
-				.Where(u => u.Role == _mapper.Map<Role>(role))
+				.Where(u => u.Role >= _mapper.Map<Role>(role))
 				.Select(u => _mapper.Map<UserInfoDto>(u))
 				.ToListAsync();
 		}

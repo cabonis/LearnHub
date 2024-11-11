@@ -24,7 +24,7 @@ const CourseAdd = () => {
     return (
         <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
 
-            <Header title="Add Course" subtitle="" />
+            <Header title="Course Editor" subtitle="Add a new course" />
 
             <TabViewRouted tabs={[
                 { label: "Information", path: "add" }, ,

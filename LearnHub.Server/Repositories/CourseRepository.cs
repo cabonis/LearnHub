@@ -25,15 +25,12 @@ namespace LearnHub.Server.Repositories
 				.ToListAsync();
 		}
 
-		public async Task<CourseDetailDto?> GetByIdAsync(int id)
+		public async Task<CourseInfoDto?> GetByIdAsync(int id)
 		{
 			return await _dbContext.Courses
 				.Include(c => c.Instructor)
-				.Include(c => c.Modules)
-				.Include(c => c.Announcements)
-				.Include(c => c.Users)
 				.Where(c => c.Id == id)
-				.Select(c => _mapper.Map<CourseDetailDto>(c))
+				.Select(c => _mapper.Map<CourseInfoDto>(c))
 				.FirstOrDefaultAsync();
 		}
 
@@ -70,7 +67,7 @@ namespace LearnHub.Server.Repositories
 	{
 		Task<List<CoruseInstructorInfo>> GetAllAsync();
 
-		Task<CourseDetailDto?> GetByIdAsync(int id);
+		Task<CourseInfoDto?> GetByIdAsync(int id);
 
 		Task<CourseInfoDto> AddAsync(CourseInfoDto courseInfoDto);
 
