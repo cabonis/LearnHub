@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
 import { Outlet, useParams, useOutletContext } from 'react-router-dom';
 import { useFetchCourseInfo } from '../../../hooks/CourseHooks';
 
 const Course = () => {
 
     const { id } = useParams();
-    const { data, status, isSuccess } = useFetchCourseInfo(id);
+    const { data } = useFetchCourseInfo(id);
     const outletContext = useOutletContext();
 
     return (data &&

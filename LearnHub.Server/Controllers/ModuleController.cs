@@ -29,6 +29,22 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
+		[HttpGet("course/{courseId}")]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetByCourseIdAsync(int courseId)
+		{
+			List<ModuleInfoDto> modules = await _moduleRepository.GetByCourseIdAsync(courseId);
+
+			if (modules != null)
+			{
+				return Ok(modules);
+			}
+
+			return NotFound();
+		}
+
 		[HttpGet("{id}")]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,6 +56,20 @@ namespace LearnHub.Server.Controllers
 			if (moduleDetails != null)
 			{
 				return Ok(moduleDetails);
+			}
+
+			return NotFound();
+		}
+
+		[HttpPut]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> UpdateModule([FromBody] ModuleInfoDto moduleInfoDto)
+		{
+			if (await _moduleRepository.UpdateAsync(moduleInfoDto))
+			{
+				return Ok();
 			}
 
 			return NotFound();

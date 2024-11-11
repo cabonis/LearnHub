@@ -1,9 +1,8 @@
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Dashboard from "../scenes/dashboard";
 import Courses from "../scenes/courses";
 import Calendar from "../scenes/calendar";
 import Announcements from "../scenes/announcements";
-import Admin from "../scenes/admin/Admin"
 import UserGrid from "../scenes/admin/user/UserGrid";
 import Course from "../scenes/admin/course/Course";
 import CourseGrid from "../scenes/admin/course/CourseGrid";
@@ -26,7 +25,7 @@ const Scenes = () => {
             <Route path="announcements" element={<Announcements />} />
             <Route path="calendar" element={<Calendar />} />
 
-            <Route path="admin" element={<Admin />}>
+            <Route path="admin">
 
                 <Route path="user" element={<UserGrid />} />
 
@@ -46,7 +45,9 @@ const Scenes = () => {
                             <Route path="modules" element={<CourseModules />} />
                         </Route>
 
-                        <Route path="add" element={<ModuleAdd />} />
+                        <Route path="add" element={<ModuleAdd />}>
+                            <Route path="" element={<ModuleInfo />} />
+                        </Route>
 
                         <Route path=":moduleid" element={<ModuleEdit />} >
                             <Route index element={<ModuleInfo />} />

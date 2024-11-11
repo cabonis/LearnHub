@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const useFetchCourseAnnouncements = (courseId) => {
     return useQuery({
@@ -33,7 +33,7 @@ const useUpdateAnnouncement = () => {
 const useDeleteAnnouncement = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id, courseId) => axios.delete(`/api/announcement/${id}`),
+        mutationFn: ({ id, courseId }) => axios.delete(`/api/announcement/${id}`),
         onSuccess: (_, courseId) => {
             queryClient.invalidateQueries({ queryKey: ["announcements", courseId] });
         },

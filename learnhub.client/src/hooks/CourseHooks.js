@@ -1,6 +1,6 @@
+import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const useFetchCourses = () => {
     return useQuery({
@@ -45,7 +45,7 @@ const useUpdateCourse = () => {
 const useDeleteCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id) => axios.delete(`/api/course/${id}`),
+        mutationFn: (id) => axios.delete(`/api/coursexxx/${id}`),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["courses"] });
         },

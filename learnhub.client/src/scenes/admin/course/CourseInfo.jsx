@@ -1,14 +1,15 @@
-import { Box } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 import { Formik } from "formik";
 import dayjs from "dayjs";
 import * as yup from "yup";
+import { Box } from "@mui/material";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import FormInputText from "../../../components/FormInputText";
 import FormInputDropdown from "../../../components/FormInputDropdown";
 import FormInputDatePicker from "../../../components/FormInputDatePicker";
 import { useAddCourse, useUpdateCourse } from '../../../hooks/CourseHooks';
 import { useFetchUsersByRole } from '../../../hooks/UserHooks';
-
+import useSaveCancel from "../../../hooks/useSaveCancel"
 
 const Required = "Required";
 
@@ -26,13 +27,19 @@ const validationSchema = yup.object({
 
 const CourseInfo = () => {
 
-    const { course, submitRef, setDirty } = useOutletContext();
-    const { data: instructors, status, isSuccess } = useFetchUsersByRole("Instructor");
+    const formikRef = useRef();
+    const { course } = useOutletContext();
+    const [isDirty, setIsDirty] = useState(false);
+    const { SaveCancelButtons, setShown } = useSaveCancel();
+    const { data: instructors } = useFetchUsersByRole("Instructor");
     const navigate = useNavigate();
     const addCourse = useAddCourse();
     const updateCourse = useUpdateCourse();
-
     const isEdit = !!course;
+
+    useEffect(() => {
+        setShown(isDirty);
+    }, [isDirty]);
 
     const newCourse = {
         id: "0",
@@ -79,19 +86,27 @@ const CourseInfo = () => {
         }
     }
 
+    const handleSaveClicked = () => {
+        formikRef.current.submitForm();
+    }
+    const handleCancelClicked = () => {
+        formikRef.current.resetForm(getCourse());
+    }
+
     return (instructors &&
         <Box m="20px">
             <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={getCourse()}
                 validationSchema={validationSchema}
+                innerRef={formikRef}
             >
                 {(formik) => {
 
-                    setTimeout(() => setDirty(formik.dirty), 0);
+                    setTimeout(() => setIsDirty(formik.dirty), 0);
 
                     return (
-                        <form ref={submitRef} onSubmit={formik.handleSubmit}>
+                        <form onSubmit={formik.handleSubmit}>
                             <Box
                                 display="grid"
                                 gap="30px"
@@ -154,6 +169,10 @@ const CourseInfo = () => {
                 }
 
             </Formik>
+            <SaveCancelButtons
+                handleSaveClicked={handleSaveClicked}
+                handleCancelClicked={handleCancelClicked}
+            />
         </Box>
     )
 }

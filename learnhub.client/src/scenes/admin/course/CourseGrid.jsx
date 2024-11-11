@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import dayjs from "dayjs";
 import { Box } from "@mui/material";
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import Header from "../../../components/Header";
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
-import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
+import { gridStyle, buttonHoverStyle } from "../../../styles";
+import Header from "../../../components/Header";
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
@@ -54,6 +55,30 @@ const CourseGrid = () => {
       renderCell: ({ row: { instructor } }) => {
         return `${instructor.firstName} ${instructor.lastName}`;
       },
+    },
+    {
+      field: "startDate",
+      headerName: "Start Date",
+      minWidth: 150,
+      renderCell: (params) => (
+        <Box>
+          {params.row.startDate ?
+            dayjs(params.row.startDate).format("MMM D, YYYY") :
+            ""}
+        </Box>
+      ),
+    },
+    {
+      field: "endDate",
+      headerName: "Start Date",
+      minWidth: 150,
+      renderCell: (params) => (
+        <Box>
+          {params.row.endDate ?
+            dayjs(params.row.endDate).format("MMM D, YYYY") :
+            ""}
+        </Box>
+      ),
     },
     {
       field: 'actions',

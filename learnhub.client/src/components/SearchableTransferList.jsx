@@ -5,7 +5,7 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
+import Checkbox, { checkboxClasses } from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import { Box } from "@mui/material";
@@ -25,6 +25,14 @@ export default function SearchableTransferList({ leftTitle, leftData, rightTitle
   useEffect(() => {
     dataChanged(left, right);
   }, [left, right]);
+
+  useEffect(() => {
+    setRight(rightData);
+  }, [rightData]);
+
+  useEffect(() => {
+    setLeft(leftData);
+  }, [leftData]);
 
   const not = (a, b) => {
     return a.filter((value) => !b.some((item) => getId(item) === getId(value)));
@@ -98,7 +106,12 @@ export default function SearchableTransferList({ leftTitle, leftData, rightTitle
                 <ListItemIcon>
                   <Checkbox
                     checked={checked.includes(value)}
-                    sx={{ m: 0, color: 'secondary.main' }}
+                    sx={{
+                      m: 0,
+                      [`&, &.${checkboxClasses.checked}`]: {
+                        color: 'secondary.main',
+                      },
+                    }}
                     tabIndex={-1}
                     disableRipple
                     inputProps={{

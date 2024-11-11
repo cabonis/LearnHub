@@ -1,23 +1,22 @@
-import { Box } from "@mui/material";
 import { useState, useEffect } from 'react';
-import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
+import dayjs from "dayjs";
+import { Box } from "@mui/material";
+import Tooltip from '@mui/material/Tooltip';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
-import dayjs from "dayjs";
+import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
 import { useOutletContext } from 'react-router-dom';
-import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
+import { gridStyle, buttonHoverStyle } from "../../../styles"
 import DataGridAddButton from '../../../components/DataGridAddButton';
-import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
 import { useFetchCourseAnnouncements, useAddAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement } from "../../../hooks/AnnouncementHooks";
 
 const CourseAnnouncements = () => {
 
-	const { course, setDirty, setSaveCancel } = useOutletContext();
-
-	const { data: announcements, status, isSuccess } = useFetchCourseAnnouncements(course.id);
+	const { course } = useOutletContext();
+	const { data: announcements } = useFetchCourseAnnouncements(course.id);
 	const addAnnouncement = useAddAnnouncement();
 	const updateAnnouncement = useUpdateAnnouncement();
 	const deleteAnnouncement = useDeleteAnnouncement();
@@ -26,20 +25,13 @@ const CourseAnnouncements = () => {
 	const [rowModesModel, setRowModesModel] = useState({});
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
 
-	setSaveCancel(false);
-
 	useEffect(() => {
 		setRows(announcements);
 	}, [announcements]);
 
-	useEffect(() => {
-		setDirty(Object.values(rowModesModel).some((row) => row.mode === GridRowModes.Edit));
-	}, [rowModesModel]);
-
-
 	const handleDeleteClick = async (id) => {
 		if (await confirmDelete("Confirm", "Are you sure you wish to delete this announcement?")) {
-			deleteAnnouncement.mutate(id, course.id, {
+			deleteAnnouncement.mutate({ id: id, courseId: course.id }, {
 				onError: () => {
 					setRows([
 						...rows

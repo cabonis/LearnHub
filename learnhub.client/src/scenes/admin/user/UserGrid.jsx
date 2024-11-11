@@ -1,26 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
-import { useOutletContext } from 'react-router-dom';
-import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Header from "../../../components/Header";
 import Tooltip from '@mui/material/Tooltip';
-import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
 import useConfirm from "../../../hooks/useConfirm";
+import { gridStyle, buttonHoverStyle } from "../../../styles";
 import { useFetchUsers, useUpdateUserRole, useDeleteUser } from '../../../hooks/UserHooks';
+import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
 
 const UserGrid = () => {
 
-	const { data, status, isSuccess } = useFetchUsers();
+	const { data } = useFetchUsers();
 	const updateUserRole = useUpdateUserRole();
 	const deleteUser = useDeleteUser();
 
 	const [rowModesModel, setRowModesModel] = useState({});
 	const [rows, setRows] = useState([]);
-	const { setDirty } = useOutletContext();
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
 
 	useEffect(() => {
@@ -29,7 +27,6 @@ const UserGrid = () => {
 
 	const updateRowModel = (rowModel) => {
 		setRowModesModel(rowModel);
-		setDirty(Object.values(rowModel).some((row) => row.mode === GridRowModes.Edit));
 	}
 
 	const handleEditClick = (id) => {

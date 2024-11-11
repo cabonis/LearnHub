@@ -12,8 +12,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 
 const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
-    const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
+
     return (
         <MenuItem
             active={selected === title}

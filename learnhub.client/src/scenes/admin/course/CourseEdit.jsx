@@ -1,36 +1,18 @@
-import { useState, useRef } from 'react';
-import { useNavigate, useOutletContext, Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { useOutletContext, Outlet } from 'react-router-dom';
 import Header from "../../../components/Header";
-import SaveCancel from "../../../components/SaveCancel";
 import TabViewRouted from "../../../components/TabViewRouted";
 
 const CourseEdit = () => {
 
-  const submitRef = useRef();
-  const navigate = useNavigate();
-  const { course, isDirty, setDirty } = useOutletContext();
-  const [isSaveCancel, setSaveCancel] = useState(true);
-
-  const onSaveClick = () => {
-    submitRef.current.requestSubmit();
-  };
-
-  const onCancelClick = () => {
-    navigate("/admin/course");
-  };
-
-  const onTabChanged = () => {
-    setDirty(false);
-    setSaveCancel(true);
-  }
+  const { course } = useOutletContext();
 
   return (
     <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
 
       <Header title="Course Editor" subtitle={course.title} />
 
-      <TabViewRouted tabChanged={() => onTabChanged()} tabs={[
+      <TabViewRouted tabs={[
         { label: "Information", path: "" },
         ...course ? [{ label: "Enrollment", path: "enrollment" }] : [],
         ...course ? [{ label: "Announcements", path: "announcements" }] : [],
@@ -40,19 +22,7 @@ const CourseEdit = () => {
 
       <Outlet context={{
         course: course,
-        submitRef, submitRef,
-        isDirty: isDirty,
-        setDirty: setDirty,
-        setSaveCancel: setSaveCancel
       }}
-      />
-
-      <SaveCancel
-        isSaveShown={isSaveCancel && isDirty}
-        isCancelShown={isSaveCancel && isDirty}
-        saveClicked={onSaveClick}
-        cancelClicked={onCancelClick}
-        sx={{ position: 'absolute', right: 15, bottom: 15 }}
       />
 
     </Box>
