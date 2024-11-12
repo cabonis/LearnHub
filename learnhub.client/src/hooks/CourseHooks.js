@@ -35,7 +35,7 @@ const useUpdateCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (course) => axios.put(`/api/course`, course),
-        onSuccess: () => {
+        onSuccess: (course) => {
             queryClient.invalidateQueries({ queryKey: ["courses"] });
             queryClient.invalidateQueries({ queryKey: ["course", course.id] });
         },

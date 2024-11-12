@@ -3,7 +3,7 @@ import { Formik } from "formik";
 import dayjs from "dayjs";
 import * as yup from "yup";
 import { Box } from "@mui/material";
-import { useOutletContext, useNavigate } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 import FormInputText from "../../../components/FormInputText";
 import FormInputDropdown from "../../../components/FormInputDropdown";
 import FormInputDatePicker from "../../../components/FormInputDatePicker";
@@ -28,11 +28,10 @@ const validationSchema = yup.object({
 const CourseInfo = () => {
 
     const formikRef = useRef();
-    const { course } = useOutletContext();
+    const { course, setUpdatedCourse } = useOutletContext();
     const [isDirty, setIsDirty] = useState(false);
     const { SaveCancelButtons, setShown } = useSaveCancel();
     const { data: instructors } = useFetchUsersByRole("Instructor");
-    const navigate = useNavigate();
     const addCourse = useAddCourse();
     const updateCourse = useUpdateCourse();
     const isEdit = !!course;
@@ -71,16 +70,20 @@ const CourseInfo = () => {
         };
 
         if (isEdit) {
-            updateCourse.mutate(formValues, {
+            updateCourse.mutate({
+                ...formValues,
+                id: course.id
+            }, {
                 onSuccess: () => {
                     submitProps.resetForm({ values });
+                    setUpdatedCourse(formValues);
                 }
             });
         }
         else {
             addCourse.mutate(formValues, {
                 onSuccess: ({ data: newCourse }) => {
-                    navigate(`/admin/course/${newCourse.id}`);
+                    setUpdatedCourse(newCourse);
                 }
             });
         }

@@ -8,6 +8,10 @@ const ModuleAdd = () => {
     const navigate = useNavigate();
     const { course } = useOutletContext();
 
+    const setUpdatedModule = (module) => {
+        navigate(`/admin/course/${course.id}/${module.id}`);
+    }
+
     return (
         <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
 
@@ -19,7 +23,8 @@ const ModuleAdd = () => {
             />
 
             <Outlet context={{
-                course: course
+                course: course,
+                setUpdatedModule: setUpdatedModule
             }}
             />
 

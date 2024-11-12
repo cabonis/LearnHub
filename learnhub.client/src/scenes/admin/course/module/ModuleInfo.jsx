@@ -26,7 +26,7 @@ const newModule = {
 const ModuleInfo = () => {
 
     const formikRef = useRef();
-    const { course, module } = useOutletContext();
+    const { course, module, setUpdatedModule } = useOutletContext();
     const [isDirty, setIsDirty] = useState(false);
     const { SaveCancelButtons, setShown } = useSaveCancel();
     const navigate = useNavigate();
@@ -63,13 +63,14 @@ const ModuleInfo = () => {
             }, {
                 onSuccess: () => {
                     submitProps.resetForm({ values });
+                    setUpdatedModule(values);
                 }
             });
         }
         else {
             addModule.mutate(moduleValues, {
                 onSuccess: ({ data: newModule }) => {
-                    navigate(`/admin/course/${course.id}/${newModule.id}`);
+                    setUpdatedModule(newModule);
                 }
             });
         }

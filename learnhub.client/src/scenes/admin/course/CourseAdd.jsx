@@ -1,9 +1,15 @@
 import Box from '@mui/material/Box';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Header from "../../../components/Header";
 import TabViewRouted from "../../../components/TabViewRouted";
 
 const CourseAdd = () => {
+
+    const navigate = useNavigate();
+
+    const setUpdatedCourse = (course) => {
+        navigate(`/admin/course/${course.id}`);
+    }
 
     return (
         <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
@@ -15,7 +21,9 @@ const CourseAdd = () => {
             ]}
             />
 
-            <Outlet context={{}} />
+            <Outlet context={{
+                setUpdatedCourse: setUpdatedCourse
+            }} />
 
         </Box>
     );
