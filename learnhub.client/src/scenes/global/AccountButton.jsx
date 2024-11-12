@@ -11,7 +11,7 @@ import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import ChangePassword from './ChangePassword';
 
-const AccountButton = () => {
+const AccountButton = ({ sx }) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
@@ -54,6 +54,7 @@ const AccountButton = () => {
           aria-controls={open ? 'account-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
+          sx={sx}
         >
           <PersonOutlinedIcon />
         </IconButton>

@@ -7,6 +7,8 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountButton from "./AccountButton";
+import { StayPrimaryLandscape } from "@mui/icons-material";
+import { buttonHoverStyle } from "../../styles";
 
 const Topbar = () => {
 
@@ -19,7 +21,7 @@ const Topbar = () => {
 
             <Box
                 display="flex"
-                backgroundColor={colors.primary[400]}
+                backgroundColor={"primary.light"}
                 borderRadius="3px"
             >
                 <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
@@ -29,17 +31,23 @@ const Topbar = () => {
             </Box>
 
             <Box display="flex">
-                <IconButton onClick={colorMode.toggleColorMode}>
+                <IconButton
+                    onClick={colorMode.toggleColorMode}
+                    sx={buttonHoverStyle}
+                >
                     {theme.palette.mode === "dark" ? (
                         <DarkModeOutlinedIcon />
                     ) : (
                         <LightModeOutlinedIcon />
                     )}
                 </IconButton>
-                <IconButton>
+                <IconButton
+                    sx={buttonHoverStyle}>
                     <NotificationsOutlinedIcon />
                 </IconButton>
-                <AccountButton />
+                <AccountButton
+                    sx={buttonHoverStyle}
+                />
             </Box>
         </Box>
     );
