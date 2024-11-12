@@ -20,7 +20,7 @@ import ModuleContent from '../scenes/admin/course/module/ModuleContent';
 const Scenes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Dashboard />} />
+            <Route index element={<Dashboard />} />
             <Route path="courses" element={<Courses />} />
             <Route path="announcements" element={<Announcements />} />
             <Route path="calendar" element={<Calendar />} />
