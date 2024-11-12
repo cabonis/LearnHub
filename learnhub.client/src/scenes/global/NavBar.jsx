@@ -37,43 +37,42 @@ const NavBar = () => {
 
     const menuItemStyles = {
         icon: {
-            color: colors.grey[100],
+            color: "theme.palette.neutral.light",
         },
         SubMenuExpandIcon: {
-            color: colors.grey[100],
+            color: theme.palette.neutral.light,
             '&:hover': {
-                color: colors.primary[800],
+                color: theme.palette.primary.dark,
             },
         },
         subMenuContent: ({ level }) => ({
             backgroundColor:
                 level === 0
-                    ? colors.primary[400]
+                    ? theme.palette.primary.main
                     : 'transparent',
         }),
         button: {
-            color: colors.grey[100],
+            color: theme.palette.neutral.light,
             '&:hover': {
-                backgroundColor: colors.grey[300],
-                color: colors.primary[400],
+                backgroundColor: theme.palette.neutral.light,
+                color: theme.palette.primary.main,
             },
         }
     };
 
     const headerStyle = {
         icon: {
-            color: colors.grey[100],
+            color: theme.palette.neutral.light,
         },
         button: {
             '&:hover': {
-                backgroundColor: colors.primary[400],
-                color: colors.grey[100],
+                backgroundColor: theme.palette.primary.light,
             },
         }
     };
 
     return (
-        <Sidebar collapsed={isCollapsed} backgroundColor={colors.primary[400]}>
+        <Sidebar collapsed={isCollapsed} backgroundColor={theme.palette.primary.light}>
 
             <Menu menuItemStyles={headerStyle}>
                 <MenuItem
@@ -114,13 +113,13 @@ const NavBar = () => {
                         <Box textAlign="center">
                             <Typography
                                 variant="h4"
-                                color={colors.grey[100]}
+                                color={theme.palette.neutral.light}
                                 fontWeight="bold"
                                 sx={{ m: "10px 0 0 0" }}
                             >
                                 {`${authorizedUser.firstName} ${authorizedUser.lastName}`}
                             </Typography>
-                            <Typography variant="h5" color="secondary.main">
+                            <Typography variant="h5" color={theme.palette.secondary.main}>
                                 {authorizedUser.role}
                             </Typography>
                         </Box>
@@ -137,7 +136,7 @@ const NavBar = () => {
 
                 <Typography
                     variant="h6"
-                    color={colors.grey[300]}
+                    color={theme.palette.neutral.main}
                     sx={{ m: "25px 0 5px 20px" }}
                 >
                     {!isCollapsed && ("Academics")}
@@ -169,7 +168,7 @@ const NavBar = () => {
 
                 <Typography
                     variant="h6"
-                    color={colors.grey[300]}
+                    color={theme.palette.neutral.main}
                     sx={{ m: "25px 0 5px 20px" }}
                 >
                     {!isCollapsed && ("Admin")}

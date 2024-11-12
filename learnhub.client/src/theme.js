@@ -18,7 +18,7 @@ export const tokens = (mode) => ({
                 800: "#292929",
                 900: "#141414",
             },
-            primary: {
+            bluePrimary: {
                 100: "#d0d1d5",
                 200: "#a1a4ab",
                 300: "#727681",
@@ -28,6 +28,28 @@ export const tokens = (mode) => ({
                 700: "#0c101b",
                 800: "#080b12",
                 900: "#040509",
+            },
+            grayPrimary: {
+                50: '#BAC1CA',
+                100: '#AFB6C1',
+                200: '#98A1AF',
+                300: '#818D9D',
+                400: '#6B788A',
+                500: '#596473',
+                600: '#414953',
+                700: '#282D34',
+                800: '#101214'
+            },
+            orangeAccent: {
+                50: '#241500',
+                100: '#5C3700',
+                200: '#945800',
+                300: '#CC7A00',
+                400: '#F59200',
+                500: '#FFA51F',
+                600: '#FFB547',
+                700: '#FFC670',
+                800: '#FFCE85'
             },
             greenAccent: {
                 100: "#dbf5ee",
@@ -75,7 +97,7 @@ export const tokens = (mode) => ({
                 800: "#c2c2c2",
                 900: "#e0e0e0",
             },
-            primary: {
+            bluePrimary: {
                 100: "#040509",
                 200: "#080b12",
                 300: "#0c101b",
@@ -85,6 +107,30 @@ export const tokens = (mode) => ({
                 700: "#727681",
                 800: "#a1a4ab",
                 900: "#d0d1d5",
+            },
+            grayPrimary: {
+                50: '#101214',
+                100: '#282D34',
+                200: '#414953',
+                300: '#596473',
+                400: '#6B788A',
+                500: '#818D9D',
+                600: '#98A1AF',
+                700: '#AFB6C1',
+                800: '#BAC1CA',
+            },
+            orangeAccent: {
+                50: '#FFCE85',
+                100: '#FFC670',
+                200: '#FFB547',
+                300: '#FFA51F',
+                400: '#F59200',
+                500: '#CC7A00',
+                600: '#945800',
+                700: '#5C3700',
+                800: '#241500',
+                900: '#000000',
+                950: '#000000'
             },
             greenAccent: {
                 100: "#0f2922",
@@ -130,39 +176,43 @@ export const themeSettings = (mode) => {
             ...(mode === "dark"
                 ? {
                     primary: {
-                        light: colors.primary[400],
-                        main: colors.primary[500],
+                        dark: colors.grayPrimary[800],
+                        main: colors.grayPrimary[700],
+                        light: colors.grayPrimary[600]
                     },
                     secondary: {
-                        dark: colors.greenAccent[700],
-                        main: colors.greenAccent[500],
-                        light: colors.greenAccent[100],
+                        dark: colors.orangeAccent[700],
+                        main: colors.orangeAccent[600],
+                        light: colors.orangeAccent[100],
                     },
                     neutral: {
                         dark: colors.grey[700],
-                        main: colors.grey[500],
+                        main: colors.grey[300],
                         light: colors.grey[100],
                     },
                     background: {
-                        default: colors.primary[500],
+                        default: colors.grayPrimary[700],
                     },
                 }
                 : {
                     // palette values for light mode
                     primary: {
-                        main: colors.primary[100],
-                        light: colors.primary[400],
+                        dark: colors.grayPrimary[600],
+                        main: colors.grayPrimary[700],
+                        light: colors.grayPrimary[800]
                     },
                     secondary: {
-                        main: colors.greenAccent[500],
+                        dark: colors.orangeAccent[700],
+                        main: colors.orangeAccent[500],
+                        light: colors.orangeAccent[100],
                     },
                     neutral: {
                         dark: colors.grey[700],
-                        main: colors.grey[500],
-                        light: colors.grey[100],
+                        main: colors.grey[400],
+                        light: colors.grey[500],
                     },
                     background: {
-                        default: "#fcfcfc",
+                        default: "#ededed",
                     },
                 }),
         },
