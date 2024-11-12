@@ -1,13 +1,9 @@
-import { useRef } from 'react';
-import { TextField, FormControl } from "@mui/material";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useField, useFormikContext } from "formik";
-import dayjs from "dayjs";
 
 const FormInputDatePicker = ({ name, label, formik, sx, props }) => {
-        
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
@@ -28,24 +24,24 @@ const FormInputDatePicker = ({ name, label, formik, sx, props }) => {
                     popper: {
                         sx: {
                             '& .MuiPaper-root': {
-                            backgroundColor: 'primary.light',
+                                backgroundColor: 'primary.light',
                             },
                         },
                     },
                     day: {
                         sx: {
-                        '&.MuiPickersDay-root.Mui-selected': {
-                            backgroundColor: 'secondary.main',
-                        },
+                            '&.MuiPickersDay-root.Mui-selected': {
+                                backgroundColor: 'secondary.main',
+                            },
                         }
                     },
                 }}
                 sx={{
                     ...sx
-                    }}  
+                }}
             />
         </LocalizationProvider>
     );
-  };
+};
 
-  export default FormInputDatePicker
+export default FormInputDatePicker

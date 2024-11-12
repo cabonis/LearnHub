@@ -1,15 +1,14 @@
 import { Outlet, useParams, useOutletContext } from 'react-router-dom';
-import { mockCourseData } from "../../../data/mockData";
+import { useFetchCourseInfo } from '../../../hooks/CourseHooks';
 
 const Course = () => {
 
-    const outletContext = useOutletContext();
     const { id } = useParams();
-    const numId = parseInt(id);
-    const course = mockCourseData.find((c) => c.id === numId);
+    const { data } = useFetchCourseInfo(id);
+    const outletContext = useOutletContext();
 
-    return (
-        <Outlet context={{ ...outletContext, course: course }} />
+    return (data &&
+        <Outlet context={{ ...outletContext, course: data }} />
     )
 }
 

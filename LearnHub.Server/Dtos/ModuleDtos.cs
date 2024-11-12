@@ -11,5 +11,6 @@
 		public int CourseId { get; init; }
 		public string Title { get; init; }
 		public string Description { get; init; }
+		public DateOnly StartDate { get; init; }
 	}
 }

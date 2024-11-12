@@ -1,27 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
-import { useOutletContext } from 'react-router-dom';
-import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Header from "../../../components/Header";
 import Tooltip from '@mui/material/Tooltip';
-import { mockDataUsers } from "../../../data/mockData";
-import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
 import useConfirm from "../../../hooks/useConfirm";
+import { gridStyle, buttonHoverStyle } from "../../../styles";
+import { useFetchUsers, useUpdateUserRole, useDeleteUser } from '../../../hooks/UserHooks';
+import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
 
 const UserGrid = () => {
 
+	const { data } = useFetchUsers();
+	const updateUserRole = useUpdateUserRole();
+	const deleteUser = useDeleteUser();
+
 	const [rowModesModel, setRowModesModel] = useState({});
-	const [rows, setRows] = useState(mockDataUsers);
-	const { setDirty } = useOutletContext();
+	const [rows, setRows] = useState([]);
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
+
+	useEffect(() => {
+		setRows(data);
+	}, [data]);
 
 	const updateRowModel = (rowModel) => {
 		setRowModesModel(rowModel);
-		setDirty(Object.values(rowModel).some((row) => row.mode === GridRowModes.Edit));
 	}
 
 	const handleEditClick = (id) => {
@@ -50,9 +55,26 @@ const UserGrid = () => {
 
 	const handleDeleteClick = async (id) => {
 		if (await confirmDelete("Confirm", "Are you sure you wish to delete this user?")) {
-			// Do delete
+			deleteUser.mutate(id, {
+				onError: () => {
+					setRows([
+						...rows
+					]);
+				}
+			});
 			setRows(rows.filter((row) => row.id !== id));
 		}
+	};
+
+	const processRowUpdate = (newRow, oldrow, { rowId }) => {
+		updateUserRole.mutate(newRow, {
+			onError: () => {
+				setRows(rows => rows.map(row =>
+					row.id === rowId ? oldrow : row)
+				);
+			}
+		});
+		return newRow;
 	};
 
 	const columns = [
@@ -156,6 +178,8 @@ const UserGrid = () => {
 					columns={columns}
 					rowHeight={40}
 					editMode="row"
+					processRowUpdate={processRowUpdate}
+					experimentalFeatures={{ newEditingApi: true }}
 					rowModesModel={rowModesModel}
 					onRowModesModelChange={handleRowModesModelChange}
 					onRowEditStop={handleRowEditStop}

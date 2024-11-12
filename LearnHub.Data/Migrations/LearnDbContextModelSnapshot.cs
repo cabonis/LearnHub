@@ -128,8 +128,14 @@ namespace LearnHub.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
                     b.Property<int>("InstructorId")
                         .HasColumnType("int");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -146,21 +152,27 @@ namespace LearnHub.Data.Migrations
                         {
                             Id = 1,
                             Description = "",
+                            EndDate = new DateOnly(2024, 12, 31),
                             InstructorId = 1,
+                            StartDate = new DateOnly(2024, 11, 1),
                             Title = "Physics 101"
                         },
                         new
                         {
                             Id = 2,
                             Description = "",
+                            EndDate = new DateOnly(2024, 12, 31),
                             InstructorId = 1,
+                            StartDate = new DateOnly(2024, 11, 1),
                             Title = "Math 101"
                         },
                         new
                         {
                             Id = 3,
                             Description = "",
+                            EndDate = new DateOnly(2024, 12, 31),
                             InstructorId = 1,
+                            StartDate = new DateOnly(2024, 11, 1),
                             Title = "English 101"
                         });
                 });
@@ -179,6 +191,9 @@ namespace LearnHub.Data.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -232,11 +247,11 @@ namespace LearnHub.Data.Migrations
                         new
                         {
                             Id = 1,
-                            FirstName = "Joe",
-                            LastName = "Dirt",
-                            PasswordHash = "$2b$11$cmttKuuLuaJhPucqV4VZouXJsa4DqNSWnJMXBwp.6rQ1laUbGnoNS",
-                            Role = 0,
-                            UserName = "user1"
+                            FirstName = "LearnHub",
+                            LastName = "Admin",
+                            PasswordHash = "$2b$11$tqmJtna2R3Wr9dqe9.btr.R8Tz3XDam6Lxv3hoTyWCBYueY0tWx7e",
+                            Role = 2,
+                            UserName = "admin"
                         },
                         new
                         {

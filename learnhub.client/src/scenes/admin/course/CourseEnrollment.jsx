@@ -1,56 +1,82 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Box } from "@mui/material";
-import SearchableTransferList from "../../../components/SearchableTransferList";
-import { mockDataUsers } from "../../../data/mockData";
-import { mockCourseData } from "../../../data/mockData";
 import { useOutletContext } from "react-router-dom";
-
+import SearchableTransferList from "../../../components/SearchableTransferList";
+import { useFetchCourseEnrollment, useUpdateCourseEnrollment } from "../../../hooks/EnrollmentHooks";
+import { useFetchUsers } from "../../../hooks/UserHooks";
+import useSaveCancel from "../../../hooks/useSaveCancel"
 
 const CourseEnrollment = () => {
 
-   const { course, submitRef, setDirty } = useOutletContext();
-   const [originalEnrolled, setOriginalEnrolled] = useState(course.users);
-   const [enrolled, setEnrolled] = useState(course.users);
+   const { course } = useOutletContext();
+   const { data: serverEnrollment } = useFetchCourseEnrollment(course.id);
+   const { data: serverUsers } = useFetchUsers();
+   const { SaveCancelButtons, setShown } = useSaveCancel();
+
+   const [originalEnrolled, setOriginalEnrolled] = useState();
+   const [enrolled, setEnrolled] = useState();
+   const [originalAvailable, setOriginalAvailable] = useState();
+   const updateEnrollment = useUpdateCourseEnrollment();
 
    useEffect(() => {
-      setDirty(!areEquivilant(enrolled, originalEnrolled));
-   }, [enrolled, originalEnrolled]);
+      if (serverEnrollment && serverUsers) {
+         setEnrolled(serverEnrollment)
+         setOriginalEnrolled(serverEnrollment);
+         setOriginalAvailable(serverUsers.filter((u) => !serverEnrollment.some((e) => {
+            return e.id === u.id;
+         })));
+      }
+   }, [serverEnrollment, serverUsers]);
 
-   const available = mockDataUsers.filter((value) => !enrolled.some((item) => {
-      return item.id === value.id;
-   }));
+   useEffect(() => {
+      setShown(!areEquivilant(enrolled, originalEnrolled));
+   }, [enrolled]);
 
    const areEquivilant = (left, right) => {
-
+      if (!left || !right)
+         return true;
       if (left.length !== right.length)
          return false;
-
       return left.every(l => right.some((r) => r.id === l.id)) &&
          right.every(r => left.some((l) => l.id === r.id));
    }
 
-   const enrollmentChanged = (newAvailable, newEnrolled) => {
+   const enrollmentChanged = (_, newEnrolled) => {
       setEnrolled(newEnrolled)
    }
 
-   const handleFormSubmit = (e) => {
-      e.preventDefault();
-      // Save data
-      setOriginalEnrolled(enrolled);
+   const handleSaveClicked = () => {
+      updateEnrollment.mutate({
+         courseId: course.id,
+         users: enrolled
+      }, {
+         onSuccess: () => {
+            setOriginalEnrolled(enrolled);
+         }
+      });
    };
 
-   return (
+   const handleCancelClicked = () => {
+      setOriginalEnrolled([...originalEnrolled]);
+      setOriginalAvailable([...originalAvailable]);
+   }
+
+   return ((originalAvailable && originalEnrolled) &&
       <Box m="20px" sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
-         <form ref={submitRef} onSubmit={handleFormSubmit}>
-            <SearchableTransferList
-               leftTitle="Available"
-               leftData={available}
-               rightTitle="Enrolled"
-               rightData={enrolled}
-               dataChanged={enrollmentChanged}
-               getId={(value) => value.id}
-               getValue={(value) => `${value.firstName} ${value.lastName}`} />
-         </form>
+
+         <SearchableTransferList
+            leftTitle="Available"
+            leftData={originalAvailable}
+            rightTitle="Enrolled"
+            rightData={originalEnrolled}
+            dataChanged={enrollmentChanged}
+            getId={(value) => value.id}
+            getValue={(value) => `${value.firstName} ${value.lastName}`}
+         />
+         <SaveCancelButtons
+            handleSaveClicked={handleSaveClicked}
+            handleCancelClicked={handleCancelClicked}
+         />
       </Box>
    )
 }

@@ -1,21 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import dayjs from "dayjs";
 import { Box } from "@mui/material";
-import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import { useNavigate } from 'react-router-dom';
-import { gridStyle, buttonHoverStyle } from "../../global/ComponentStyles"
-import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
-import { useOutletContext } from 'react-router-dom';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import { useNavigate, useOutletContext } from 'react-router-dom';
+import { gridStyle, buttonHoverStyle } from "../../../styles"
+import DataGridAddButton from '../../../components/DataGridAddButton';
 import useConfirm from "../../../hooks/useConfirm";
+import { useFetchCourseModules, useDeleteModule } from "../../../hooks/ModuleHooks";
 
 const CourseModules = () => {
 
 	const navigate = useNavigate();
 	const { course } = useOutletContext();
-	const [rows, setRows] = useState(course.modules);
+	const { data: modules } = useFetchCourseModules(course.id);
+	const deleteModule = useDeleteModule();
+
+	const [rows, setRows] = useState([]);
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
+
+	useEffect(() => {
+		setRows(modules);
+	}, [modules]);
 
 	const handleEditClick = (moduleId) => {
 		navigate(`/admin/course/${course.id}/${moduleId}`);
@@ -23,7 +31,13 @@ const CourseModules = () => {
 
 	const handleDeleteClick = async (id) => {
 		if (await confirmDelete("Confirm", "Are you sure you wish to delete this module?")) {
-			// Do delete
+			deleteModule.mutate({ id: id, courseId: course.id }, {
+				onError: () => {
+					setRows([
+						...rows
+					]);
+				}
+			});
 			setRows(rows.filter((row) => row.id !== id));
 		}
 	};
@@ -33,6 +47,18 @@ const CourseModules = () => {
 			field: "title",
 			headerName: "Title",
 			minWidth: 250
+		},
+		{
+			field: "startDate",
+			headerName: "Start Date",
+			minWidth: 150,
+			renderCell: (params) => (
+				<Box>
+					{params.row.startDate ?
+						dayjs(params.row.startDate).format("MMM D, YYYY") :
+						""}
+				</Box>
+			),
 		},
 		{
 			field: 'actions',

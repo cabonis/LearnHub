@@ -17,12 +17,30 @@ namespace LearnHub.Server.Repositories
 			_mapper = mapper;
 		}
 
+		public async Task<List<AnnouncementDto>> GetByCourseIdAsync(int courseId)
+		{
+			return await _dbContext.Announcements
+				.Where(a => a.CourseId == courseId)
+				.Select(a => _mapper.Map<AnnouncementDto>(a))
+				.ToListAsync();
+		}
+
 		public async Task<AnnouncementDto> AddAsync(AnnouncementInfoDto announcementInfoDto)
 		{
 			Announcement announcement = _mapper.Map<Announcement>(announcementInfoDto);
 			_dbContext.Announcements.Add(announcement);
 			await _dbContext.SaveChangesAsync();
 			return _mapper.Map<AnnouncementDto>(announcement);
+		}
+
+		public async Task<bool> UpdateAsync(AnnouncementInfoDto announcementInfoDto)
+		{
+			int count = await _dbContext.Announcements
+				.Where(a => a.Id == announcementInfoDto.Id)
+				.ExecuteUpdateAsync(setters => setters
+					.SetProperty(a => a.Text, announcementInfoDto.Text)
+					.SetProperty(a => a.Priority, _mapper.Map<Priority>(announcementInfoDto.Priority)));
+			return count > 0;
 		}
 
 		public async Task<bool> DeleteAsync(int announcementId)
@@ -37,6 +55,10 @@ namespace LearnHub.Server.Repositories
 
 	public interface IAnnouncementRepository
 	{
+		Task<List<AnnouncementDto>> GetByCourseIdAsync(int courseId);
+
+		Task<bool> UpdateAsync(AnnouncementInfoDto announcementInfoDto);
+
 		Task<AnnouncementDto> AddAsync(AnnouncementInfoDto announcementInfoDto);
 
 		Task<bool> DeleteAsync(int announcementId);
