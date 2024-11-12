@@ -82,14 +82,21 @@ namespace LearnHub.Server.Repositories
 				.ToListAsync();
 		}
 
-		public async Task<bool> UpdatePasswordAsync(int id, string password)
+		public async Task<bool> UpdatePasswordAsync(string userName, ChangePasswordDto changePassword)
 		{
-			string hash = _passwordHasher.Hash(password);
-			int count = await _dbContext.Users
-				.Where(user => user.Id == id)
-				.ExecuteUpdateAsync(setters => setters
-					.SetProperty(u => u.PasswordHash, hash));
-			return count > 0;
+			User? user = await _dbContext.Users
+				.Where(u => u.UserName == userName)
+				.FirstOrDefaultAsync();
+
+			if (user != null && _passwordHasher.Verify(changePassword.CurrentPassword, user.PasswordHash))
+			{
+				user.PasswordHash = _passwordHasher.Hash(changePassword.NewPassword);
+				_dbContext.Update(user);
+				_dbContext.SaveChanges();
+				return true;
+			}
+
+			return false;
 		}
 
 		public async Task<bool> UpdateRoleAsync(int id, RoleDto userRole)
@@ -127,7 +134,7 @@ namespace LearnHub.Server.Repositories
 
 		Task AddAsync(UserRegistrationDto userRegistrationDto);
 
-		Task<bool> UpdatePasswordAsync(int id, string password);
+		Task<bool> UpdatePasswordAsync(string userName, ChangePasswordDto changePassword);
 
 		Task<bool> UpdateRoleAsync(int id, RoleDto userRole);
 

@@ -19,7 +19,7 @@ const FormInputDatePicker = ({ name, label, formik, sx, props }) => {
                         variant: "filled",
                         onBlur: () => formik.setFieldTouched(name),
                         error: !!formik.touched[name] && !!formik.errors[name],
-                        helperText: formik.touched[name] && formik.errors[name]
+                        helperText: formik.touched[name] && formik.errors[name],
                     },
                     popper: {
                         sx: {

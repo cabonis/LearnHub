@@ -48,7 +48,7 @@ const FormInputDropdown = ({ name, label, formik, sx, options, optionsConverter,
 
       {(formik.touched[name] && formik.errors[name]) && (
         <FormHelperText>
-          {formik.touched[name] && formik.errors[name]}
+          {formik.touched[name] ? formik.errors[name] : '\u00A0'}
         </FormHelperText>
       )}
 

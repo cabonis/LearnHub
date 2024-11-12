@@ -3,6 +3,7 @@ import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses } from 'react-pro-side
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import { tokens } from "../../theme";
+import LearnHubLogo from "../../components/LearnHubLogo";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import LocalLibraryOutlinedIcon from '@mui/icons-material/LocalLibraryOutlined';
@@ -10,6 +11,7 @@ import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
+import { useAuthorizedUser } from "../../hooks/useAuthorization";
 
 const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
 
@@ -31,6 +33,7 @@ const NavBar = () => {
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
+    const authorizedUser = useAuthorizedUser();
 
     const menuItemStyles = {
         icon: {
@@ -87,9 +90,7 @@ const NavBar = () => {
                             alignItems="center"
                             ml="0px"
                         >
-                            <Typography variant="h3" color={colors.grey[100]}>
-                                LearnHub
-                            </Typography>
+                            <LearnHubLogo />
                             <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                                 <MenuOutlinedIcon />
                             </IconButton>
@@ -112,15 +113,15 @@ const NavBar = () => {
                         </Box>
                         <Box textAlign="center">
                             <Typography
-                                variant="h2"
+                                variant="h4"
                                 color={colors.grey[100]}
                                 fontWeight="bold"
                                 sx={{ m: "10px 0 0 0" }}
                             >
-                                Chris Bonis
+                                {`${authorizedUser.firstName} ${authorizedUser.lastName}`}
                             </Typography>
                             <Typography variant="h5" color="secondary.main">
-                                Admin
+                                {authorizedUser.role}
                             </Typography>
                         </Box>
                     </Box>
