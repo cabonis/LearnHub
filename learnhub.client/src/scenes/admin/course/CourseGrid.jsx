@@ -123,7 +123,7 @@ const CourseGrid = () => {
       <Box
         m="40px 0 0 0"
         p="0 0 20px 0"
-        height="75vh"
+        height="72vh"
         sx={gridStyle}
       >
         <DataGrid

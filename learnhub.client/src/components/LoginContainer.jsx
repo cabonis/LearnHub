@@ -19,7 +19,8 @@ const LoginContainer = ({ children }) => {
                     backgroundColor: "primary.light",
                     boxShadow: 20,
                     padding: 3
-                }}            >
+                }}
+            >
                 <Stack>
                     <LearnHubLogo />
 

@@ -3,6 +3,7 @@ using LearnHub.Data.Database;
 using LearnHub.Data.Domain;
 using LearnHub.Server.Dtos;
 using LearnHub.Server.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace LearnHub.Server.Repositories
 {
@@ -32,6 +33,14 @@ namespace LearnHub.Server.Repositories
 
 			transaction.Commit();
 			return _mapper.Map<ContentInfoDto>(content);
+		}
+
+		public async Task<List<ContentInfoDto>> GetByModuleAsync(int moduleId)
+		{
+			return await _dbContext.Content
+				.Where(c => c.ModuleId == moduleId)
+				.Select(c => _mapper.Map<ContentInfoDto>(c))
+				.ToListAsync();
 		}
 
 		public async Task<ContentDownloadDto?> GetAsync(int contentId)
@@ -66,6 +75,8 @@ namespace LearnHub.Server.Repositories
 
 	public interface IContentRepository
 	{
+		Task<List<ContentInfoDto>> GetByModuleAsync(int moduleId);
+
 		Task<ContentInfoDto> AddAsync(ContentUplaodDto contentDto);
 
 		Task<ContentDownloadDto?> GetAsync(int contentId);

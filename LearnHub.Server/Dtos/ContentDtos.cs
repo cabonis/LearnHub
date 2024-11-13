@@ -1,14 +1,18 @@
 ﻿namespace LearnHub.Server.Dtos
 {
-	public record ContentInfoDto
+	public abstract record ContentInfoBaseDto
 	{
 		public int Id { get; init; }
 		public string Title { get; init; }
-		public string Description { get; init; }
 		public int ModuleId { get; init; }
 	}
 
-	public record ContentUplaodDto : ContentInfoDto
+	public record ContentInfoDto : ContentInfoBaseDto
+	{
+		public string OriginalFileName { get; init; }
+	}
+
+	public record ContentUplaodDto : ContentInfoBaseDto
 	{
 		public IFormFile DataFile { get; init; }
 	}

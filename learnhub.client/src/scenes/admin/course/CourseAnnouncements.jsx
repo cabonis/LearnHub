@@ -225,7 +225,7 @@ const CourseAnnouncements = () => {
 		<Box>
 			<Box
 				p="0 0 20px 0"
-				height="72vh"
+				height="70vh"
 				sx={gridStyle}
 			>
 				<DataGrid

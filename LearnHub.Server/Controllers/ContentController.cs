@@ -12,6 +12,22 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly IContentRepository _contentRepository;
 
+		[HttpGet("module/{moduleId}")]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetByModuleContent(int moduleId)
+		{
+			List<ContentInfoDto> content = await _contentRepository.GetByModuleAsync(moduleId);
+
+			if (content != null)
+			{
+				return Ok(content);
+			}
+
+			return NotFound();
+		}
+
 		[HttpPost]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[RequestSizeLimit(10000000)]
