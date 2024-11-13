@@ -23,11 +23,16 @@ const CourseAnnouncements = () => {
 
 	const [rows, setRows] = useState([]);
 	const [rowModesModel, setRowModesModel] = useState({});
+	const [isAdding, setIsAdding] = useState(false);
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
 
 	useEffect(() => {
 		setRows(announcements);
 	}, [announcements]);
+
+	useEffect(() => {
+		setIsAdding(rows.some(r => r.id === 0));
+	}, [rows]);
 
 	const handleDeleteClick = async (id) => {
 		if (await confirmDelete("Confirm", "Are you sure you wish to delete this announcement?")) {
@@ -60,7 +65,6 @@ const CourseAnnouncements = () => {
 	};
 
 	const handleSaveClick = (id) => {
-		// DO SAVE!!
 		setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
 	};
 
@@ -242,7 +246,7 @@ const CourseAnnouncements = () => {
 						toolbar: DataGridAddButton,
 					}}
 					slotProps={{
-						toolbar: { text: "Add Announcement", onClick: handleAddClick },
+						toolbar: { text: "Add Announcement", onClick: handleAddClick, disabled: isAdding },
 					}}
 				/>
 
