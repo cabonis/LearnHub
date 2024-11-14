@@ -50,6 +50,7 @@ const Login = () => {
                     onSubmit={handleFormSubmit}
                     initialValues={{ userName: "", password: "", isPersistent: false }}
                     validationSchema={validationSchema}
+                    onValidationError={() => { }}
                     innerRef={formikRef}
                 >
                     {(formik) => {

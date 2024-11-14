@@ -15,7 +15,7 @@ const CourseModules = () => {
 
 	const navigate = useNavigate();
 	const { course } = useOutletContext();
-	const { data: modules } = useFetchCourseModules(course.id);
+	const { data: modules, isLoading } = useFetchCourseModules(course.id);
 	const deleteModule = useDeleteModule();
 
 	const [rows, setRows] = useState([]);
@@ -99,13 +99,14 @@ const CourseModules = () => {
 		<Box m="0">
 			<Box
 				p="0 0 20px 0"
-				height="72vh"
+				height="70vh"
 				sx={gridStyle}
 			>
 				<DataGrid
 					rows={rows}
 					columns={columns}
 					rowHeight={40}
+					loading={isLoading}
 					slots={{
 						toolbar: DataGridAddButton,
 					}}

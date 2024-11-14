@@ -13,7 +13,7 @@ import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } 
 
 const UserGrid = () => {
 
-	const { data } = useFetchUsers();
+	const { data, isLoading } = useFetchUsers();
 	const updateUserRole = useUpdateUserRole();
 	const deleteUser = useDeleteUser();
 
@@ -178,6 +178,7 @@ const UserGrid = () => {
 					columns={columns}
 					rowHeight={40}
 					editMode="row"
+					loading={isLoading}
 					processRowUpdate={processRowUpdate}
 					experimentalFeatures={{ newEditingApi: true }}
 					rowModesModel={rowModesModel}

@@ -23,7 +23,7 @@ const ModuleEdit = () => {
     return (module &&
         <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
 
-            <Header title="Module Editor" subtitle={`${course.title}---${title}`} />
+            <Header title="Module Editor" subtitle={`${course.title}:`} text={title} />
 
             <TabViewRouted tabs={[
                 { label: "Information", path: "" },

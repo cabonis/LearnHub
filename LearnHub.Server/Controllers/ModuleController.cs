@@ -51,11 +51,11 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetAsync(int id)
 		{
-			ModuleDetailDto? moduleDetails = await _moduleRepository.GetAsync(id);
+			ModuleInfoDto? moduleInfo = await _moduleRepository.GetAsync(id);
 
-			if (moduleDetails != null)
+			if (moduleInfo != null)
 			{
-				return Ok(moduleDetails);
+				return Ok(moduleInfo);
 			}
 
 			return NotFound();

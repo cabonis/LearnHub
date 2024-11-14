@@ -45,7 +45,7 @@ const useUpdateCourse = () => {
 const useDeleteCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id) => axios.delete(`/api/coursexxx/${id}`),
+        mutationFn: (id) => axios.delete(`/api/course/${id}`),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["courses"] });
         },
