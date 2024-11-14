@@ -35,6 +35,15 @@ namespace LearnHub.Server.Repositories
 			return _mapper.Map<ContentInfoDto>(content);
 		}
 
+		public async Task<bool> UpdateAsync(ContentInfoBaseDto contentInfoDto)
+		{
+			int count = await _dbContext.Content
+				.Where(c => c.Id == contentInfoDto.Id)
+				.ExecuteUpdateAsync(setters => setters
+					.SetProperty(c => c.Title, contentInfoDto.Title));
+			return count > 0;
+		}
+
 		public async Task<List<ContentInfoDto>> GetByModuleAsync(int moduleId)
 		{
 			return await _dbContext.Content
@@ -78,6 +87,8 @@ namespace LearnHub.Server.Repositories
 		Task<List<ContentInfoDto>> GetByModuleAsync(int moduleId);
 
 		Task<ContentInfoDto> AddAsync(ContentUplaodDto contentDto);
+
+		Task<bool> UpdateAsync(ContentInfoBaseDto contentInfoDto);
 
 		Task<ContentDownloadDto?> GetAsync(int contentId);
 

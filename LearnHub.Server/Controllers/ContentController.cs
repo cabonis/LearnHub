@@ -44,6 +44,21 @@ namespace LearnHub.Server.Controllers
 			return BadRequest();
 		}
 
+		[HttpPut]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> UpdateContent([FromBody] ContentInfoBaseDto contentInfoDto)
+		{
+			if (await _contentRepository.UpdateAsync(contentInfoDto))
+			{
+
+				return Ok();
+			}
+
+			return NotFound();
+		}
+
 		[HttpGet("{id}")]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]

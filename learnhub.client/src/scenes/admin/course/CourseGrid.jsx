@@ -16,7 +16,7 @@ const CourseGrid = () => {
 
   const navigate = useNavigate();
 
-  const { data, status, isSuccess } = useFetchCourses();
+  const { data, isLoading, isSuccess } = useFetchCourses();
   const deleteCourse = useDeleteCourse();
   const [rows, setRows] = useState([]);
   const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
@@ -130,6 +130,7 @@ const CourseGrid = () => {
           rows={rows}
           columns={columns}
           rowHeight={40}
+          loading={isLoading}
           slots={{
             toolbar: DataGridAddButton,
           }}

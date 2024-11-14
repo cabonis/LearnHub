@@ -11,12 +11,13 @@ import { useOutletContext } from 'react-router-dom';
 import { gridStyle, buttonHoverStyle } from "../../../styles"
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import useConfirm from "../../../hooks/useConfirm";
+import useAlertSnack from "../../../hooks/useAlertSnack";
 import { useFetchCourseAnnouncements, useAddAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement } from "../../../hooks/AnnouncementHooks";
 
 const CourseAnnouncements = () => {
 
 	const { course } = useOutletContext();
-	const { data: announcements } = useFetchCourseAnnouncements(course.id);
+	const { data: announcements, isLoading } = useFetchCourseAnnouncements(course.id);
 	const addAnnouncement = useAddAnnouncement();
 	const updateAnnouncement = useUpdateAnnouncement();
 	const deleteAnnouncement = useDeleteAnnouncement();
@@ -25,13 +26,14 @@ const CourseAnnouncements = () => {
 	const [rowModesModel, setRowModesModel] = useState({});
 	const [isAdding, setIsAdding] = useState(false);
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
+	const [AlertSnack, showAlert] = useAlertSnack();
 
 	useEffect(() => {
 		setRows(announcements);
 	}, [announcements]);
 
 	useEffect(() => {
-		setIsAdding(rows.some(r => r.id === 0));
+		setIsAdding(rows?.some(r => r.isNew === true));
 	}, [rows]);
 
 	const handleDeleteClick = async (id) => {
@@ -100,7 +102,8 @@ const CourseAnnouncements = () => {
 					r.id === row.id ? {
 						...r,
 						id: announcement.id,
-						datetime: announcement.datetime
+						datetime: announcement.datetime,
+						isNew: false
 					} : r)
 				);
 			},
@@ -126,6 +129,12 @@ const CourseAnnouncements = () => {
 	}
 
 	const processRowUpdate = (row, oldRow) => {
+
+		if (!row.text) {
+			showAlert("You must provide announcement text!");
+			return;
+		}
+
 		if (row.isNew) {
 			processRowAdd(row);
 		}
@@ -237,6 +246,7 @@ const CourseAnnouncements = () => {
 					columns={columns}
 					rowHeight={40}
 					editMode="row"
+					loading={isLoading}
 					processRowUpdate={processRowUpdate}
 					experimentalFeatures={{ newEditingApi: true }}
 					rowModesModel={rowModesModel}
@@ -252,6 +262,7 @@ const CourseAnnouncements = () => {
 
 			</Box>
 			<ConfirmDeleteDialog />
+			<AlertSnack />
 		</Box>
 	)
 }

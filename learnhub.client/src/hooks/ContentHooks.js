@@ -5,6 +5,16 @@ const useFetchContent = () => (id) => {
     open(`/api/content/${id}`);
 };
 
+const useAddContent = () => {
+    return useMutation({
+        mutationFn: (contentForm) => axios.post(`/api/content`, contentForm, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+    });
+};
+
 const useFetchModuleContent = (moduleId) => {
     return useQuery({
         queryKey: ["content", moduleId],
@@ -14,31 +24,25 @@ const useFetchModuleContent = (moduleId) => {
     });
 };
 
-// const useAddModule = () => {
-//     const queryClient = useQueryClient();
-//     return useMutation({
-//         mutationFn: (module) => axios.post(`/api/module`, module),
-//         onSuccess: (_, newModule) => {
-//             queryClient.invalidateQueries({ queryKey: ["modules", newModule.courseId] });
-//         },
-//     });
-// };
-
-// const useUpdateModule = () => {
-//     const queryClient = useQueryClient();
-//     return useMutation({
-//         mutationFn: (module) => axios.put(`/api/module`, module),
-//         onSuccess: (module) => {
-//             queryClient.invalidateQueries({ queryKey: ["modules", module.courseId] });
-//         },
-//     });
-// };
+const useUpdateContent = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (content) => axios.put(`/api/content`, content),
+        onSuccess: (content) => {
+            queryClient.invalidateQueries({ queryKey: ["content", content.moduleId] });
+        },
+    });
+};
 
 const useDeleteContent = () => {
+    const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id }) => axios.delete(`/api/content/${id}`)
+        mutationFn: (id, moduleId) => axios.delete(`/api/content/${id}`),
+        onSuccess: (_, moduleId) => {
+            queryClient.invalidateQueries({ queryKey: ["content", moduleId] });
+        },
     });
 };
 
 
-export { useFetchContent, useDeleteContent, useFetchModuleContent }
+export { useFetchModuleContent, useFetchContent, useAddContent, useUpdateContent, useDeleteContent }

@@ -1,6 +1,6 @@
 ﻿namespace LearnHub.Server.Dtos
 {
-	public abstract record ContentInfoBaseDto
+	public record ContentInfoBaseDto
 	{
 		public int Id { get; init; }
 		public string Title { get; init; }
