@@ -170,7 +170,7 @@ const UserGrid = () => {
 			<Box
 				m="40px 0 0 0"
 				p="0 0 20px 0"
-				height="75vh"
+				height="70vh"
 				sx={gridStyle}
 			>
 				<DataGrid
