@@ -242,31 +242,26 @@ const ModuleContent = () => {
     ];
 
     return (
-        <Box m="0">
-            <Box
-                p="0 0 20px 0"
-                height="70vh"
-                sx={gridStyle}
-            >
-                <DataGrid
-                    rows={rows}
-                    columns={columns}
-                    editMode="row"
-                    rowHeight={40}
-                    processRowUpdate={processRowUpdate}
-                    experimentalFeatures={{ newEditingApi: true }}
-                    rowModesModel={rowModesModel}
-                    onRowModesModelChange={handleRowModesModelChange}
-                    onRowEditStop={handleRowEditStop}
-                    slots={{
-                        toolbar: DataGridAddButton,
-                    }}
-                    slotProps={{
-                        toolbar: { text: "Add Content", onClick: handleAddClick, disabled: isAdding },
-                    }}
-                />
-
-            </Box>
+        <Box sx={gridStyle}
+            height="100%"
+        >
+            <DataGrid
+                rows={rows}
+                columns={columns}
+                editMode="row"
+                rowHeight={40}
+                processRowUpdate={processRowUpdate}
+                experimentalFeatures={{ newEditingApi: true }}
+                rowModesModel={rowModesModel}
+                onRowModesModelChange={handleRowModesModelChange}
+                onRowEditStop={handleRowEditStop}
+                slots={{
+                    toolbar: DataGridAddButton,
+                }}
+                slotProps={{
+                    toolbar: { text: "Add Content", onClick: handleAddClick, disabled: isAdding },
+                }}
+            />
             <ConfirmDeleteDialog />
             <AlertSnack />
             <input ref={fileInputRef}

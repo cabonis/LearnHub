@@ -97,7 +97,7 @@ const CourseInfo = () => {
     }
 
     return (instructors &&
-        <Box m="20px">
+        <Box height="100%" sx={{ display: 'flex', justifyContent: 'left', alignItems: 'start' }}>
             <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={getCourse()}

@@ -19,20 +19,23 @@ const CourseEdit = () => {
       title="Course Editor"
       subtitle={title}
     >
+      <Box height="100%" display="flex" flexDirection="column" justifyContent="start" >
 
-      <TabViewRouted tabs={[
-        { label: "Information", path: "" },
-        ...course ? [{ label: "Enrollment", path: "enrollment" }] : [],
-        ...course ? [{ label: "Announcements", path: "announcements" }] : [],
-        ...course ? [{ label: "Modules", path: "modules" }] : []
-      ]}
-      />
+        <TabViewRouted tabs={[
+          { label: "Information", path: "" },
+          ...course ? [{ label: "Enrollment", path: "enrollment" }] : [],
+          ...course ? [{ label: "Announcements", path: "announcements" }] : [],
+          ...course ? [{ label: "Modules", path: "modules" }] : []
+        ]}
+        />
 
-      <Outlet context={{
-        course: course,
-        setUpdatedCourse: setUpdatedCourse
-      }}
-      />
+        <Outlet context={{
+          course: course,
+          setUpdatedCourse: setUpdatedCourse
+        }}
+        />
+
+      </Box>
 
     </Scene>
   );

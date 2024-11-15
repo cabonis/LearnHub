@@ -27,19 +27,22 @@ const ModuleEdit = () => {
             subtitle={`${course.title}:`}
             text={title}
         >
+            <Box height="100%" display="flex" flexDirection="column" justifyContent="start" >
 
-            <TabViewRouted tabs={[
-                { label: "Information", path: "" },
-                ...module ? [{ label: "Content", path: "content" }] : []
-            ]}
-            />
+                <TabViewRouted tabs={[
+                    { label: "Information", path: "" },
+                    ...module ? [{ label: "Content", path: "content" }] : []
+                ]}
+                />
 
-            <Outlet context={{
-                course: course,
-                module: module,
-                setUpdatedModule: setUpdatedModule
-            }}
-            />
+                <Outlet context={{
+                    course: course,
+                    module: module,
+                    setUpdatedModule: setUpdatedModule
+                }}
+                />
+
+            </Box>
 
         </Scene>
     )
