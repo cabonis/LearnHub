@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useOutletContext, Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import Scene from '../../../global/Scene';
 import Header from "../../../../components/Header";
 import TabViewRouted from "../../../../components/TabViewRouted";
 import { useFetchModule } from "../../../../hooks/ModuleHooks";
@@ -21,9 +22,11 @@ const ModuleEdit = () => {
     }
 
     return (module &&
-        <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
-
-            <Header title="Module Editor" subtitle={`${course.title}:`} text={title} />
+        <Scene
+            title="Module Editor"
+            subtitle={`${course.title}:`}
+            text={title}
+        >
 
             <TabViewRouted tabs={[
                 { label: "Information", path: "" },
@@ -38,7 +41,7 @@ const ModuleEdit = () => {
             }}
             />
 
-        </Box>
+        </Scene>
     )
 }
 

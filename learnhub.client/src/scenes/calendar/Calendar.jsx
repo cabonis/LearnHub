@@ -16,7 +16,7 @@ import SquareIcon from '@mui/icons-material/Square';
 import Header from "../../components/Header";
 import Working from "../../components/Working";
 import { useFetchEvents } from "../../hooks/EventsHooks";
-import { Work } from "@mui/icons-material";
+import Scene from "../global/Scene";
 
 const courseColors = [
 	"#FF5733", // Bright Orange
@@ -71,9 +71,10 @@ const Calendar = () => {
 
 	if (!calData) return (<Working />)
 	return (
-		<Box m="20px">
-			<Header title="Calendar" subtitle="Upcoming Events" />
-
+		<Scene
+			title="Calendar"
+			subtitle="Upcoming Events"
+		>
 			<Box display="flex" justifyContent="space-between">
 
 				<Box flex="1 1 100%" ml="15px"
@@ -133,7 +134,7 @@ const Calendar = () => {
 				</Box>
 
 			</Box>
-		</Box>
+		</Scene>
 	);
 };
 

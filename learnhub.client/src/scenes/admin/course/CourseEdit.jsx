@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import { useOutletContext, Outlet } from 'react-router-dom';
+import Scene from '../../global/Scene';
 import Header from "../../../components/Header";
 import TabViewRouted from "../../../components/TabViewRouted";
 
@@ -14,9 +15,10 @@ const CourseEdit = () => {
   }
 
   return (
-    <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
-
-      <Header title="Course Editor" subtitle={title} />
+    <Scene
+      title="Course Editor"
+      subtitle={title}
+    >
 
       <TabViewRouted tabs={[
         { label: "Information", path: "" },
@@ -32,7 +34,7 @@ const CourseEdit = () => {
       }}
       />
 
-    </Box>
+    </Scene>
   );
 }
 

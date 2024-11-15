@@ -16,12 +16,12 @@ const Announcements = () => {
 
 		// 	</Box>
 		// </Box>
-		<Scene>
-
-			<Header title="Announcements" subtitle="Here are your announcements." />
+		<Scene
+			title="Announcements"
+			subtitle="Here are your announcements">
 
 			<Box
-				flex="1"
+				height="100%"
 				backgroundColor="blue">
 				Test 2
 			</Box>

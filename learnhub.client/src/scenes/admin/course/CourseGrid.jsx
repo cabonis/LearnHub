@@ -7,6 +7,7 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { gridStyle, buttonHoverStyle } from "../../../styles";
 import Header from "../../../components/Header";
+import Scene from '../../global/Scene';
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
@@ -116,14 +117,12 @@ const CourseGrid = () => {
   ];
 
   return (
-    <Box m="10px">
-      <Box display="flex" justifyContent="space-between">
-        <Header title="Course Catalog" subtitle="Manage course catalog" />
-      </Box>
+    <Scene
+      title="Course Catalog"
+      subtitle="Manage course catalog"
+    >
       <Box
-        m="40px 0 0 0"
-        p="0 0 20px 0"
-        height="72vh"
+        height="100%"
         sx={gridStyle}
       >
         <DataGrid
@@ -141,7 +140,7 @@ const CourseGrid = () => {
 
       </Box>
       <ConfirmDeleteDialog />
-    </Box>
+    </Scene>
   );
 };
 
