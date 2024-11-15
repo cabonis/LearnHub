@@ -17,6 +17,23 @@ namespace LearnHub.Server.Repositories
 			_mapper = mapper;
 		}
 
+		public async Task<AnnouncementsDto> GetAllAsync()
+		{
+			var courses = await _dbContext.Courses
+				.Include(c => c.Announcements)
+				.ToListAsync();
+
+			AnnouncementsDto announcements = new AnnouncementsDto();
+
+			foreach (var course in courses)
+			{
+				announcements.Add(course.Title, course.Announcements.Select(a => _mapper.Map<AnnouncementDto>(a)).ToList());
+			}
+
+			return announcements;
+		}
+
+
 		public async Task<List<AnnouncementDto>> GetByCourseIdAsync(int courseId)
 		{
 			return await _dbContext.Announcements
@@ -55,6 +72,8 @@ namespace LearnHub.Server.Repositories
 
 	public interface IAnnouncementRepository
 	{
+		Task<AnnouncementsDto> GetAllAsync();
+
 		Task<List<AnnouncementDto>> GetByCourseIdAsync(int courseId);
 
 		Task<bool> UpdateAsync(AnnouncementInfoDto announcementInfoDto);

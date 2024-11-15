@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import dayjs from "dayjs";
+import { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -13,10 +12,11 @@ import {
 	Typography,
 	useTheme,
 } from "@mui/material";
-import ListItemIcon from '@mui/material/ListItemIcon';
 import SquareIcon from '@mui/icons-material/Square';
 import Header from "../../components/Header";
+import Working from "../../components/Working";
 import { useFetchEvents } from "../../hooks/EventsHooks";
+import { Work } from "@mui/icons-material";
 
 const courseColors = [
 	"#FF5733", // Bright Orange
@@ -43,16 +43,15 @@ const courseColors = [
 
 const Calendar = () => {
 	const theme = useTheme();
-	const [courses, setCourses] = useState([]);
+	const [calData, setCalData] = useState();
 	const { data } = useFetchEvents();
-	const calendarRef = useRef();
 
 	useEffect(() => {
 
 		const serverCourses = [];
 		const serverEvents = [];
 
-		if (data && calendarRef.current) {
+		if (data) {
 
 			Object.entries(data).forEach(([key, value], index) => {
 
@@ -65,13 +64,12 @@ const Calendar = () => {
 				})));
 			});
 
-			setCourses(serverCourses);
-			const calendarApi = calendarRef.current.getApi();
-			serverEvents.forEach((e) => calendarApi.addEvent(e));
+			setCalData({ courses: serverCourses, events: serverEvents });
 		}
 
 	}, [data]);
 
+	if (!calData) return (<Working />)
 	return (
 		<Box m="20px">
 			<Header title="Calendar" subtitle="Upcoming Events" />
@@ -89,7 +87,6 @@ const Calendar = () => {
 						}
 					}}>
 					<FullCalendar
-						ref={calendarRef}
 						height="72vh"
 						plugins={[
 							dayGridPlugin,
@@ -106,7 +103,7 @@ const Calendar = () => {
 						selectable={true}
 						selectMirror={true}
 						dayMaxEvents={true}
-						initialEvents={[]}
+						initialEvents={calData.events}
 					/>
 				</Box>
 
@@ -117,7 +114,7 @@ const Calendar = () => {
 				>
 					<Typography variant="h4" sx={{ textAlign: "center" }}>Courses</Typography>
 					<List dense>
-						{courses.map((course) => (
+						{calData.courses.map((course) => (
 							<ListItem
 								key={course.title}
 								sx={{

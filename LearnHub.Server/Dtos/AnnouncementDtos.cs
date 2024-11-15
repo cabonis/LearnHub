@@ -1,5 +1,7 @@
 ﻿namespace LearnHub.Server.Dtos
 {
+	public class AnnouncementsDto : Dictionary<string, List<AnnouncementDto>> { }
+
 	public record AnnouncementInfoDto
 	{
 		public int Id { get; init; }

@@ -1,6 +1,15 @@
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+const useFetchAnnouncements = () => {
+    return useQuery({
+        queryKey: ["announcements"],
+        queryFn: () =>
+            axios.get(`/api/announcement/`)
+                .then((resp) => resp.data),
+    });
+};
+
 const useFetchCourseAnnouncements = (courseId) => {
     return useQuery({
         queryKey: ["announcements", courseId],
@@ -41,4 +50,4 @@ const useDeleteAnnouncement = () => {
 };
 
 
-export { useFetchCourseAnnouncements, useAddAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement }
+export { useFetchAnnouncements, useFetchCourseAnnouncements, useAddAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement }
