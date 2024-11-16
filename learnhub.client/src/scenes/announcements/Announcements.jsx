@@ -116,7 +116,7 @@ const Announcements = () => {
 				</Box>
 
 
-				<Box display="flex" flex="1" overflow="auto">
+				<Box display="flex" overflow="auto">
 					<Box
 						flex="1"
 						display="flex"
