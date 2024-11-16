@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
-import Scene from "../global/Scene";
+import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import dayjs from "dayjs";
+import Scene from "../global/Scene";
 import CourseLegend from "../../components/CourseLegend";
+import Working from "../../components/Working";
+import ClearableTextBox from "../../components/ClearableTextBox";
 import getCourseColor from "../../hooks/courseColorsRegistry";
 import { useFetchAnnouncements } from "../../hooks/AnnouncementHooks";
-import Working from "../../components/Working";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import ClearableTextBox from "../../components/ClearableTextBox";
 import AnnoucementCard from "./AnnouncementCard";
 
 const sortByDateDesc = (a, b) => {
@@ -15,7 +14,7 @@ const sortByDateDesc = (a, b) => {
 }
 
 const sortByDateAsc = (a, b) => {
-	return dayjs(b.dateTime) - dayjs(a.dateTme);
+	return b.dateTime - a.dateTme;
 }
 
 const sortByCourse = (a, b) => {
@@ -69,12 +68,11 @@ const Announcements = () => {
 	}, [announcements, sortBy, filter]);
 
 	const getSort = () => {
-		if (sortBy === 1) return sortByDateDesc;
-		if (sortBy === 2) return sortByDateAsc;
-		return sortByCourse;
+		if (sortBy === 1) return (a, b) => dayjs(a.dateTime) - dayjs(b.dateTme);
+		if (sortBy === 2) return (a, b) => b.dateTime - a.dateTme;
+		if (sortBy === 3) return (a, b) => a.priority.localeCompare(b.priority);
+		return (a, b) => b.courseId - a.courseId;;
 	}
-
-
 
 	if (!announcementsDisplay) return (<Working />)
 	return (
@@ -106,7 +104,8 @@ const Announcements = () => {
 						>
 							<MenuItem value={1}>Date Descending</MenuItem>
 							<MenuItem value={2}>Date Ascending</MenuItem>
-							<MenuItem value={3}>Course</MenuItem>
+							<MenuItem value={3}>Priority</MenuItem>
+							<MenuItem value={4}>Course</MenuItem>
 						</Select>
 
 					</FormControl>
