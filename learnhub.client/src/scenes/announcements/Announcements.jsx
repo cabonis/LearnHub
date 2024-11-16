@@ -1,33 +1,36 @@
 import { useState, useEffect } from "react";
-import { List, ListItem, ListItemText } from "@mui/material";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Scene from "../global/Scene";
 import dayjs from "dayjs";
 import CourseLegend from "../../components/CourseLegend";
 import getCourseColor from "../../hooks/courseColorsRegistry";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import NotificationImportantOutlinedIcon from '@mui/icons-material/NotificationImportantOutlined';
 import { useFetchAnnouncements } from "../../hooks/AnnouncementHooks";
 import Working from "../../components/Working";
-import Divider from '@mui/material/Divider';
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import ClearableTextBox from "../../components/ClearableTextBox";
+import AnnoucementCard from "./AnnouncementCard";
 
 const sortByDateDesc = (a, b) => {
 	return dayjs(a.dateTime) - dayjs(b.dateTme);
 }
 
 const sortByDateAsc = (a, b) => {
-	return sortByDateDesc(b, a);
+	return dayjs(b.dateTime) - dayjs(a.dateTme);
 }
 
 const sortByCourse = (a, b) => {
-	return a.courseId - b.courseId;
+	return b.courseId - a.courseId;
 }
 
 const Announcements = () => {
 
 	const { data } = useFetchAnnouncements();
-	const [announcemens, setAnnouncements] = useState();
+	const [announcements, setAnnouncements] = useState();
+	const [announcementsDisplay, setAnnouncementsDisplay] = useState();
+
 	const [courses, setCourses] = useState();
+	const [sortBy, setSortBy] = useState(1);
+	const [filter, setFilter] = useState("");
 
 	useEffect(() => {
 
@@ -46,15 +49,34 @@ const Announcements = () => {
 				})));
 			});
 
-
 			setCourses(serverCourses);
-			setAnnouncements(serverAnnouncements.sort(sortByDateAsc));
+			setAnnouncements(serverAnnouncements);
 		}
 
 	}, [data]);
 
+	useEffect(() => {
 
-	if (!announcemens) return (<Working />)
+		if (announcements) {
+
+			const sorted = [...announcements].sort(getSort())
+			const filtered = sorted.filter((item) => item.text.toUpperCase().includes(filter.toUpperCase()));
+
+			setAnnouncementsDisplay(filtered);
+		}
+
+
+	}, [announcements, sortBy, filter]);
+
+	const getSort = () => {
+		if (sortBy === 1) return sortByDateDesc;
+		if (sortBy === 2) return sortByDateAsc;
+		return sortByCourse;
+	}
+
+
+
+	if (!announcementsDisplay) return (<Working />)
 	return (
 
 		<Scene
@@ -62,91 +84,59 @@ const Announcements = () => {
 			subtitle="Consolidated Across All Courses">
 
 			<Box
-				height="75vh"
-				backgroundColor="lightblue"
+				height="74vh"
 				display="flex"
-				padding="10px"
+				flexDirection="column"
 			>
 
 				<Box
-					flex="1"
 					backgroundColor=""
-					display="flex"
-					flexWrap="wrap"
-					alignItems="flex-start"
-					justifyContent="center"
-					overflow="auto"
+					mb="15px"
 				>
+					<FormControl
+						variant="filled"
+						color="secondary"
+						sx={{ minWidth: "200px", mt: "8px" }}
+					>
+						<InputLabel>Sort By</InputLabel>
+						<Select
+							value={sortBy}
+							label="Sort By"
+							onChange={(e) => setSortBy(e.target.value)}
+						>
+							<MenuItem value={1}>Date Descending</MenuItem>
+							<MenuItem value={2}>Date Ascending</MenuItem>
+							<MenuItem value={3}>Course</MenuItem>
+						</Select>
 
-					{announcemens.map((a) => (
-						<AnnouceCard announcement={a} key={a.id} />
-					))}
+					</FormControl>
+
+					<ClearableTextBox label="Filter" onValueChange={(value) => setFilter(value)} />
+
 				</Box>
 
-				<Box minWidth="200px" pl="20px" pt="20px">
-					{courses &&
-						<CourseLegend courses={courses} />
-					}
-				</Box>
 
+				<Box display="flex" flex="1" overflow="auto">
+					<Box
+						flex="1"
+						display="flex"
+						flexWrap="wrap"
+						alignItems="start"
+						justifyContent="center"
+						overflow="auto"
+					>
+						{announcementsDisplay.map((a) => (
+							<AnnoucementCard announcement={a} key={a.id} />
+						))}
+					</Box>
+					<Box minWidth="200px" pl="20px" pt="20px" backgroundColor="">
+						{courses &&
+							<CourseLegend courses={courses} />
+						}
+					</Box>
+				</Box>
 			</Box>
 		</Scene>
-	)
-}
-
-const AnnouceCard = ({ announcement }) => {
-
-	const { dateTime, text, priority, color } = announcement;
-
-	return (
-		<Box
-			flex=".5"
-			minWidth="700px"
-			minHeight="75px"
-			borderRadius="10px"
-			m="20px"
-			color="black"
-			backgroundColor="primary.light"
-			display="flex"
-		>
-			<Box
-				width="20px"
-				borderRadius="10px 0 0 10px"
-				backgroundColor={color}
-			/>
-
-			<Box
-				flex="1"
-				padding="10px"
-			>
-				<Typography variant="h6" color="neutral.main" fontWeight="bold" mb="5px">
-					{dayjs(dateTime).format("MMM D, YYYY h:mm A")}
-				</Typography>
-
-				<Typography variant="h6" color="neutral.light">
-					{text}
-				</Typography>
-
-			</Box>
-
-			<Box
-				padding="5px"
-			>
-				{priority === "High" ?
-					<NotificationImportantOutlinedIcon
-						sx={{ color: 'red' }}
-						fontSize="large"
-					/>
-					:
-					<InfoOutlinedIcon
-						sx={{ color: 'secondary.main' }}
-						fontSize="large"
-					/>
-				}
-			</Box>
-
-
-		</Box>
 	)
 }
 
