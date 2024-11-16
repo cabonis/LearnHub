@@ -27,7 +27,10 @@ namespace LearnHub.Server.Repositories
 
 			foreach (var course in courses)
 			{
-				announcements.Add(course.Title, course.Announcements.Select(a => _mapper.Map<AnnouncementDto>(a)).ToList());
+				if (course.Announcements.Any())
+				{
+					announcements.Add(course.Title, course.Announcements.Select(a => _mapper.Map<AnnouncementDto>(a)).ToList());
+				}
 			}
 
 			return announcements;

@@ -4,42 +4,12 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import {
-	Box,
-	List,
-	ListItem,
-	ListItemText,
-	Typography,
-	useTheme,
-} from "@mui/material";
-import SquareIcon from '@mui/icons-material/Square';
-import Header from "../../components/Header";
+import { Box, useTheme } from "@mui/material";
 import Working from "../../components/Working";
 import { useFetchEvents } from "../../hooks/EventsHooks";
+import getCourseColor from "../../hooks/courseColorsRegistry";
 import Scene from "../global/Scene";
-
-const courseColors = [
-	"#FF5733", // Bright Orange
-	"#33A1FF", // Sky Blue
-	"#FF33A8", // Pink
-	"#33FF57", // Bright Green
-	"#FFB733", // Gold
-	"#8D33FF", // Purple
-	"#33FFF6", // Cyan
-	"#FF3357", // Coral Red
-	"#33FF94", // Mint Green
-	"#FF33E3", // Magenta
-	"#B6FF33", // Lime
-	"#3357FF", // Blue
-	"#FF8E33", // Orange
-	"#33FFB5", // Light Teal
-	"#FF33B5", // Deep Pink
-	"#DFFF33", // Chartreuse
-	"#33FF83", // Pastel Green
-	"#FF5733", // Bright Red-Orange
-	"#57FF33", // Bright Lime Green
-	"#FFA833"  // Amber
-];
+import CourseLegend from "../../components/CourseLegend";
 
 const Calendar = () => {
 	const theme = useTheme();
@@ -53,9 +23,9 @@ const Calendar = () => {
 
 		if (data) {
 
-			Object.entries(data).forEach(([key, value], index) => {
+			Object.entries(data).forEach(([key, value]) => {
 
-				const color = courseColors[index];
+				const color = getCourseColor(key);
 				serverCourses.push({ title: key, color: color });
 				serverEvents.push(...value.map((e) => ({
 					...e,
@@ -113,24 +83,7 @@ const Calendar = () => {
 					p="10px"
 					mt="50px"
 				>
-					<Typography variant="h4" sx={{ textAlign: "center" }}>Courses</Typography>
-					<List dense>
-						{calData.courses.map((course) => (
-							<ListItem
-								key={course.title}
-								sx={{
-									margin: "0",
-									borderRadius: "2px",
-								}}
-							>
-								<SquareIcon sx={{
-									color: course.color,
-									mr: "10px"
-								}} />
-								<ListItemText primary={course.title} />
-							</ListItem>
-						))}
-					</List>
+					<CourseLegend courses={calData.courses} />
 				</Box>
 
 			</Box>

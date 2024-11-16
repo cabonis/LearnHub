@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import Dashboard from "../scenes/dashboard";
 import Courses from "../scenes/courses";
 import Calendar from "../scenes/calendar/Calendar";
-import Announcements from "../scenes/announcements";
+import Announcements from "../scenes/announcements/Announcements";
 import UserGrid from "../scenes/admin/user/UserGrid";
 import Course from "../scenes/admin/course/Course";
 import CourseGrid from "../scenes/admin/course/CourseGrid";
