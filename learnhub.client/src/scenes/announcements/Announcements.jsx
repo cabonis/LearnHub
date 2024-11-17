@@ -8,20 +8,7 @@ import ClearableTextBox from "../../components/ClearableTextBox";
 import getCourseColor from "../../hooks/courseColorsRegistry";
 import { useFetchAnnouncements } from "../../hooks/AnnouncementHooks";
 import AnnoucementCard from "./AnnouncementCard";
-import Grow from '@mui/material/Grow';
 import Slide from '@mui/material/Slide';
-
-const sortByDateDesc = (a, b) => {
-	return dayjs(a.dateTime) - dayjs(b.dateTme);
-}
-
-const sortByDateAsc = (a, b) => {
-	return b.dateTime - a.dateTme;
-}
-
-const sortByCourse = (a, b) => {
-	return b.courseId - a.courseId;
-}
 
 const Announcements = () => {
 

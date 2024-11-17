@@ -9,6 +9,9 @@
 		public DateOnly StartDate { get; init; }
 		public DateOnly EndDate { get; init; }
 		public int InstructorId { get; init; }
+		public int UserCount { get; init; }
+		public int ModuleCount { get; init; }
+		public int AnnouncementCount { get; init; }
 	}
 
 	public record CoruseInstructorInfo : CourseInfoDto

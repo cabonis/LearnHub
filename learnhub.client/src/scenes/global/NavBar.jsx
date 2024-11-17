@@ -143,7 +143,7 @@ const NavBar = () => {
                 </Typography>
 
                 <NavMenuItem
-                    title="Courses"
+                    title="My Courses"
                     to="/courses"
                     icon={<LocalLibraryOutlinedIcon />}
                     selected={selected}

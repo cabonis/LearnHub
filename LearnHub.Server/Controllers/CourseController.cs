@@ -37,6 +37,22 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
+		[HttpGet("{id}/detail")]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetCourseDetail(int id)
+		{
+			var course = await _courseRepository.GetDetailByIdAsync(id);
+
+			if (course != null)
+			{
+				return Ok(course);
+			}
+
+			return NotFound();
+		}
+
 		[HttpPost]
 		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]

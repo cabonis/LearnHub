@@ -18,8 +18,14 @@ namespace LearnHub.Server.Helpers
 			CreateMap<Module, ModuleDetailDto>();
 			CreateMap<Announcement, AnnouncementDto>();
 			CreateMap<Course, CourseDetailDto>();
+
 			CreateMap<Course, CoruseInstructorInfo>();
-			CreateMap<Course, CourseInfoDto>();
+
+			CreateMap<Course, CourseInfoDto>()
+				.ForMember(ci => ci.AnnouncementCount, opt => opt.MapFrom(c => c.Announcements.Count()))
+				.ForMember(ci => ci.ModuleCount, opt => opt.MapFrom(c => c.Modules.Count()))
+				.ForMember(ci => ci.UserCount, opt => opt.MapFrom(c => c.Users.Count()))
+				.Include<Course, CoruseInstructorInfo>();
 
 			CreateMap<UserRegistrationDto, User>()
 				.ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => hasher.Hash(src.Password)));
