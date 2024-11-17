@@ -8,6 +8,8 @@ import ClearableTextBox from "../../components/ClearableTextBox";
 import getCourseColor from "../../hooks/courseColorsRegistry";
 import { useFetchAnnouncements } from "../../hooks/AnnouncementHooks";
 import AnnoucementCard from "./AnnouncementCard";
+import Grow from '@mui/material/Grow';
+import Slide from '@mui/material/Slide';
 
 const sortByDateDesc = (a, b) => {
 	return dayjs(a.dateTime) - dayjs(b.dateTme);
@@ -124,16 +126,21 @@ const Announcements = () => {
 						justifyContent="center"
 						overflow="auto"
 					>
-						{announcementsDisplay.map((a) => (
-							<AnnoucementCard announcement={a} key={a.id} />
-						))}
+						<Slide in={true} timeout={1000}>
+							<div>
+								{announcementsDisplay.map((a) => (
+									<AnnoucementCard announcement={a} key={a.id} />
+								))}
+							</div>
+						</Slide>
 					</Box>
-					<Box minWidth="200px" pl="20px" pt="20px" backgroundColor="">
+					<Box minWidth="200px" pl="20px" pt="20px">
 						{courses &&
 							<CourseLegend courses={courses} />
 						}
 					</Box>
 				</Box>
+
 			</Box>
 		</Scene>
 	)
