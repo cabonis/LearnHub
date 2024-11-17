@@ -96,26 +96,21 @@ const CourseModules = () => {
 	];
 
 	return (
-		<Box m="0">
-			<Box
-				p="0 0 20px 0"
-				height="70vh"
-				sx={gridStyle}
-			>
-				<DataGrid
-					rows={rows}
-					columns={columns}
-					rowHeight={40}
-					loading={isLoading}
-					slots={{
-						toolbar: DataGridAddButton,
-					}}
-					slotProps={{
-						toolbar: { text: "Add Module", onClick: () => navigate(`/admin/course/${course.id}/add`) },
-					}}
-				/>
-
-			</Box>
+		<Box sx={gridStyle}
+			height="100%"
+		>
+			<DataGrid
+				rows={rows}
+				columns={columns}
+				rowHeight={40}
+				loading={isLoading}
+				slots={{
+					toolbar: DataGridAddButton,
+				}}
+				slotProps={{
+					toolbar: { text: "Add Module", onClick: () => navigate(`/admin/course/${course.id}/add`) },
+				}}
+			/>
 			<ConfirmDeleteDialog />
 		</Box>
 	);

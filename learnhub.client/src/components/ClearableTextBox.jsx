@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
@@ -15,23 +15,24 @@ const ClearableTextBox = ({ label, onValueChange }) => {
 
   return (
     <TextField
-          label={label}
-          id="filter-box"
-          sx={{ m: 1, width: '27ch' }}
-          color="secondary"
-          value={text}
-          onChange={(e) => handleInputChange(e.target.value)}
-          slotProps={{
-            input: {
-              endAdornment: 
-                <InputAdornment position="end">
-                  <IconButton onClick={() => handleInputChange('')}>
-                    <ClearOutlinedIcon />
-                  </IconButton>
-                </InputAdornment>,
-            },
-          }}
-        />
+      label={label}
+      id="filter-box"
+      sx={{ m: 1, width: '27ch' }}
+      color="secondary"
+      variant="filled"
+      value={text}
+      onChange={(e) => handleInputChange(e.target.value)}
+      slotProps={{
+        input: {
+          endAdornment:
+            <InputAdornment position="end">
+              <IconButton onClick={() => handleInputChange('')}>
+                <ClearOutlinedIcon />
+              </IconButton>
+            </InputAdornment>,
+        },
+      }}
+    />
   );
 }
 

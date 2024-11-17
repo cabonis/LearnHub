@@ -13,6 +13,22 @@ namespace LearnHub.Server.Controllers
 	{
 		private readonly IAnnouncementRepository _announcementRepository;
 
+		[HttpGet]
+		[Authorize]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetAsync()
+		{
+			var announcements = await _announcementRepository.GetAllAsync();
+
+			if (announcements != null)
+			{
+				return Ok(announcements);
+			}
+
+			return NotFound();
+		}
+
 		[HttpGet("course/{courseId}")]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]

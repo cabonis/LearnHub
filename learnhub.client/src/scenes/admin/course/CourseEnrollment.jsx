@@ -62,7 +62,7 @@ const CourseEnrollment = () => {
    }
 
    return ((originalAvailable && originalEnrolled) &&
-      <Box m="20px" sx={{ display: 'flex', justifyContent: 'left', alignItems: 'center' }}>
+      <Box height="100%" sx={{ display: 'flex', justifyContent: 'left', alignItems: 'start' }}>
 
          <SearchableTransferList
             leftTitle="Available"

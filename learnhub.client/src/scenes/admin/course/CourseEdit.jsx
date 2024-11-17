@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import { useOutletContext, Outlet } from 'react-router-dom';
+import Scene from '../../global/Scene';
 import Header from "../../../components/Header";
 import TabViewRouted from "../../../components/TabViewRouted";
 
@@ -14,25 +15,29 @@ const CourseEdit = () => {
   }
 
   return (
-    <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
+    <Scene
+      title="Course Editor"
+      subtitle={title}
+    >
+      <Box height="100%" display="flex" flexDirection="column" justifyContent="start" >
 
-      <Header title="Course Editor" subtitle={title} />
+        <TabViewRouted tabs={[
+          { label: "Information", path: "" },
+          ...course ? [{ label: "Enrollment", path: "enrollment" }] : [],
+          ...course ? [{ label: "Announcements", path: "announcements" }] : [],
+          ...course ? [{ label: "Modules", path: "modules" }] : []
+        ]}
+        />
 
-      <TabViewRouted tabs={[
-        { label: "Information", path: "" },
-        ...course ? [{ label: "Enrollment", path: "enrollment" }] : [],
-        ...course ? [{ label: "Announcements", path: "announcements" }] : [],
-        ...course ? [{ label: "Modules", path: "modules" }] : []
-      ]}
-      />
+        <Outlet context={{
+          course: course,
+          setUpdatedCourse: setUpdatedCourse
+        }}
+        />
 
-      <Outlet context={{
-        course: course,
-        setUpdatedCourse: setUpdatedCourse
-      }}
-      />
+      </Box>
 
-    </Box>
+    </Scene>
   );
 }
 

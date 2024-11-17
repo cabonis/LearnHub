@@ -235,32 +235,27 @@ const CourseAnnouncements = () => {
 
 
 	return (
-		<Box>
-			<Box
-				p="0 0 20px 0"
-				height="70vh"
-				sx={gridStyle}
-			>
-				<DataGrid
-					rows={rows}
-					columns={columns}
-					rowHeight={40}
-					editMode="row"
-					loading={isLoading}
-					processRowUpdate={processRowUpdate}
-					experimentalFeatures={{ newEditingApi: true }}
-					rowModesModel={rowModesModel}
-					onRowModesModelChange={handleRowModesModelChange}
-					onRowEditStop={handleRowEditStop}
-					slots={{
-						toolbar: DataGridAddButton,
-					}}
-					slotProps={{
-						toolbar: { text: "Add Announcement", onClick: handleAddClick, disabled: isAdding },
-					}}
-				/>
-
-			</Box>
+		<Box sx={gridStyle}
+			height="100%"
+		>
+			<DataGrid
+				rows={rows}
+				columns={columns}
+				rowHeight={40}
+				editMode="row"
+				loading={isLoading}
+				processRowUpdate={processRowUpdate}
+				experimentalFeatures={{ newEditingApi: true }}
+				rowModesModel={rowModesModel}
+				onRowModesModelChange={handleRowModesModelChange}
+				onRowEditStop={handleRowEditStop}
+				slots={{
+					toolbar: DataGridAddButton,
+				}}
+				slotProps={{
+					toolbar: { text: "Add Announcement", onClick: handleAddClick, disabled: isAdding },
+				}}
+			/>
 			<ConfirmDeleteDialog />
 			<AlertSnack />
 		</Box>

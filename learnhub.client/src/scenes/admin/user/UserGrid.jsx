@@ -5,6 +5,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import Header from "../../../components/Header";
+import Scene from '../../global/Scene';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
 import { gridStyle, buttonHoverStyle } from "../../../styles";
@@ -163,14 +164,12 @@ const UserGrid = () => {
 	];
 
 	return (
-		<Box m="10px">
-			<Box display="flex" justifyContent="space-between">
-				<Header title="User Registry" subtitle="Manage users" />
-			</Box>
+		<Scene
+			title="User Registry"
+			subtitle="Manage users"
+		>
 			<Box
-				m="40px 0 0 0"
-				p="0 0 20px 0"
-				height="70vh"
+				height="100%"
 				sx={gridStyle}
 			>
 				<DataGrid
@@ -187,7 +186,7 @@ const UserGrid = () => {
 				/>
 			</Box>
 			<ConfirmDeleteDialog />
-		</Box>
+		</Scene>
 	);
 };
 
