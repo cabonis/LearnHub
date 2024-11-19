@@ -11,6 +11,7 @@ namespace LearnHub.Server.Controllers
 	public class UserController : ControllerBase
 	{
 		private readonly IUserRepository _userRepository;
+		private readonly IAuthenticatedUserHelper _userHelper;
 
 
 		[HttpGet("all")]
@@ -28,6 +29,12 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> UpdateUserRole([FromBody] UserInfoDto user)
 		{
+			int userId = _userHelper.GetUserId(User);
+
+			// User may not modify themselves
+			if (userId == user.Id)
+				return BadRequest();
+
 			if (await _userRepository.UpdateRoleAsync(user.Id, user.Role))
 			{
 				return Ok();
@@ -42,6 +49,12 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteUser(int id)
 		{
+			int userId = _userHelper.GetUserId(User);
+
+			// User may not delete themselves
+			if (userId == id)
+				return BadRequest();
+
 			if (await _userRepository.DeleteAsync(id))
 			{
 				return Ok();
@@ -59,9 +72,10 @@ namespace LearnHub.Server.Controllers
 		}
 
 
-		public UserController(IUserRepository userRepository)
+		public UserController(IUserRepository userRepository, IAuthenticatedUserHelper userHelper)
 		{
 			_userRepository = userRepository;
+			_userHelper = userHelper;
 		}
 	}
 }
