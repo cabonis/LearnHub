@@ -25,7 +25,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("admin/course/{courseId}")]
-		[Authorize]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetByCourseIdAsync(int courseId)
@@ -35,7 +35,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("admin/{id}")]
-		[Authorize]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetAsync(int id)
