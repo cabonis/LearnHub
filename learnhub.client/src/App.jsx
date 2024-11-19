@@ -9,7 +9,7 @@ import Register from "./scenes/global/Register";
 import Topbar from "./scenes/global/TopBar";
 import NavBar from "./scenes/global/NavBar";
 import Scenes from './scenes/Scenes';
-import { AuthorizeView } from './hooks/useAuthorization';
+import { AuthenticatedView } from './hooks/useAuthorization';
 
 function App() {
 
@@ -18,7 +18,7 @@ function App() {
 
     const Application = () => {
         return (
-            <AuthorizeView>
+            <AuthenticatedView>
                 <div className="app">
                     <NavBar />
                     <div className="content">
@@ -29,7 +29,7 @@ function App() {
                     </div>
                     <QueryFeedback />
                 </div>
-            </AuthorizeView>
+            </AuthenticatedView>
         );
     }
 

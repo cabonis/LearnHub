@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses } from 'react-pro-sidebar';
+import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
-import { tokens } from "../../theme";
 import LearnHubLogo from "../../components/LearnHubLogo";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -11,7 +10,7 @@ import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
-import { useAuthorizedUser } from "../../hooks/useAuthorization";
+import { AdminView, InstructorView, useAuthenticatedUser } from "../../hooks/useAuthorization";
 
 const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
 
@@ -30,10 +29,9 @@ const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
 const NavBar = () => {
 
     const theme = useTheme();
-    const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
-    const authorizedUser = useAuthorizedUser();
+    const authenticatedUser = useAuthenticatedUser();
 
     const menuItemStyles = {
         icon: {
@@ -117,10 +115,10 @@ const NavBar = () => {
                                 fontWeight="bold"
                                 sx={{ m: "10px 0 0 0" }}
                             >
-                                {`${authorizedUser.firstName} ${authorizedUser.lastName}`}
+                                {`${authenticatedUser.firstName} ${authenticatedUser.lastName}`}
                             </Typography>
                             <Typography variant="h5" color={theme.palette.secondary.main}>
-                                {authorizedUser.role}
+                                {authenticatedUser.role}
                             </Typography>
                         </Box>
                     </Box>
@@ -166,29 +164,33 @@ const NavBar = () => {
                     setSelected={setSelected}
                 />
 
-                <Typography
-                    variant="h6"
-                    color={theme.palette.neutral.main}
-                    sx={{ m: "25px 0 5px 20px" }}
-                >
-                    {!isCollapsed && ("Admin")}
-                </Typography>
+                <InstructorView>
+                    <Typography
+                        variant="h6"
+                        color={theme.palette.neutral.main}
+                        sx={{ m: "25px 0 5px 20px" }}
+                    >
+                        {!isCollapsed && ("Admin")}
+                    </Typography>
 
-                <NavMenuItem
-                    title="Users"
-                    to="/admin/user"
-                    icon={<PersonOutlinedIcon />}
-                    selected={selected}
-                    setSelected={setSelected}
-                />
+                    <AdminView>
+                        <NavMenuItem
+                            title="Users"
+                            to="/admin/user"
+                            icon={<PersonOutlinedIcon />}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />
+                    </AdminView>
 
-                <NavMenuItem
-                    title="Course Catalog"
-                    to="/admin/course"
-                    icon={<LibraryBooksOutlinedIcon />}
-                    selected={selected}
-                    setSelected={setSelected}
-                />
+                    <NavMenuItem
+                        title="Course Catalog"
+                        to="/admin/course"
+                        icon={<LibraryBooksOutlinedIcon />}
+                        selected={selected}
+                        setSelected={setSelected}
+                    />
+                </InstructorView>
 
             </Menu>
         </Sidebar>

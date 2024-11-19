@@ -11,6 +11,7 @@ import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
 import { useFetchCourses, useDeleteCourse } from '../../../hooks/CourseHooks';
+import { useAuthenticatedUser } from "../../../hooks/useAuthorization";
 
 const CourseGrid = () => {
 
@@ -20,6 +21,7 @@ const CourseGrid = () => {
   const deleteCourse = useDeleteCourse();
   const [rows, setRows] = useState([]);
   const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
+  const user = useAuthenticatedUser();
 
   useEffect(() => {
     setRows(data);
@@ -104,6 +106,7 @@ const CourseGrid = () => {
           <Tooltip title="Delete">
             <GridActionsCellItem
               icon={<DeleteIcon />}
+              disabled={!user.isAdmin}
               label="Delete"
               onClick={() => handleDeleteClick(id)}
               color="inherit"
@@ -133,7 +136,7 @@ const CourseGrid = () => {
             toolbar: DataGridAddButton,
           }}
           slotProps={{
-            toolbar: { text: "Add Course", onClick: () => navigate(`/admin/course/add`) },
+            toolbar: { disabled: !user.isAdmin, text: "Add Course", onClick: () => navigate(`/admin/course/add`) },
           }}
         />
 
