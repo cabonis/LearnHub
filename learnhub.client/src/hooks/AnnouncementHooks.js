@@ -19,30 +19,39 @@ const useFetchCourseAnnouncements = (courseId) => {
     });
 };
 
-const useAddAnnouncement = () => {
+const useFetchAdminCourseAnnouncements = (courseId) => {
+    return useQuery({
+        queryKey: ["announcements", courseId],
+        queryFn: () =>
+            axios.get(`/api/announcement/admin/${courseId}`)
+                .then((resp) => resp.data),
+    });
+};
+
+const useAddAdminAnnouncement = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (announcement) => axios.post(`/api/announcement`, announcement),
+        mutationFn: (announcement) => axios.post(`/api/announcement/admin`, announcement),
         onSuccess: (_, announcement) => {
             queryClient.invalidateQueries({ queryKey: ["announcements", announcement.courseId] });
         },
     });
 };
 
-const useUpdateAnnouncement = () => {
+const useUpdateAdminAnnouncement = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (announcement) => axios.put(`/api/announcement`, announcement),
+        mutationFn: (announcement) => axios.put(`/api/announcement/admin`, announcement),
         onSuccess: (_, announcement) => {
             queryClient.invalidateQueries({ queryKey: ["announcements", announcement.courseId] });
         },
     });
 };
 
-const useDeleteAnnouncement = () => {
+const useDeleteAdminAnnouncement = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, courseId }) => axios.delete(`/api/announcement/${id}`),
+        mutationFn: ({ id, courseId }) => axios.delete(`/api/announcement/admin/${id}`),
         onSuccess: (_, courseId) => {
             queryClient.invalidateQueries({ queryKey: ["announcements", courseId] });
         },
@@ -50,4 +59,11 @@ const useDeleteAnnouncement = () => {
 };
 
 
-export { useFetchAnnouncements, useFetchCourseAnnouncements, useAddAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement }
+export {
+    useFetchAnnouncements,
+    useFetchCourseAnnouncements,
+    useFetchAdminCourseAnnouncements,
+    useAddAdminAnnouncement,
+    useUpdateAdminAnnouncement,
+    useDeleteAdminAnnouncement
+}

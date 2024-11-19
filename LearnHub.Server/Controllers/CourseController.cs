@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using LearnHub.Server.Dtos;
+﻿using LearnHub.Server.Dtos;
 using LearnHub.Server.Helpers;
 using LearnHub.Server.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -13,13 +12,14 @@ namespace LearnHub.Server.Controllers
 	public class CourseController : ControllerBase
 	{
 		private readonly ICourseRepository _courseRepository;
+		private readonly IAuthenticatedUserHelper _userHelper;
 
 		[HttpGet]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetMyCourses()
 		{
-			string userName = User.Identity?.Name ?? string.Empty;
+			string userName = _userHelper.GetUser(User);
 			return Ok(await _courseRepository.GetAllByUserAsync(userName));
 		}
 
@@ -29,8 +29,7 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetMyCourseDetail(int id)
 		{
-			string userName = User.Identity?.Name ?? string.Empty;
-
+			string userName = _userHelper.GetUser(User);
 			var course = await _courseRepository.GetDetailByIdAndUserAsync(id, userName);
 
 			if (course != null)
@@ -46,10 +45,7 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetAdminCoursesByRole()
 		{
-			string role = User?.Claims.Where(c => c.Type == ClaimTypes.Role).First().Value ?? string.Empty;
-			string userName = User?.Identity?.Name ?? string.Empty;
-			string? instructor = role == RoleDto.Instructor.ToString() ? userName : null;
-
+			string? instructor = _userHelper.GetInstructor(User);
 			return Ok(await _courseRepository.GetAllAsync(instructor));
 		}
 
@@ -59,10 +55,7 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetAdminCourseByRole(int id)
 		{
-			string role = User?.Claims.Where(c => c.Type == ClaimTypes.Role).First().Value ?? string.Empty;
-			string userName = User?.Identity?.Name ?? string.Empty;
-			string? instructor = role == RoleDto.Instructor.ToString() ? userName : null;
-
+			string? instructor = _userHelper.GetInstructor(User);
 			var course = await _courseRepository.GetByIdAsync(id, instructor);
 
 			if (course != null)
@@ -110,9 +103,10 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		public CourseController(ICourseRepository courseRepository)
+		public CourseController(ICourseRepository courseRepository, IAuthenticatedUserHelper userHelper)
 		{
 			_courseRepository = courseRepository;
+			_userHelper = userHelper;
 		}
 	}
 }
