@@ -43,9 +43,13 @@ namespace LearnHub.Server.Repositories
 
 		public async Task<List<ModuleInfoDto>> GetByMyCourseIdAsync(int courseId, string userName)
 		{
+			DateOnly now = DateOnly.FromDateTime(DateTime.Now);
+
 			return await _dbContext.Courses
 				.Include(c => c.Modules)
-				.Where(c => c.Id == courseId && c.Users.Any(u => u.UserName == userName))
+				.Where(c => c.Id == courseId
+					&& c.Users.Any(u => u.UserName == userName)
+					&& c.StartDate <= now)
 				.SelectMany(c => c.Modules)
 				.Select(m => _mapper.Map<ModuleInfoDto>(m))
 				.ToListAsync();

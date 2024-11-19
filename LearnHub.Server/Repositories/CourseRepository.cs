@@ -19,21 +19,26 @@ namespace LearnHub.Server.Repositories
 
 		public async Task<List<CoruseInstructorInfo>> GetAllByUserAsync(string userName)
 		{
+			DateOnly now = DateOnly.FromDateTime(DateTime.Now);
+
 			return await _dbContext.Courses
 				.Include(c => c.Instructor)
-				.Include(c => c.Modules)
+				.Include(c => c.Modules.Where(m => m.StartDate <= now))
 				.Include(c => c.Announcements)
 				.Include(c => c.Users)
-				.Where(c => c.Users.Any(u => u.UserName == userName))
+				.Where(c => c.Users.Any(u => u.UserName == userName)
+					&& c.StartDate <= now && c.EndDate.AddMonths(1) >= now)
 				.Select(c => _mapper.Map<CoruseInstructorInfo>(c))
 				.ToListAsync();
 		}
 
 		public async Task<CourseDetailDto?> GetDetailByIdAndUserAsync(int id, string userName)
 		{
+			DateOnly now = DateOnly.FromDateTime(DateTime.Now);
+
 			var details = await _dbContext.Courses
 				.Include(c => c.Instructor)
-				.Include(c => c.Modules)
+				.Include(c => c.Modules.Where(m => m.StartDate <= now))
 					.ThenInclude(m => m.Content)
 				.Include(c => c.Announcements)
 				.Include(c => c.Users)
