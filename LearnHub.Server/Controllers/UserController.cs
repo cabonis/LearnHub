@@ -35,6 +35,12 @@ namespace LearnHub.Server.Controllers
 			if (userId == user.Id)
 				return BadRequest();
 
+			// Do not allow downgrade to user if they are currently a course instructor
+			if (user.Role == RoleDto.User && await _userRepository.IsCourseInstructorAsync(user.Id))
+			{
+				return BadRequest();
+			}
+
 			if (await _userRepository.UpdateRoleAsync(user.Id, user.Role))
 			{
 				return Ok();
