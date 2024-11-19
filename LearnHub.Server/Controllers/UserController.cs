@@ -14,7 +14,7 @@ namespace LearnHub.Server.Controllers
 
 
 		[HttpGet("all")]
-		[Authorize(AuthPolicies.AdminPolicy)]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetUsers()
 		{
@@ -51,7 +51,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("role/{role}")]
-		[Authorize(AuthPolicies.AdminPolicy)]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> GetUsersByRole(RoleDto role)
 		{

@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import dayjs from "dayjs";
-import axios from "axios";
 import { Box } from "@mui/material";
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import SaveIcon from '@mui/icons-material/Save';
@@ -14,18 +12,24 @@ import { gridStyle, buttonHoverStyle } from "../../../../styles"
 import DataGridAddButton from '../../../../components/DataGridAddButton';
 import useConfirm from "../../../../hooks/useConfirm";
 import useAlertSnack from "../../../../hooks/useAlertSnack";
-import { useFetchContent, useAddContent, useUpdateContent, useDeleteContent, useFetchModuleContent } from "../../../../hooks/ContentHooks";
+import {
+    useFetchAdminContent,
+    useAddAdminContent,
+    useUpdateAdminContent,
+    useDeleteAdminContent,
+    useFetchAdminModuleContent
+} from "../../../../hooks/ContentHooks";
 
 const ModuleContent = () => {
 
     const navigate = useNavigate();
     const { course, module } = useOutletContext();
-    const { data: content } = useFetchModuleContent(module.id);
+    const { data: content } = useFetchAdminModuleContent(module.id);
 
-    const addContent = useAddContent();
-    const updateContent = useUpdateContent();
-    const fetchContent = useFetchContent();
-    const deleteContent = useDeleteContent();
+    const addContent = useAddAdminContent();
+    const updateContent = useUpdateAdminContent();
+    const fetchContent = useFetchAdminContent();
+    const deleteContent = useDeleteAdminContent();
 
     const fileInputRef = useRef();
     const [rows, setRows] = useState([]);
