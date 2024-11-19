@@ -1,6 +1,6 @@
 import { Box, Typography, useTheme } from "@mui/material";
 
-const ProgressCircle = ({ progress = "0.75", size = "40" }) => {
+const ProgressCircle = ({ progress = "0.75", size = "50" }) => {
     const angle = progress * 360;
 
     const theme = useTheme();
@@ -22,18 +22,19 @@ const ProgressCircle = ({ progress = "0.75", size = "40" }) => {
                     width: `${size}px`,
                     height: `${size}px`,
                 }}
-            />
-            <Box
-                sx={{
-                    position: "relative",
-                    top: "-35px",
-                    color: "neutral.light"
-                }}
+
             >
-                <Typography fontWeight="bold">
+                <Typography
+                    color="neutral.light"
+                    fontWeight="bold"
+                    textAlign="center"
+                    sx={{
+                        position: "relative",
+                        top: `${.3 * size}px`,
+                    }}
+                >
                     {`${percent}%`}
                 </Typography>
-
             </Box>
         </>
     );

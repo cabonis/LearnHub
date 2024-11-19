@@ -29,3 +29,5 @@ export const buttonHoverStyle = {
         backgroundColor: 'secondary.main'
     }
 }
+
+export const animationDuration = 600;

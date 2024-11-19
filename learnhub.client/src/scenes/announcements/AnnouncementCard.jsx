@@ -3,19 +3,22 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import NotificationImportantOutlinedIcon from '@mui/icons-material/NotificationImportantOutlined';
 import dayjs from "dayjs";
 
-const AnnoucementCard = ({ announcement }) => {
+const AnnoucementCard = ({ announcement, color }) => {
 
-    const { dateTime, text, priority, color } = announcement;
+    const { dateTime, text, priority } = announcement;
 
     return (
         <Box
-            minWidth="600px"
             minHeight="75px"
             borderRadius="10px"
             m="20px"
             color="black"
             backgroundColor="primary.light"
             display="flex"
+            sx={{
+                border: 1,
+                borderColor: 'primary.main'
+            }}
         >
             <Box
                 width="20px"

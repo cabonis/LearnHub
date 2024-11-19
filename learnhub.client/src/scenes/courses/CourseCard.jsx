@@ -5,6 +5,7 @@ import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import NumBox from "../../components/NumBox";
 import ProgressCircle from "../../components/ProgressCircle";
 import getCourseColor from "../../hooks/courseColorsRegistry";
+import { useNavigate } from 'react-router-dom';
 import dayjs from "dayjs";
 
 const iconStyle = {
@@ -13,6 +14,7 @@ const iconStyle = {
 
 const CourseCard = ({ course }) => {
 
+    const navigate = useNavigate();
     const start = dayjs(course.startDate);
     const end = dayjs(course.endDate);
     const today = dayjs();
@@ -29,14 +31,14 @@ const CourseCard = ({ course }) => {
             backgroundColor="primary.light"
             display="flex"
             sx={{
-                border: 2,
+                border: 1,
                 borderColor: 'primary.main',
                 '&:hover': {
                     cursor: 'pointer',
                     borderColor: "secondary.main"
                 }
             }}
-            onClick={() => alert("test")}
+            onClick={() => navigate(`/course/${course.id}`)}
         >
             <Box
                 width="20px"
@@ -74,7 +76,7 @@ const CourseCard = ({ course }) => {
                         <Typography variant="h5" color="neutral.main" mb="5px">
                             Course Completion
                         </Typography>
-                        <ProgressCircle progress={percentComplete} size="50" />
+                        <ProgressCircle progress={percentComplete} />
                     </Box>
 
                 </Box>

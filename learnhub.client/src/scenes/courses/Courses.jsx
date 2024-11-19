@@ -5,6 +5,7 @@ import Working from "../../components/Working";
 import CourseCard from "./CourseCard";
 import Slide from '@mui/material/Slide';
 import { useFetchCourses } from '../../hooks/CourseHooks';
+import { animationDuration } from '../../styles';
 
 const Courses = () => {
 
@@ -29,7 +30,7 @@ const Courses = () => {
 				<Box
 					overflow="auto"
 				>
-					<Slide in={true} timeout={1000}>
+					<Slide in={true} timeout={animationDuration}>
 						<Box
 							display="flex"
 							flexWrap="wrap"
