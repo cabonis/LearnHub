@@ -10,15 +10,15 @@ import Scene from '../../global/Scene';
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
-import { useFetchCourses, useDeleteCourse } from '../../../hooks/CourseHooks';
+import { useFetchAdminCourses, useDeleteAdminCourse } from '../../../hooks/CourseHooks';
 import { useAuthenticatedUser } from "../../../hooks/useAuthorization";
 
 const CourseGrid = () => {
 
   const navigate = useNavigate();
 
-  const { data, isLoading, isSuccess } = useFetchCourses();
-  const deleteCourse = useDeleteCourse();
+  const { data, isLoading, isSuccess } = useFetchAdminCourses();
+  const deleteCourse = useDeleteAdminCourse();
   const [rows, setRows] = useState([]);
   const [ConfirmDeleteDialog, confirmDelete] = useConfirm();
   const user = useAuthenticatedUser();

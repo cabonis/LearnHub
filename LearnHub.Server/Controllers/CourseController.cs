@@ -1,4 +1,5 @@
-﻿using LearnHub.Server.Dtos;
+﻿using System.Security.Claims;
+using LearnHub.Server.Dtos;
 using LearnHub.Server.Helpers;
 using LearnHub.Server.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -16,18 +17,21 @@ namespace LearnHub.Server.Controllers
 		[HttpGet]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		public async Task<IActionResult> GetCourses()
+		public async Task<IActionResult> GetMyCourses()
 		{
-			return Ok(await _courseRepository.GetAllAsync());
+			string userName = User.Identity?.Name ?? string.Empty;
+			return Ok(await _courseRepository.GetAllByUserAsync(userName));
 		}
 
 		[HttpGet("{id}")]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetCourse(int id)
+		public async Task<IActionResult> GetMyCourseDetail(int id)
 		{
-			var course = await _courseRepository.GetByIdAsync(id);
+			string userName = User.Identity?.Name ?? string.Empty;
+
+			var course = await _courseRepository.GetDetailByIdAndUserAsync(id, userName);
 
 			if (course != null)
 			{
@@ -37,13 +41,29 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpGet("{id}/detail")]
-		[Authorize]
+		[HttpGet("admin")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		public async Task<IActionResult> GetAdminCoursesByRole()
+		{
+			string role = User?.Claims.Where(c => c.Type == ClaimTypes.Role).First().Value ?? string.Empty;
+			string userName = User?.Identity?.Name ?? string.Empty;
+			string? instructor = role == RoleDto.Instructor.ToString() ? userName : null;
+
+			return Ok(await _courseRepository.GetAllAsync(instructor));
+		}
+
+		[HttpGet("admin/{id}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetCourseDetail(int id)
+		public async Task<IActionResult> GetAdminCourseByRole(int id)
 		{
-			var course = await _courseRepository.GetDetailByIdAsync(id);
+			string role = User?.Claims.Where(c => c.Type == ClaimTypes.Role).First().Value ?? string.Empty;
+			string userName = User?.Identity?.Name ?? string.Empty;
+			string? instructor = role == RoleDto.Instructor.ToString() ? userName : null;
+
+			var course = await _courseRepository.GetByIdAsync(id, instructor);
 
 			if (course != null)
 			{
@@ -53,7 +73,8 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpPost]
+
+		[HttpPost("admin")]
 		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		public async Task<IActionResult> AddCourse([FromBody] CourseInfoDto courseInfoDto)
@@ -61,7 +82,7 @@ namespace LearnHub.Server.Controllers
 			return Ok(await _courseRepository.AddAsync(courseInfoDto));
 		}
 
-		[HttpPut]
+		[HttpPut("admin")]
 		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -75,7 +96,7 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpDelete("{id}")]
+		[HttpDelete("admin/{id}")]
 		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]

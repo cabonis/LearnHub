@@ -21,22 +21,8 @@ namespace LearnHub.Server.Controllers
 			return Ok(await _userRepository.GetAllAsync());
 		}
 
-
-		//[HttpPut]
-		//[ProducesResponseType(StatusCodes.Status200OK)]
-		//[ProducesResponseType(StatusCodes.Status404NotFound)]
-		//public async Task<IActionResult> UpdateUserPassword([FromBody] string password)
-		//{
-
-		//	if (await _userRepository.UpdatePasswordAsync(id, password))
-		//	{
-		//		return Ok();
-		//	}
-
-		//	return NotFound();
-		//}
-
 		[HttpPut()]
+		[Authorize(AuthPolicies.AdminPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status400BadRequest)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]

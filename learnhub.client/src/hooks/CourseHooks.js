@@ -11,38 +11,48 @@ const useFetchCourses = () => {
     });
 };
 
-const useFetchCourseInfo = (id) => {
-    return useQuery({
-        queryKey: ["course", id],
-        queryFn: () =>
-            axios.get(`/api/course/${id}`)
-                .then((resp) => resp.data),
-    });
-};
-
 const useFetchCourseDetail = (id) => {
     return useQuery({
         queryKey: ["course-detail", id],
         queryFn: () =>
-            axios.get(`/api/course/${id}/detail`)
+            axios.get(`/api/course/${id}`)
+                .then((resp) => resp.data),
+        retry: false
+    });
+};
+
+const useFetchAdminCourses = () => {
+    return useQuery({
+        queryKey: ["courses"],
+        queryFn: () =>
+            axios.get(`/api/course/admin`)
                 .then((resp) => resp.data),
     });
 };
 
-const useAddCourse = () => {
+const useFetchAdminCourseInfo = (id) => {
+    return useQuery({
+        queryKey: ["course", id],
+        queryFn: () =>
+            axios.get(`/api/course/admin/${id}`)
+                .then((resp) => resp.data),
+    });
+};
+
+const useAddAdminCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (course) => axios.post(`/api/course`, course),
+        mutationFn: (course) => axios.post(`/api/course/admin`, course),
         onSuccess: (_, course) => {
             queryClient.invalidateQueries({ queryKey: ["courses"] });
         },
     });
 };
 
-const useUpdateCourse = () => {
+const useUpdateAdminCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (course) => axios.put(`/api/course`, course),
+        mutationFn: (course) => axios.put(`/api/course/admin`, course),
         onSuccess: (course) => {
             queryClient.invalidateQueries({ queryKey: ["courses"] });
             queryClient.invalidateQueries({ queryKey: ["course", course.id] });
@@ -51,10 +61,10 @@ const useUpdateCourse = () => {
     });
 };
 
-const useDeleteCourse = () => {
+const useDeleteAdminCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id) => axios.delete(`/api/course/${id}`),
+        mutationFn: (id) => axios.delete(`/api/course/admin/${id}`),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["courses"] });
         },
@@ -62,4 +72,12 @@ const useDeleteCourse = () => {
 };
 
 
-export { useFetchCourses, useFetchCourseInfo, useFetchCourseDetail, useAddCourse, useUpdateCourse, useDeleteCourse }
+export {
+    useFetchCourses,
+    useFetchAdminCourses,
+    useFetchAdminCourseInfo,
+    useFetchCourseDetail,
+    useAddAdminCourse,
+    useUpdateAdminCourse,
+    useDeleteAdminCourse
+}

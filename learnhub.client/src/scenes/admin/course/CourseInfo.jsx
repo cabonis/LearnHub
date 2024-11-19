@@ -7,7 +7,7 @@ import { useOutletContext } from "react-router-dom";
 import FormInputText from "../../../components/FormInputText";
 import FormInputDropdown from "../../../components/FormInputDropdown";
 import FormInputDatePicker from "../../../components/FormInputDatePicker";
-import { useAddCourse, useUpdateCourse } from '../../../hooks/CourseHooks';
+import { useAddAdminCourse, useUpdateAdminCourse } from '../../../hooks/CourseHooks';
 import { useFetchUsersByRole } from '../../../hooks/UserHooks';
 import useSaveCancel from "../../../hooks/useSaveCancel"
 import { useAuthenticatedUser } from "../../../hooks/useAuthorization";
@@ -33,8 +33,8 @@ const CourseInfo = () => {
     const [isDirty, setIsDirty] = useState(false);
     const { SaveCancelButtons, setShown } = useSaveCancel();
     const { data: instructors } = useFetchUsersByRole("Instructor");
-    const addCourse = useAddCourse();
-    const updateCourse = useUpdateCourse();
+    const addCourse = useAddAdminCourse();
+    const updateCourse = useUpdateAdminCourse();
     const user = useAuthenticatedUser();
     const isEdit = !!course;
 
