@@ -6,7 +6,6 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { gridStyle, buttonHoverStyle } from "../../../styles";
-import Header from "../../../components/Header";
 import Scene from '../../global/Scene';
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import Tooltip from '@mui/material/Tooltip';

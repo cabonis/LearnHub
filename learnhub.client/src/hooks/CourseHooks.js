@@ -20,9 +20,17 @@ const useFetchCourseInfo = (id) => {
     });
 };
 
+const useFetchCourseDetail = (id) => {
+    return useQuery({
+        queryKey: ["course-detail", id],
+        queryFn: () =>
+            axios.get(`/api/course/${id}/detail`)
+                .then((resp) => resp.data),
+    });
+};
+
 const useAddCourse = () => {
     const queryClient = useQueryClient();
-    const nav = useNavigate();
     return useMutation({
         mutationFn: (course) => axios.post(`/api/course`, course),
         onSuccess: (_, course) => {
@@ -38,6 +46,7 @@ const useUpdateCourse = () => {
         onSuccess: (course) => {
             queryClient.invalidateQueries({ queryKey: ["courses"] });
             queryClient.invalidateQueries({ queryKey: ["course", course.id] });
+            queryClient.invalidateQueries({ queryKey: ["course-detail", course.id] });
         },
     });
 };
@@ -53,4 +62,4 @@ const useDeleteCourse = () => {
 };
 
 
-export { useFetchCourses, useFetchCourseInfo, useAddCourse, useUpdateCourse, useDeleteCourse }
+export { useFetchCourses, useFetchCourseInfo, useFetchCourseDetail, useAddCourse, useUpdateCourse, useDeleteCourse }

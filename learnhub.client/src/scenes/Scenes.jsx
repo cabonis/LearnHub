@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from "../scenes/dashboard";
-import Courses from "../scenes/courses";
+import Courses from "../scenes/courses/Courses";
+import CourseDetail from './courses/CourseDetail';
+import ModuleDetail from './courses/modules/ModuleDetail';
 import Calendar from "../scenes/calendar/Calendar";
 import Announcements from "../scenes/announcements/Announcements";
 import UserGrid from "../scenes/admin/user/UserGrid";
@@ -22,6 +24,14 @@ const Scenes = () => {
         <Routes>
             <Route index element={<Dashboard />} />
             <Route path="courses" element={<Courses />} />
+
+            <Route path="course">
+                <Route path=":id" >
+                    <Route path="" element={<CourseDetail />} />
+                    <Route path=":moduleid" element={<ModuleDetail />} />
+                </Route>
+            </Route>
+
             <Route path="announcements" element={<Announcements />} />
             <Route path="calendar" element={<Calendar />} />
 
