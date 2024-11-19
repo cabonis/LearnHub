@@ -14,17 +14,12 @@ namespace LearnHub.Server.Repositories
 		private bool ValidateInstructor(int courseId, string? instructor)
 		{
 			// Make sure the instructor is associated with the course they're modifying
-			if (!string.IsNullOrEmpty(instructor))
-			{
-				if (!_dbContext.Courses
-					.Where(c => c.Instructor.UserName == instructor && c.Id == courseId)
-					.Any())
-				{
-					return false;
-				}
-			}
+			if (string.IsNullOrEmpty(instructor))
+				return true;
 
-			return true;
+			return _dbContext.Courses
+					.Where(c => c.Instructor.UserName == instructor && c.Id == courseId)
+					.Any();
 		}
 
 		public AnnouncementRepository(LearnDbContext dbContext, IMapper mapper)

@@ -9,14 +9,14 @@ import { useNavigate, useOutletContext } from 'react-router-dom';
 import { gridStyle, buttonHoverStyle } from "../../../styles"
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import useConfirm from "../../../hooks/useConfirm";
-import { useFetchCourseModules, useDeleteModule } from "../../../hooks/ModuleHooks";
+import { useFetchAdminCourseModules, useDeleteAdminModule } from "../../../hooks/ModuleHooks";
 
 const CourseModules = () => {
 
 	const navigate = useNavigate();
 	const { course } = useOutletContext();
-	const { data: modules, isLoading } = useFetchCourseModules(course.id);
-	const deleteModule = useDeleteModule();
+	const { data: modules, isLoading } = useFetchAdminCourseModules(course.id);
+	const deleteModule = useDeleteAdminModule();
 
 	const [rows, setRows] = useState([]);
 	const [ConfirmDeleteDialog, confirmDelete] = useConfirm();

@@ -10,39 +10,48 @@ const useFetchCourseModules = (courseId) => {
     });
 };
 
-const useFetchModule = (id) => {
+const useFetchAdminCourseModules = (courseId) => {
     return useQuery({
-        queryKey: ["module", id],
+        queryKey: ["modules", courseId],
         queryFn: () =>
-            axios.get(`/api/module/${id}`)
+            axios.get(`/api/module/admin/course/${courseId}`)
                 .then((resp) => resp.data),
     });
 };
 
-const useAddModule = () => {
+const useFetchAdminModule = (id) => {
+    return useQuery({
+        queryKey: ["module", id],
+        queryFn: () =>
+            axios.get(`/api/module/admin/${id}`)
+                .then((resp) => resp.data),
+    });
+};
+
+const useAddAdminModule = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (module) => axios.post(`/api/module`, module),
+        mutationFn: (module) => axios.post(`/api/module/admin`, module),
         onSuccess: (_, newModule) => {
             queryClient.invalidateQueries({ queryKey: ["modules", newModule.courseId] });
         },
     });
 };
 
-const useUpdateModule = () => {
+const useUpdateAdminModule = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (module) => axios.put(`/api/module`, module),
+        mutationFn: (module) => axios.put(`/api/module/admin`, module),
         onSuccess: (module) => {
             queryClient.invalidateQueries({ queryKey: ["modules", module.courseId] });
         },
     });
 };
 
-const useDeleteModule = () => {
+const useDeleteAdminModule = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, courseId }) => axios.delete(`/api/module/${id}`),
+        mutationFn: ({ id, courseId }) => axios.delete(`/api/module/admin/${id}`),
         onSuccess: (_, courseId) => {
             queryClient.invalidateQueries({ queryKey: ["modules", courseId] });
         },
@@ -50,4 +59,11 @@ const useDeleteModule = () => {
 };
 
 
-export { useFetchCourseModules, useFetchModule, useAddModule, useUpdateModule, useDeleteModule }
+export {
+    useFetchCourseModules,
+    useFetchAdminCourseModules,
+    useFetchAdminModule,
+    useAddAdminModule,
+    useUpdateAdminModule,
+    useDeleteAdminModule
+}

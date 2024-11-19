@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import FormInputText from "../../../../components/FormInputText";
 import FormInputDatePicker from "../../../../components/FormInputDatePicker";
-import { useAddModule, useUpdateModule } from "../../../../hooks/ModuleHooks";
+import { useAddAdminModule, useUpdateAdminModule } from "../../../../hooks/ModuleHooks";
 import useSaveCancel from "../../../../hooks/useSaveCancel"
 
 const Required = "Required";
@@ -30,8 +30,8 @@ const ModuleInfo = () => {
     const [isDirty, setIsDirty] = useState(false);
     const { SaveCancelButtons, setShown } = useSaveCancel();
     const navigate = useNavigate();
-    const addModule = useAddModule();
-    const updateModule = useUpdateModule();
+    const addModule = useAddAdminModule();
+    const updateModule = useUpdateAdminModule();
     const isEdit = !!module;
 
     useEffect(() => {
