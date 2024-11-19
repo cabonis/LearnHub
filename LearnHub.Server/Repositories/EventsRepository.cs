@@ -16,10 +16,11 @@ namespace LearnHub.Server.Repositories
 			_mapper = mapper;
 		}
 
-		public async Task<EventsDto> GetAllAsync()
+		public async Task<EventsDto> GetAllByUserAsync(string userName)
 		{
 			var courses = await _dbContext.Courses
 				.Include(c => c.Modules)
+				.Where(c => c.Users.Any(u => u.UserName == userName))
 				.ToListAsync();
 
 			EventsDto events = new EventsDto();
@@ -44,6 +45,6 @@ namespace LearnHub.Server.Repositories
 
 	public interface IEventsRepository
 	{
-		Task<EventsDto> GetAllAsync();
+		Task<EventsDto> GetAllByUserAsync(string userName);
 	}
 }
