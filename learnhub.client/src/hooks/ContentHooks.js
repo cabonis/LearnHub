@@ -5,16 +5,6 @@ const useFetchContent = () => (id) => {
     open(`/api/content/${id}`);
 };
 
-const useAddContent = () => {
-    return useMutation({
-        mutationFn: (contentForm) => axios.post(`/api/content`, contentForm, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-    });
-};
-
 const useFetchModuleContent = (moduleId) => {
     return useQuery({
         queryKey: ["content", moduleId],
@@ -24,20 +14,43 @@ const useFetchModuleContent = (moduleId) => {
     });
 };
 
-const useUpdateContent = () => {
+const useFetchAdminContent = () => (id) => {
+    open(`/api/content/admin/${id}`);
+};
+
+const useFetchAdminModuleContent = (moduleId) => {
+    return useQuery({
+        queryKey: ["content", moduleId],
+        queryFn: () =>
+            axios.get(`/api/content/admin/module/${moduleId}`)
+                .then((resp) => resp.data),
+    });
+};
+
+const useAddAdminContent = () => {
+    return useMutation({
+        mutationFn: (contentForm) => axios.post(`/api/content/admin`, contentForm, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+    });
+};
+
+const useUpdateAdminContent = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (content) => axios.put(`/api/content`, content),
+        mutationFn: (content) => axios.put(`/api/content/admin`, content),
         onSuccess: (content) => {
             queryClient.invalidateQueries({ queryKey: ["content", content.moduleId] });
         },
     });
 };
 
-const useDeleteContent = () => {
+const useDeleteAdminContent = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id, moduleId) => axios.delete(`/api/content/${id}`),
+        mutationFn: (id, moduleId) => axios.delete(`/api/content/admin/${id}`),
         onSuccess: (_, moduleId) => {
             queryClient.invalidateQueries({ queryKey: ["content", moduleId] });
         },
@@ -45,4 +58,12 @@ const useDeleteContent = () => {
 };
 
 
-export { useFetchModuleContent, useFetchContent, useAddContent, useUpdateContent, useDeleteContent }
+export {
+    useFetchContent,
+    useFetchModuleContent,
+    useFetchAdminContent,
+    useFetchAdminModuleContent,
+    useAddAdminContent,
+    useUpdateAdminContent,
+    useDeleteAdminContent
+}

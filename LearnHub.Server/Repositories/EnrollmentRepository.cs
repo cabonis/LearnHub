@@ -17,11 +17,11 @@ namespace LearnHub.Server.Repositories
 			_mapper = mapper;
 		}
 
-		public async Task<List<UserInfoDto>> GetByCourseIdAsync(int courseId)
+		public async Task<List<UserInfoDto>> GetByCourseIdAsync(int courseId, string? instructor)
 		{
 			return await _dbContext.Courses
 				.Include(c => c.Users)
-				.Where(c => c.Id == courseId)
+				.Where(c => c.Id == courseId && (string.IsNullOrEmpty(instructor) || c.Instructor.UserName == instructor))
 				.SelectMany(c => c.Users)
 				.Select(u => _mapper.Map<UserInfoDto>(u))
 				.ToListAsync();
@@ -63,7 +63,7 @@ namespace LearnHub.Server.Repositories
 
 	public interface IEnrollmentRepository
 	{
-		Task<List<UserInfoDto>> GetByCourseIdAsync(int courseId);
+		Task<List<UserInfoDto>> GetByCourseIdAsync(int courseId, string? instructor);
 
 		Task<bool> UpdateAsync(int courseId, List<UserInfoDto> userInfoDtos);
 	}

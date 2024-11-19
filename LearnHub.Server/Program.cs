@@ -26,6 +26,7 @@ builder.Services.ConfigureHttpJsonOptions(
 builder.Services.AddAutoMapper((s, m) =>
 		m.AddProfile(new DtoMapperProfile(s.GetService<IPasswordHasher>())), typeof(DtoMapperProfile));
 
+builder.Services.AddSingleton<IAuthenticatedUserHelper, AuthenticatedUserHelper>();
 builder.Services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
 builder.Services.AddSingleton<IContentHelper, ContentStorageHelper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -56,7 +57,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
-app.MapControllers().AllowAnonymous();
+app.MapControllers(); //.AllowAnonymous();
 app.MapFallbackToFile("/index.html");
 
 app.Run();

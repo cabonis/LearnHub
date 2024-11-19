@@ -12,15 +12,15 @@ import { gridStyle, buttonHoverStyle } from "../../../styles"
 import DataGridAddButton from '../../../components/DataGridAddButton';
 import useConfirm from "../../../hooks/useConfirm";
 import useAlertSnack from "../../../hooks/useAlertSnack";
-import { useFetchCourseAnnouncements, useAddAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement } from "../../../hooks/AnnouncementHooks";
+import { useFetchAdminCourseAnnouncements, useAddAdminAnnouncement, useUpdateAdminAnnouncement, useDeleteAdminAnnouncement } from "../../../hooks/AnnouncementHooks";
 
 const CourseAnnouncements = () => {
 
 	const { course } = useOutletContext();
-	const { data: announcements, isLoading } = useFetchCourseAnnouncements(course.id);
-	const addAnnouncement = useAddAnnouncement();
-	const updateAnnouncement = useUpdateAnnouncement();
-	const deleteAnnouncement = useDeleteAnnouncement();
+	const { data: announcements, isLoading } = useFetchAdminCourseAnnouncements(course.id);
+	const addAnnouncement = useAddAdminAnnouncement();
+	const updateAnnouncement = useUpdateAdminAnnouncement();
+	const deleteAnnouncement = useDeleteAdminAnnouncement();
 
 	const [rows, setRows] = useState([]);
 	const [rowModesModel, setRowModesModel] = useState({});

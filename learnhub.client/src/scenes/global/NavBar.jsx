@@ -10,7 +10,7 @@ import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
-import { AdminView, InstructorView, useAuthenticatedUser } from "../../hooks/useAuthorization";
+import { useAuthenticatedUser } from "../../hooks/useAuthorization";
 
 const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
 
@@ -31,7 +31,7 @@ const NavBar = () => {
     const theme = useTheme();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
-    const authenticatedUser = useAuthenticatedUser();
+    const user = useAuthenticatedUser();
 
     const menuItemStyles = {
         icon: {
@@ -115,10 +115,10 @@ const NavBar = () => {
                                 fontWeight="bold"
                                 sx={{ m: "10px 0 0 0" }}
                             >
-                                {`${authenticatedUser.firstName} ${authenticatedUser.lastName}`}
+                                {`${user.firstName} ${user.lastName}`}
                             </Typography>
                             <Typography variant="h5" color={theme.palette.secondary.main}>
-                                {authenticatedUser.role}
+                                {user.role}
                             </Typography>
                         </Box>
                     </Box>
@@ -164,33 +164,35 @@ const NavBar = () => {
                     setSelected={setSelected}
                 />
 
-                <InstructorView>
-                    <Typography
-                        variant="h6"
-                        color={theme.palette.neutral.main}
-                        sx={{ m: "25px 0 5px 20px" }}
-                    >
-                        {!isCollapsed && ("Admin")}
-                    </Typography>
+                {(user.isAdmin || user.isInstructor) && (
+                    <>
+                        <Typography
+                            variant="h6"
+                            color={theme.palette.neutral.main}
+                            sx={{ m: "25px 0 5px 20px" }}
+                        >
+                            {!isCollapsed && ("Admin")}
+                        </Typography>
 
-                    <AdminView>
+                        {user.isAdmin && (
+                            <NavMenuItem
+                                title="Users"
+                                to="/admin/user"
+                                icon={<PersonOutlinedIcon />}
+                                selected={selected}
+                                setSelected={setSelected}
+                            />
+                        )}
+
                         <NavMenuItem
-                            title="Users"
-                            to="/admin/user"
-                            icon={<PersonOutlinedIcon />}
+                            title="Course Catalog"
+                            to="/admin/course"
+                            icon={<LibraryBooksOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
                         />
-                    </AdminView>
-
-                    <NavMenuItem
-                        title="Course Catalog"
-                        to="/admin/course"
-                        icon={<LibraryBooksOutlinedIcon />}
-                        selected={selected}
-                        setSelected={setSelected}
-                    />
-                </InstructorView>
+                    </>
+                )}
 
             </Menu>
         </Sidebar>

@@ -12,21 +12,16 @@ namespace LearnHub.Server.Controllers
 	public class AnnouncementController : ControllerBase
 	{
 		private readonly IAnnouncementRepository _announcementRepository;
+		private readonly IAuthenticatedUserHelper _userHelper;
 
 		[HttpGet]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetAsync()
+		public async Task<IActionResult> GetMyAsync()
 		{
-			var announcements = await _announcementRepository.GetAllAsync();
-
-			if (announcements != null)
-			{
-				return Ok(announcements);
-			}
-
-			return NotFound();
+			string userName = _userHelper.GetUser(User);
+			return Ok(await _announcementRepository.GetAllByUserAsync(userName));
 		}
 
 		[HttpGet("course/{courseId}")]
@@ -35,7 +30,8 @@ namespace LearnHub.Server.Controllers
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetByCourseAsync(int courseId)
 		{
-			var announcementWithId = await _announcementRepository.GetByCourseIdAsync(courseId);
+			string userName = _userHelper.GetUser(User);
+			var announcementWithId = await _announcementRepository.GetByCourseIdAndUserAsync(courseId, userName);
 
 			if (announcementWithId != null)
 			{
@@ -45,13 +41,25 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpPost()]
+		[HttpGet("admin/{id}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetByIdAsync(int id)
+		{
+			string? instructor = _userHelper.GetInstructor(User);
+			return Ok(await _announcementRepository.GetByCourseIdAndInstructorAsync(id, instructor));
+
+		}
+
+		[HttpPost("admin")]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> AddAsync([FromBody] AnnouncementInfoDto announcementInfoDto)
 		{
-			var announcementWithId = await _announcementRepository.AddAsync(announcementInfoDto);
+			string? instructor = _userHelper.GetInstructor(User);
+			var announcementWithId = await _announcementRepository.AddAsync(announcementInfoDto, instructor);
 
 			if (announcementWithId != null)
 			{
@@ -61,13 +69,14 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpPut()]
+		[HttpPut("admin")]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> UpdateAsync([FromBody] AnnouncementInfoDto announcementInfoDto)
 		{
-			if (await _announcementRepository.UpdateAsync(announcementInfoDto))
+			string? instructor = _userHelper.GetInstructor(User);
+			if (await _announcementRepository.UpdateAsync(announcementInfoDto, instructor))
 			{
 				return Ok();
 			}
@@ -75,13 +84,14 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpDelete("{id}")]
+		[HttpDelete("admin/{id}")]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteAsync(int id)
 		{
-			if (await _announcementRepository.DeleteAsync(id))
+			string? instructor = _userHelper.GetInstructor(User);
+			if (await _announcementRepository.DeleteAsync(id, instructor))
 			{
 				return Ok();
 			}
@@ -89,9 +99,10 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		public AnnouncementController(IAnnouncementRepository announcementRepository)
+		public AnnouncementController(IAnnouncementRepository announcementRepository, IAuthenticatedUserHelper userHelper)
 		{
 			_announcementRepository = announcementRepository;
+			_userHelper = userHelper;
 		}
 	}
 }

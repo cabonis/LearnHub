@@ -47,20 +47,13 @@ namespace LearnHub.Server.Repositories
 				.Select(u => _mapper.Map<UserInfoDto>(u))
 				.ToListAsync();
 		}
+
 		public async Task<List<UserInfoDto>> GetByRoleAsync(RoleDto role)
 		{
 			return await _dbContext.Users
 				.Where(u => u.Role >= _mapper.Map<Role>(role))
 				.Select(u => _mapper.Map<UserInfoDto>(u))
 				.ToListAsync();
-		}
-
-		public async Task<UserInfoDto?> GetByIdAsync(int id)
-		{
-			return await _dbContext.Users
-				.Where(u => u.Id == id)
-				.Select(u => _mapper.Map<UserInfoDto>(u))
-				.FirstOrDefaultAsync();
 		}
 
 		public async Task<UserInfoDto?> GetByUserNameAsync(string userName)
@@ -71,16 +64,6 @@ namespace LearnHub.Server.Repositories
 				.FirstOrDefaultAsync();
 		}
 
-		public async Task<List<CourseInfoDto>?> GetCoursesAsync(int id)
-		{
-			return await _dbContext.Users
-				.Include(u => u.Courses)
-				.ThenInclude(c => c.Instructor)
-				.Where(u => u.Id == id)
-				.SelectMany(u => u.Courses)
-				.Select(c => _mapper.Map<CourseInfoDto>(c))
-				.ToListAsync();
-		}
 
 		public async Task<bool> UpdatePasswordAsync(string userName, ChangePasswordDto changePassword)
 		{
@@ -108,6 +91,11 @@ namespace LearnHub.Server.Repositories
 			return count > 0;
 		}
 
+		public async Task<bool> IsCourseInstructorAsync(int id)
+		{
+			return await _dbContext.Courses.Where(c => c.InstructorId == id).AnyAsync();
+		}
+
 		public async Task<bool> DeleteAsync(int id)
 		{
 			int count = await _dbContext.Users
@@ -126,11 +114,7 @@ namespace LearnHub.Server.Repositories
 
 		Task<List<UserInfoDto>> GetByRoleAsync(RoleDto role);
 
-		Task<UserInfoDto?> GetByIdAsync(int id);
-
 		Task<UserInfoDto?> GetByUserNameAsync(string userName);
-
-		Task<List<CourseInfoDto>?> GetCoursesAsync(int id);
 
 		Task AddAsync(UserRegistrationDto userRegistrationDto);
 
@@ -139,5 +123,7 @@ namespace LearnHub.Server.Repositories
 		Task<bool> UpdateRoleAsync(int id, RoleDto userRole);
 
 		Task<bool> DeleteAsync(int id);
+
+		Task<bool> IsCourseInstructorAsync(int id);
 	}
 }

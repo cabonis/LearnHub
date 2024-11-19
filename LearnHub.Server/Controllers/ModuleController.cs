@@ -12,46 +12,36 @@ namespace LearnHub.Server.Controllers
 	public class ModuleController : ControllerBase
 	{
 		private readonly IModuleRepository _moduleRepository;
-
-		[HttpPost]
-		[Authorize(AuthPolicies.InstructorPolicy)]
-		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> AddAsync([FromBody] ModuleInfoDto moduleInfoDto)
-		{
-			var moduleWithId = await _moduleRepository.AddAsync(moduleInfoDto);
-
-			if (moduleWithId != null)
-			{
-				return Ok(moduleWithId);
-			}
-
-			return NotFound();
-		}
+		private readonly IAuthenticatedUserHelper _userHelper;
 
 		[HttpGet("course/{courseId}")]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetByCourseIdAsync(int courseId)
+		public async Task<IActionResult> GetByMyCourseIdAsync(int courseId)
 		{
-			List<ModuleInfoDto> modules = await _moduleRepository.GetByCourseIdAsync(courseId);
-
-			if (modules != null)
-			{
-				return Ok(modules);
-			}
-
-			return NotFound();
+			string userName = _userHelper.GetUser(User);
+			return Ok(await _moduleRepository.GetByMyCourseIdAsync(courseId, userName));
 		}
 
-		[HttpGet("{id}")]
-		[Authorize]
+		[HttpGet("admin/course/{courseId}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetByCourseIdAsync(int courseId)
+		{
+			string? instructor = _userHelper.GetInstructor(User);
+			return Ok(await _moduleRepository.GetByCourseIdAsync(courseId, instructor));
+		}
+
+		[HttpGet("admin/{id}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetAsync(int id)
 		{
-			ModuleInfoDto? moduleInfo = await _moduleRepository.GetAsync(id);
+			string? instructor = _userHelper.GetInstructor(User);
+			ModuleInfoDto? moduleInfo = await _moduleRepository.GetAsync(id, instructor);
 
 			if (moduleInfo != null)
 			{
@@ -61,13 +51,31 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpPut]
+		[HttpPost("admin")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> AddAsync([FromBody] ModuleInfoDto moduleInfoDto)
+		{
+			string? instructor = _userHelper.GetInstructor(User);
+			var moduleWithId = await _moduleRepository.AddAsync(moduleInfoDto, instructor);
+
+			if (moduleWithId != null)
+			{
+				return Ok(moduleWithId);
+			}
+
+			return NotFound();
+		}
+
+		[HttpPut("admin")]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> UpdateModule([FromBody] ModuleInfoDto moduleInfoDto)
 		{
-			if (await _moduleRepository.UpdateAsync(moduleInfoDto))
+			string? instructor = _userHelper.GetInstructor(User);
+			if (await _moduleRepository.UpdateAsync(moduleInfoDto, instructor))
 			{
 				return Ok();
 			}
@@ -75,13 +83,14 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		[HttpDelete("{id}")]
+		[HttpDelete("admin/{id}")]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> DeleteAsync(int id)
 		{
-			if (await _moduleRepository.DeleteAsync(id))
+			string? instructor = _userHelper.GetInstructor(User);
+			if (await _moduleRepository.DeleteAsync(id, instructor))
 			{
 				return Ok();
 			}
@@ -89,9 +98,10 @@ namespace LearnHub.Server.Controllers
 			return NotFound();
 		}
 
-		public ModuleController(IModuleRepository moduleRepository)
+		public ModuleController(IModuleRepository moduleRepository, IAuthenticatedUserHelper userHelper)
 		{
 			_moduleRepository = moduleRepository;
+			_userHelper = userHelper;
 		}
 	}
 }

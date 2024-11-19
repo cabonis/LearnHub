@@ -80,7 +80,7 @@ const AuthorizedView = ({ roles = [], children }) => {
     if (user && roles.includes(user.role))
         return (children);
     return (
-        <></>
+        <Navigate to="/notfound" state={{ from: location }} replace />
     )
 }
 

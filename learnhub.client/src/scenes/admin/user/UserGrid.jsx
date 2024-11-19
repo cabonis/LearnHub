@@ -8,6 +8,7 @@ import Header from "../../../components/Header";
 import Scene from '../../global/Scene';
 import Tooltip from '@mui/material/Tooltip';
 import useConfirm from "../../../hooks/useConfirm";
+import { useAuthenticatedUser } from "../../../hooks/useAuthorization";
 import { gridStyle, buttonHoverStyle } from "../../../styles";
 import { useFetchUsers, useUpdateUserRole, useDeleteUser } from '../../../hooks/UserHooks';
 import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
@@ -17,6 +18,7 @@ const UserGrid = () => {
 	const { data, isLoading } = useFetchUsers();
 	const updateUserRole = useUpdateUserRole();
 	const deleteUser = useDeleteUser();
+	const user = useAuthenticatedUser();
 
 	const [rowModesModel, setRowModesModel] = useState({});
 	const [rows, setRows] = useState([]);
@@ -100,7 +102,7 @@ const UserGrid = () => {
 			editable: true,
 			type: 'singleSelect',
 			valueOptions: ['Admin', 'Instructor', 'User'],
-			minWidth: 150,
+			minWidth: 150
 		},
 		{
 			field: 'actions',
@@ -111,53 +113,51 @@ const UserGrid = () => {
 			align: 'left',
 			flex: 1,
 			minWidth: 100,
-			getActions: ({ id }) => {
-
+			getActions: (props) => {
+				const { id, row } = props;
 				const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+				const isDisabled = row.userName === user.userName;
 
 				if (isInEditMode) {
 					return [
-						<Tooltip title="Save">
-							<GridActionsCellItem
-								icon={<SaveIcon />}
-								label="Save"
-								color='secondary'
-								onClick={() => handleSaveClick(id)}
-							/>
-						</Tooltip>,
-						<Tooltip title="Cancel">
-							<GridActionsCellItem
-								icon={<CancelIcon />}
-								label="Cancel"
-								className="textPrimary"
-								onClick={() => handleCancelClick(id)}
-								color="inherit"
-								sx={buttonHoverStyle}
-							/>
-						</Tooltip>,
+						<GridActionsCellItem
+							icon={<Tooltip title="Save"><SaveIcon /></Tooltip>}
+							disabled={isDisabled}
+							label="Save"
+							color='secondary'
+							onClick={() => handleSaveClick(id)}
+						/>,
+						<GridActionsCellItem
+							icon={<Tooltip title="Cancel"><CancelIcon /></Tooltip>}
+							label="Cancel"
+							className="textPrimary"
+							onClick={() => handleCancelClick(id)}
+							color="inherit"
+							sx={buttonHoverStyle}
+						/>
 					];
 				}
 
 				return [
-					<Tooltip title="Edit">
-						<GridActionsCellItem
-							icon={<EditIcon />}
-							label="Edit"
-							className="textPrimary"
-							onClick={() => handleEditClick(id)}
-							color="inherit"
-							sx={buttonHoverStyle}
-						/>
-					</Tooltip>,
-					<Tooltip title="Delete">
-						<GridActionsCellItem
-							icon={<DeleteIcon />}
-							label="Delete"
-							onClick={() => handleDeleteClick(id)}
-							color="inherit"
-							sx={buttonHoverStyle}
-						/>
-					</Tooltip>,
+
+					<GridActionsCellItem
+						icon={<Tooltip title="Edit"><EditIcon /></Tooltip>}
+						disabled={isDisabled}
+						label="Edit"
+						className="textPrimary"
+						onClick={() => handleEditClick(id)}
+						color="inherit"
+						sx={buttonHoverStyle}
+					/>,
+					<GridActionsCellItem
+						icon={<Tooltip title="Delete"><DeleteIcon /></Tooltip>}
+						disabled={isDisabled}
+						label="Delete"
+						onClick={() => handleDeleteClick(id)}
+						color="inherit"
+						sx={buttonHoverStyle}
+					/>
 				];
 			},
 		}
@@ -183,6 +183,7 @@ const UserGrid = () => {
 					rowModesModel={rowModesModel}
 					onRowModesModelChange={handleRowModesModelChange}
 					onRowEditStop={handleRowEditStop}
+					isCellEditable={(params) => params.row.userName !== user.userName}
 				/>
 			</Box>
 			<ConfirmDeleteDialog />

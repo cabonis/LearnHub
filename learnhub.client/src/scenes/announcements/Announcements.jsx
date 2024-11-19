@@ -34,6 +34,7 @@ const Announcements = () => {
 				serverCourses.push({ title: key, color: color });
 				serverAnnouncements.push(...value.map((a) => ({
 					...a,
+					dayjsDT: dayjs(a.dateTime),
 					color: color
 				})));
 			});
@@ -58,8 +59,8 @@ const Announcements = () => {
 	}, [announcements, sortBy, filter]);
 
 	const getSort = () => {
-		if (sortBy === 1) return (a, b) => dayjs(a.dateTime) - dayjs(b.dateTme);
-		if (sortBy === 2) return (a, b) => b.dateTime - a.dateTme;
+		if (sortBy === 1) return (a, b) => b.dayjsDT.valueOf() - a.dayjsDT.valueOf();
+		if (sortBy === 2) return (a, b) => a.dayjsDT.valueOf() - b.dayjsDT.valueOf();
 		if (sortBy === 3) return (a, b) => a.priority.localeCompare(b.priority);
 		return (a, b) => b.courseId - a.courseId;;
 	}

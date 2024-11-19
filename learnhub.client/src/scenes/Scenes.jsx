@@ -18,6 +18,7 @@ import ModuleAdd from '../scenes/admin/course/module/ModuleAdd';
 import ModuleEdit from '../scenes/admin/course/module/ModuleEdit';
 import ModuleInfo from '../scenes/admin/course/module/ModuleInfo';
 import ModuleContent from '../scenes/admin/course/module/ModuleContent';
+import NotFound from './global/NotFound';
 import { AdminView, InstructorView } from "../hooks/useAuthorization";
 
 const Scenes = () => {
@@ -71,6 +72,8 @@ const Scenes = () => {
                 </Route>
 
             </Route>
+
+            <Route path="*" element={<NotFound />} />
         </Routes>
     )
 }

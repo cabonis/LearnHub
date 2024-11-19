@@ -17,44 +17,63 @@ namespace LearnHub.Server.Repositories
 			_mapper = mapper;
 		}
 
-		public async Task<List<CoruseInstructorInfo>> GetAllAsync()
+		public async Task<List<CoruseInstructorInfo>> GetAllByUserAsync(string userName)
 		{
+			DateOnly now = DateOnly.FromDateTime(DateTime.Now);
+
 			return await _dbContext.Courses
 				.Include(c => c.Instructor)
-				.Include(c => c.Modules)
+				.Include(c => c.Modules.Where(m => m.StartDate <= now))
 				.Include(c => c.Announcements)
 				.Include(c => c.Users)
+				.Where(c => c.Users.Any(u => u.UserName == userName)
+					&& c.StartDate <= now && c.EndDate.AddMonths(1) >= now)
 				.Select(c => _mapper.Map<CoruseInstructorInfo>(c))
 				.ToListAsync();
 		}
 
-		public async Task<CourseInfoDto?> GetByIdAsync(int id)
+		public async Task<CourseDetailDto?> GetDetailByIdAndUserAsync(int id, string userName)
 		{
-			return await _dbContext.Courses
-				.Include(c => c.Instructor)
-				.Include(c => c.Modules)
-				.Include(c => c.Announcements)
-				.Include(c => c.Users)
-				.Where(c => c.Id == id)
-				.Select(c => _mapper.Map<CourseInfoDto>(c))
-				.FirstOrDefaultAsync();
-		}
+			DateOnly now = DateOnly.FromDateTime(DateTime.Now);
 
-		public async Task<CourseDetailDto?> GetDetailByIdAsync(int id)
-		{
 			var details = await _dbContext.Courses
 				.Include(c => c.Instructor)
-				.Include(c => c.Modules)
+				.Include(c => c.Modules.Where(m => m.StartDate <= now))
 					.ThenInclude(m => m.Content)
 				.Include(c => c.Announcements)
 				.Include(c => c.Users)
-				.Where(c => c.Id == id)
+				.Where(c => c.Id == id && c.Users.Any(u => u.UserName == userName))
 				.Select(c => _mapper.Map<CourseDetailDto>(c))
 				.FirstOrDefaultAsync();
 
 			details?.Announcements.Sort((x, y) => y.DateTime.CompareTo(x.DateTime));
 			details?.Modules.Sort((x, y) => y.StartDate.CompareTo(x.StartDate));
 			return details;
+		}
+
+		public async Task<List<CoruseInstructorInfo>> GetAllAsync(string? instructor)
+		{
+			return await _dbContext.Courses
+				.Include(c => c.Instructor)
+				.Include(c => c.Modules)
+				.Include(c => c.Announcements)
+				.Include(c => c.Users)
+				.Where(c => (string.IsNullOrEmpty(instructor) || c.Instructor.UserName == instructor))
+				.Select(c => _mapper.Map<CoruseInstructorInfo>(c))
+				.ToListAsync();
+		}
+
+
+		public async Task<CourseInfoDto?> GetByIdAsync(int id, string? instructor)
+		{
+			return await _dbContext.Courses
+				.Include(c => c.Instructor)
+				.Include(c => c.Modules)
+				.Include(c => c.Announcements)
+				.Include(c => c.Users)
+				.Where(c => c.Id == id && (string.IsNullOrEmpty(instructor) || c.Instructor.UserName == instructor))
+				.Select(c => _mapper.Map<CourseInfoDto>(c))
+				.FirstOrDefaultAsync();
 		}
 
 		public async Task<CourseInfoDto> AddAsync(CourseInfoDto courseInfoDto)
@@ -90,11 +109,13 @@ namespace LearnHub.Server.Repositories
 
 	public interface ICourseRepository
 	{
-		Task<List<CoruseInstructorInfo>> GetAllAsync();
+		Task<List<CoruseInstructorInfo>> GetAllAsync(string? instructor);
 
-		Task<CourseInfoDto?> GetByIdAsync(int id);
+		Task<CourseInfoDto?> GetByIdAsync(int id, string? instructor);
 
-		Task<CourseDetailDto?> GetDetailByIdAsync(int id);
+		Task<List<CoruseInstructorInfo>> GetAllByUserAsync(string userName);
+
+		Task<CourseDetailDto?> GetDetailByIdAndUserAsync(int id, string userName);
 
 		Task<CourseInfoDto> AddAsync(CourseInfoDto courseInfoDto);
 

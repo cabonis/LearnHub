@@ -12,14 +12,16 @@ namespace LearnHub.Server.Controllers
 	public class EnrollmentController : ControllerBase
 	{
 		private readonly IEnrollmentRepository _enrollmentRepository;
+		private readonly IAuthenticatedUserHelper _userHelper;
 
 		[HttpGet("{courseId}")]
-		[Authorize(AuthPolicies.AdminPolicy)]
+		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetEnrollment(int courseId)
 		{
-			var users = await _enrollmentRepository.GetByCourseIdAsync(courseId);
+			string? instructor = _userHelper.GetInstructor(User);
+			var users = await _enrollmentRepository.GetByCourseIdAsync(courseId, instructor);
 
 			if (users != null)
 			{
@@ -44,9 +46,10 @@ namespace LearnHub.Server.Controllers
 		}
 
 
-		public EnrollmentController(IEnrollmentRepository enrollmentRepository)
+		public EnrollmentController(IEnrollmentRepository enrollmentRepository, IAuthenticatedUserHelper userHelper)
 		{
 			_enrollmentRepository = enrollmentRepository;
+			_userHelper = userHelper;
 		}
 	}
 }

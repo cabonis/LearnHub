@@ -14,17 +14,12 @@ namespace LearnHub.Server.Controllers
 		[HttpGet]
 		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
-		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetAsync()
 		{
-			var moduleWithId = await _eventsRepository.GetAllAsync();
+			string userName = User.Identity?.Name ?? string.Empty;
+			var events = await _eventsRepository.GetAllByUserAsync(userName);
 
-			if (moduleWithId != null)
-			{
-				return Ok(moduleWithId);
-			}
-
-			return NotFound();
+			return Ok(events);
 		}
 
 		public EventsController(IEventsRepository eventsRepository)

@@ -1,10 +1,10 @@
 import { Outlet, useParams, useOutletContext } from 'react-router-dom';
-import { useFetchCourseInfo } from '../../../hooks/CourseHooks';
+import { useFetchAdminCourseInfo } from '../../../hooks/CourseHooks';
 
 const Course = () => {
 
     const { id } = useParams();
-    const { data } = useFetchCourseInfo(id);
+    const { data } = useFetchAdminCourseInfo(id);
     const outletContext = useOutletContext();
 
     return (data &&
