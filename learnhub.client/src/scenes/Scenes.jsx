@@ -18,6 +18,7 @@ import ModuleAdd from '../scenes/admin/course/module/ModuleAdd';
 import ModuleEdit from '../scenes/admin/course/module/ModuleEdit';
 import ModuleInfo from '../scenes/admin/course/module/ModuleInfo';
 import ModuleContent from '../scenes/admin/course/module/ModuleContent';
+import { AdminView, InstructorView } from "../hooks/useAuthorization";
 
 const Scenes = () => {
     return (
@@ -37,16 +38,17 @@ const Scenes = () => {
 
             <Route path="admin">
 
-                <Route path="user" element={<UserGrid />} />
+                <Route path="user" element={<AdminView><UserGrid /></AdminView>} />
 
                 <Route path="course">
 
-                    <Route index element={<CourseGrid />} />
-                    <Route path="add" element={<CourseAdd />}>
+                    <Route index element={<InstructorView><CourseGrid /></InstructorView>} />
+
+                    <Route path="add" element={<AdminView><CourseAdd /></AdminView>}>
                         <Route index element={<CourseInfo />} />
                     </Route>
 
-                    <Route path=":id" element={<Course />}>
+                    <Route path=":id" element={<InstructorView><Course /></InstructorView>}>
 
                         <Route path="" element={<CourseEdit />}>
                             <Route index element={<CourseInfo />} />

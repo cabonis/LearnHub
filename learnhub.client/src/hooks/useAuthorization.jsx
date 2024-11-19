@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, createContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import axios from "axios";
 import Working from "../components/Working";
 
 
 const UserContext = createContext({});
 
-function AuthorizeView({ children }) {
+const AuthenticatedView = ({ children }) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -26,7 +26,11 @@ function AuthorizeView({ children }) {
             try {
                 await axios.get(`/api/auth`)
                     .then((resp) => {
-                        setUser(resp.data);
+                        setUser({
+                            ...resp.data,
+                            isAdmin: resp.data.role === "Admin",
+                            isInstructor: resp.data.role === "Instructor"
+                        });
                         setIsAuthorized(true);
                     })
                     .catch((error) => {
@@ -68,8 +72,36 @@ function AuthorizeView({ children }) {
 
 }
 
-const useAuthorizedUser = () => {
+const AuthorizedView = ({ roles = [], children }) => {
+
+    const user = useAuthenticatedUser();
+    const location = useLocation();
+
+    if (user && roles.includes(user.role))
+        return (children);
+    return (
+        <></>
+    )
+}
+
+const AdminView = ({ children }) => {
+    return (
+        <AuthorizedView roles={["Admin"]}>
+            {children}
+        </AuthorizedView>
+    )
+}
+
+const InstructorView = ({ children }) => {
+    return (
+        <AuthorizedView roles={["Admin", "Instructor"]}>
+            {children}
+        </AuthorizedView>
+    )
+}
+
+const useAuthenticatedUser = () => {
     return useContext(UserContext);
 }
 
-export { AuthorizeView, useAuthorizedUser };
+export { AuthenticatedView, AdminView, InstructorView, useAuthenticatedUser };

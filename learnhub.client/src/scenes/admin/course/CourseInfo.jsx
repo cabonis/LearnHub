@@ -10,6 +10,7 @@ import FormInputDatePicker from "../../../components/FormInputDatePicker";
 import { useAddCourse, useUpdateCourse } from '../../../hooks/CourseHooks';
 import { useFetchUsersByRole } from '../../../hooks/UserHooks';
 import useSaveCancel from "../../../hooks/useSaveCancel"
+import { useAuthenticatedUser } from "../../../hooks/useAuthorization";
 
 const Required = "Required";
 
@@ -34,7 +35,10 @@ const CourseInfo = () => {
     const { data: instructors } = useFetchUsersByRole("Instructor");
     const addCourse = useAddCourse();
     const updateCourse = useUpdateCourse();
+    const user = useAuthenticatedUser();
     const isEdit = !!course;
+
+    const isDiabled = !user.isAdmin;
 
     useEffect(() => {
         setShown(isDirty);
@@ -121,6 +125,9 @@ const CourseInfo = () => {
                                     label="Course Title"
                                     formik={formik}
                                     sx={{ gridColumn: "span 4" }}
+                                    props={{
+                                        disabled: isDiabled
+                                    }}
                                 />
 
                                 <FormInputText
@@ -131,7 +138,8 @@ const CourseInfo = () => {
                                     props={{
                                         multiline: true,
                                         minRows: 4,
-                                        maxRows: 4
+                                        maxRows: 4,
+                                        disabled: isDiabled
                                     }}
                                 />
 
@@ -140,6 +148,9 @@ const CourseInfo = () => {
                                     label="Course Start Date"
                                     formik={formik}
                                     sx={{ gridColumn: "span 1", minWidth: "200px" }}
+                                    props={{
+                                        disabled: isDiabled
+                                    }}
                                 />
 
                                 <FormInputDatePicker
@@ -147,6 +158,9 @@ const CourseInfo = () => {
                                     label="Course End Date"
                                     formik={formik}
                                     sx={{ gridColumn: "span 1" }}
+                                    props={{
+                                        disabled: isDiabled
+                                    }}
                                 />
 
                                 <FormInputDropdown
@@ -155,6 +169,9 @@ const CourseInfo = () => {
                                     formik={formik}
                                     options={instructors}
                                     sx={{ gridColumn: "span 1" }}
+                                    props={{
+                                        disabled: isDiabled
+                                    }}
                                     optionsConverter={{
                                         key: (user) => {
                                             return `${user.id.toString()}`;

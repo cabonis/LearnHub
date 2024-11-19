@@ -5,6 +5,7 @@ import SearchableTransferList from "../../../components/SearchableTransferList";
 import { useFetchCourseEnrollment, useUpdateCourseEnrollment } from "../../../hooks/EnrollmentHooks";
 import { useFetchUsers } from "../../../hooks/UserHooks";
 import useSaveCancel from "../../../hooks/useSaveCancel"
+import { useAuthenticatedUser } from "../../../hooks/useAuthorization";
 
 const CourseEnrollment = () => {
 
@@ -17,6 +18,9 @@ const CourseEnrollment = () => {
    const [enrolled, setEnrolled] = useState();
    const [originalAvailable, setOriginalAvailable] = useState();
    const updateEnrollment = useUpdateCourseEnrollment();
+   const user = useAuthenticatedUser();
+
+   const isDiabled = !user.isAdmin;
 
    useEffect(() => {
       if (serverEnrollment && serverUsers) {
@@ -69,6 +73,7 @@ const CourseEnrollment = () => {
             leftData={originalAvailable}
             rightTitle="Enrolled"
             rightData={originalEnrolled}
+            disabled={isDiabled}
             dataChanged={enrollmentChanged}
             getId={(value) => value.id}
             getValue={(value) => `${value.firstName} ${value.lastName}`}

@@ -14,7 +14,7 @@ import Stack from '@mui/material/Stack';
 import ClearableTextBox from "./ClearableTextBox";
 
 
-export default function SearchableTransferList({ leftTitle, leftData, rightTitle, rightData, dataChanged, getId, getValue }) {
+export default function SearchableTransferList({ leftTitle, leftData, rightTitle, rightData, dataChanged, getId, getValue, disabled = false }) {
 
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState([...leftData]);
@@ -102,6 +102,7 @@ export default function SearchableTransferList({ leftTitle, leftData, rightTitle
                 role="listitem"
                 onClick={handleToggle(value)}
                 sx={{ pt: 0, pb: 0, pl: 1 }}
+                disabled={disabled}
               >
                 <ListItemIcon>
                   <Checkbox
