@@ -9,5 +9,6 @@
 		public int CourseId { get; set; }
 		public virtual Course Course { get; set; }
 		public List<Content> Content { get; set; }
+		public List<Lecture> Lectures { get; set; }
 	}
 }

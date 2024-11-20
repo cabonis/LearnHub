@@ -14,10 +14,12 @@ namespace LearnHub.Server.Helpers
 			CreateMap<Role, RoleDto>().ReverseMap();
 
 			CreateMap<Content, ContentInfoDto>();
+			CreateMap<Lecture, LectureInfoDto>();
 			CreateMap<Announcement, AnnouncementDto>();
 
 			CreateMap<Module, ModuleDetailDto>();
 			CreateMap<Module, ModuleInfoDto>()
+				.ForMember(mi => mi.LecturesCount, opt => opt.MapFrom(m => m.Lectures.Count()))
 				.ForMember(mi => mi.ContentCount, opt => opt.MapFrom(m => m.Content.Count()))
 				.Include<Module, ModuleDetailDto>();
 
@@ -41,6 +43,9 @@ namespace LearnHub.Server.Helpers
 				.ForMember(dest => dest.Id, opt => opt.Ignore());
 
 			CreateMap<ModuleInfoDto, Module>()
+				.ForMember(dest => dest.Id, opt => opt.Ignore());
+
+			CreateMap<LectureInfoDto, Lecture>()
 				.ForMember(dest => dest.Id, opt => opt.Ignore());
 
 			CreateMap<ContentUplaodDto, Content>()

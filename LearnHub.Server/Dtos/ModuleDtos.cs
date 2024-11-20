@@ -3,6 +3,8 @@
 	public record ModuleDetailDto : ModuleInfoDto
 	{
 		public List<ContentInfoDto> Content { get; init; }
+
+		public List<LectureInfoDto> Lectures { get; init; }
 	}
 
 	public record ModuleInfoDto
@@ -13,5 +15,6 @@
 		public string Description { get; init; }
 		public DateOnly StartDate { get; init; }
 		public int ContentCount { get; init; }
+		public int LecturesCount { get; init; }
 	}
 }
