@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LearnHub.Server.Controllers
 {
 	[ApiController]
-	[Route("/api/lectures")]
+	[Route("/api/lecture")]
 	public class LectureController : ControllerBase
 	{
 		private readonly ILectureRepository _lectureRepository;

@@ -30,6 +30,7 @@ const ModuleEdit = () => {
 
                 <TabViewRouted tabs={[
                     { label: "Information", path: "" },
+                    ...module ? [{ label: "Lectures", path: "lectures" }] : [],
                     ...module ? [{ label: "Content", path: "content" }] : []
                 ]}
                 />

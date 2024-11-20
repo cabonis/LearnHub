@@ -40,6 +40,8 @@ namespace LearnHub.Server.Repositories
 				.Include(c => c.Instructor)
 				.Include(c => c.Modules.Where(m => m.StartDate <= now))
 					.ThenInclude(m => m.Content)
+				.Include(c => c.Modules.Where(m => m.StartDate <= now))
+					.ThenInclude(m => m.Lectures)
 				.Include(c => c.Announcements)
 				.Include(c => c.Users)
 				.Where(c => c.Id == id && c.Users.Any(u => u.UserName == userName))
