@@ -62,7 +62,7 @@ const ModuleCard = ({ module, color }) => {
                     justifyContent="space-around"
                     alignItems="end"
                 >
-                    <NumBox title="Lectures" value={0} icon={<VoiceChatOutlinedIcon sx={iconStyle} />} />
+                    <NumBox title="Lectures" value={module.lecturesCount} icon={<VoiceChatOutlinedIcon sx={iconStyle} />} />
                     <NumBox title="Content" value={module.contentCount} icon={<FileCopyOutlinedIcon sx={iconStyle} />} />
                     <NumBox title="Assignments" value={0} icon={<BorderColorOutlinedIcon sx={iconStyle} />} />
                 </Box>

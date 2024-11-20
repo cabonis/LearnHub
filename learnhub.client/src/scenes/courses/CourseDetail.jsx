@@ -22,6 +22,7 @@ const CourseDetail = () => {
 
     useEffect(() => {
         if (data) {
+            console.log(data);
             const color = getCourseColor(data.title);
             setCourse({
                 ...data,

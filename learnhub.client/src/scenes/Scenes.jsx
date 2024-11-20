@@ -17,8 +17,10 @@ import CourseModules from '../scenes/admin/course/CourseModules';
 import ModuleAdd from '../scenes/admin/course/module/ModuleAdd';
 import ModuleEdit from '../scenes/admin/course/module/ModuleEdit';
 import ModuleInfo from '../scenes/admin/course/module/ModuleInfo';
+import ModuleLectures from './admin/course/module/ModuleLectures';
 import ModuleContent from '../scenes/admin/course/module/ModuleContent';
 import NotFound from './global/NotFound';
+
 import { AdminView, InstructorView } from "../hooks/useAuthorization";
 
 const Scenes = () => {
@@ -64,6 +66,7 @@ const Scenes = () => {
 
                         <Route path=":moduleid" element={<ModuleEdit />} >
                             <Route index element={<ModuleInfo />} />
+                            <Route path="lectures" element={<ModuleLectures />} />
                             <Route path="content" element={<ModuleContent />} />
                         </Route>
 
