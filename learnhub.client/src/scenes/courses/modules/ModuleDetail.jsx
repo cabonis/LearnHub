@@ -74,7 +74,7 @@ const ModuleDetail = () => {
                         {title}
                     </Typography>
                 </AccordionSummary>
-                <AccordionDetails sx={{ backgroundColor: "primary.main", borderBottom: 0 }}>
+                <AccordionDetails sx={{ backgroundColor: "primary.main" }}>
                     <Box display="flex" flexWrap="wrap" alignItems="center" minHeight="50px">
                         {(data && data.length > 0) ? data.map((item) => (
                             <ModuleItemCard key={item.title} text={item.title} color={course.color} icon={icon} handleClick={() => handleClick(item)} />
