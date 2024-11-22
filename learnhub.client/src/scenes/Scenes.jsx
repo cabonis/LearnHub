@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Dashboard from "../scenes/dashboard";
 import Courses from "../scenes/courses/Courses";
+import CourseView from './courses/CourseView';
 import CourseDetail from './courses/CourseDetail';
 import ModuleDetail from './courses/modules/ModuleDetail';
 import Calendar from "../scenes/calendar/Calendar";
@@ -29,11 +30,9 @@ const Scenes = () => {
             <Route index element={<Dashboard />} />
             <Route path="courses" element={<Courses />} />
 
-            <Route path="course">
-                <Route path=":id" >
-                    <Route path="" element={<CourseDetail />} />
-                    <Route path=":moduleid" element={<ModuleDetail />} />
-                </Route>
+            <Route path="course/:id" element={<CourseView />}>
+                <Route path="" element={<CourseDetail />} />
+                <Route path=":moduleid" element={<ModuleDetail />} />
             </Route>
 
             <Route path="announcements" element={<Announcements />} />

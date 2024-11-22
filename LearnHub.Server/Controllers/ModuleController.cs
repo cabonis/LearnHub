@@ -34,6 +34,23 @@ namespace LearnHub.Server.Controllers
 			return Ok(await _moduleRepository.GetByCourseIdAsync(courseId, instructor));
 		}
 
+		[HttpGet("{id}")]
+		[Authorize(AuthPolicies.InstructorPolicy)]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<IActionResult> GetMyAsync(int id)
+		{
+			string userName = _userHelper.GetUser(User);
+			ModuleDetailDto? moduleDetail = await _moduleRepository.GetByMyModuleIdAsync(id, userName);
+
+			if (moduleDetail != null)
+			{
+				return Ok(moduleDetail);
+			}
+
+			return NotFound();
+		}
+
 		[HttpGet("admin/{id}")]
 		[Authorize(AuthPolicies.InstructorPolicy)]
 		[ProducesResponseType(StatusCodes.Status200OK)]

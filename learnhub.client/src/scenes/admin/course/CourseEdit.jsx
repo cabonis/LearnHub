@@ -3,13 +3,11 @@ import Box from '@mui/material/Box';
 import { useOutletContext, Outlet } from 'react-router-dom';
 import Scene from '../../global/Scene';
 import TabViewRouted from "../../../components/TabViewRouted";
-import { useAuthenticatedUser } from '../../../hooks/useAuthorization';
 
 const CourseEdit = () => {
 
   const { course } = useOutletContext();
   const [title, setTitle] = useState(course.title);
-  const user = useAuthenticatedUser();
 
   const setUpdatedCourse = (course) => {
     setTitle(course.title);

@@ -65,6 +65,16 @@ namespace LearnHub.Server.Repositories
 				.ToListAsync();
 		}
 
+		public async Task<ModuleDetailDto?> GetByMyModuleIdAsync(int moduleId, string userName)
+		{
+			return await _dbContext.Modules
+				.Include(m => m.Lectures)
+				.Include(m => m.Content)
+				.Where(m => m.Id == moduleId && m.Course.Users.Any(u => u.UserName == userName))
+				.Select(m => _mapper.Map<ModuleDetailDto>(m))
+				.FirstOrDefaultAsync();
+		}
+
 		public async Task<ModuleInfoDto?> GetAsync(int moduleId, string? instructor)
 		{
 			if (ValidateInstructorByModule(moduleId, instructor))
@@ -128,6 +138,8 @@ namespace LearnHub.Server.Repositories
 		Task<List<ModuleInfoDto>> GetByMyCourseIdAsync(int courseId, string userName);
 
 		Task<List<ModuleInfoDto>> GetByCourseIdAsync(int courseId, string? instructor);
+
+		Task<ModuleDetailDto?> GetByMyModuleIdAsync(int moduleId, string userName);
 
 		Task<ModuleInfoDto?> GetAsync(int moduleId, string? instructor);
 
