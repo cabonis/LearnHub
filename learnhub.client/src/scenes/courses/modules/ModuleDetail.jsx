@@ -113,7 +113,7 @@ const ModuleDetail = () => {
                     >
                         <AccordianSection title="Lectures" data={module.lectures} icon={<VoiceChatOutlinedIcon />} handleClick={lectureClicked} />
                         <AccordianSection title="Content" data={module.content} icon={<FileCopyOutlinedIcon />} handleClick={contentClicked} />
-                        <AccordianSection title="Homework" data={module.homework} icon={<BorderColorOutlinedIcon />} handleClick={() => { }} />
+                        <AccordianSection title="Assignments" data={module.homework} icon={<BorderColorOutlinedIcon />} handleClick={() => { }} />
 
                     </Box>
                 </Slide>
