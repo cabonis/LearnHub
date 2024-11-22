@@ -7,7 +7,7 @@ const Working = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "100vh"
+            height: "80vh"
         }}>
             <CircularProgress color="secondary" />
         </Box>

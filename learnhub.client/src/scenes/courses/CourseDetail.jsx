@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { Box, Typography } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import SwapVertOutlinedIcon from '@mui/icons-material/SwapVertOutlined';
@@ -8,41 +8,22 @@ import Working from "../../components/Working";
 import CourseDetailCard from './CourseDetailCard';
 import ModuleCard from './modules/ModuleCard';
 import AnnoucementCard from '../announcements/AnnouncementCard';
-import getCourseColor from "../../hooks/courseColorsRegistry";
 import Slide from '@mui/material/Slide';
-import { useFetchCourseDetail } from '../../hooks/CourseHooks';
 import { animationDuration } from '../../styles';
 
 
 const CourseDetail = () => {
 
-    const { id } = useParams();
-    const { data } = useFetchCourseDetail(id);
-    const [course, setCourse] = useState();
-
-    useEffect(() => {
-        if (data) {
-            console.log(data);
-            const color = getCourseColor(data.title);
-            setCourse({
-                ...data,
-                color: color
-            });
-        }
-    }, [data]);
+    const { course } = useOutletContext();
+    const [modules, setModules] = useState(course.modules);
+    const [announcements, setAnnouncements] = useState(course.announcements);
 
     const sortModulesClicked = () => {
-        setCourse({
-            ...course,
-            modules: course.modules.reverse()
-        });
+        setModules([...modules].reverse());
     }
 
     const sortAnnouncementsClicked = () => {
-        setCourse({
-            ...course,
-            announcements: course.announcements.reverse()
-        });
+        setAnnouncements([...announcements].reverse());
     }
 
     if (!course) return (<Working />)
@@ -78,7 +59,7 @@ const CourseDetail = () => {
                     >
                         <Box display="flex" alignItems="center">
                             <Typography pt="8px" mb="10px" mr="5px" variant="h3" color="neutral.light">
-                                {`Modules (${course.modules.length})`}
+                                {`Modules (${modules.length})`}
                             </Typography>
                             <IconButton onClick={sortModulesClicked}>
                                 <SwapVertOutlinedIcon fontSize='large' sx={{ color: 'secondary.main' }} />
@@ -92,7 +73,7 @@ const CourseDetail = () => {
                         >
                             <Slide in={true} timeout={animationDuration}>
                                 <div>
-                                    {course.modules.map((m) => (
+                                    {modules.map((m) => (
                                         <ModuleCard module={m} color={course.color} key={m.id} />
                                     ))}
                                 </div>
@@ -109,7 +90,7 @@ const CourseDetail = () => {
                     >
                         <Box display="flex">
                             <Typography pt="8px" mb="10px" mr="5px" variant="h3" color="neutral.light">
-                                {`Announcements (${course.announcements.length})`}
+                                {`Announcements (${announcements.length})`}
                             </Typography>
                             <IconButton onClick={sortAnnouncementsClicked}>
                                 <SwapVertOutlinedIcon fontSize='large' sx={{ color: 'secondary.main' }} />
@@ -123,7 +104,7 @@ const CourseDetail = () => {
                         >
                             <Slide in={true} timeout={animationDuration}>
                                 <div>
-                                    {course.announcements.map((a) => (
+                                    {announcements.map((a) => (
                                         <AnnoucementCard announcement={a} color={course.color} key={a.id} />
                                     ))}
                                 </div>

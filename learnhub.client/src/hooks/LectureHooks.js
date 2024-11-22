@@ -6,7 +6,7 @@ const useFetchAdminModuleLectures = (moduleId) => {
     return useQuery({
         queryKey: ["lectures", moduleId],
         queryFn: () =>
-            axios.get(`/api/lectures/admin/module/${moduleId}`)
+            axios.get(`/api/lecture/admin/module/${moduleId}`)
                 .then((resp) => resp.data),
     });
 };
@@ -14,7 +14,7 @@ const useFetchAdminModuleLectures = (moduleId) => {
 const useAddAdminLecture = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (lecture) => axios.post(`/api/lectures/admin`, lecture),
+        mutationFn: (lecture) => axios.post(`/api/lecture/admin`, lecture),
         onSuccess: (_, newLecture) => {
             queryClient.invalidateQueries({ queryKey: ["lectures", newLecture.moduleId] });
         },
@@ -24,7 +24,7 @@ const useAddAdminLecture = () => {
 const useUpdateAdminLecture = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (lecture) => axios.put(`/api/lectures/admin`, lecture),
+        mutationFn: (lecture) => axios.put(`/api/lecture/admin`, lecture),
         onSuccess: (lecture) => {
             queryClient.invalidateQueries({ queryKey: ["lectures", lecture.moduleId] });
         },
@@ -34,7 +34,7 @@ const useUpdateAdminLecture = () => {
 const useDeleteAdminLecture = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, moduleId }) => axios.delete(`/api/lectures/admin/${id}`),
+        mutationFn: ({ id, moduleId }) => axios.delete(`/api/lecture/admin/${id}`),
         onSuccess: (_, moduleId) => {
             queryClient.invalidateQueries({ queryKey: ["lectures", moduleId] });
         },

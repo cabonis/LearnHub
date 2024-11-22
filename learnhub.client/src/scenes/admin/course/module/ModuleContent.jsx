@@ -7,13 +7,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import Tooltip from '@mui/material/Tooltip';
 import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons, } from '@mui/x-data-grid';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { gridStyle, buttonHoverStyle } from "../../../../styles"
 import DataGridAddButton from '../../../../components/DataGridAddButton';
 import useConfirm from "../../../../hooks/useConfirm";
 import useAlertSnack from "../../../../hooks/useAlertSnack";
 import {
-    useFetchAdminContent,
+    useFetchContent,
     useAddAdminContent,
     useUpdateAdminContent,
     useDeleteAdminContent,
@@ -22,13 +22,12 @@ import {
 
 const ModuleContent = () => {
 
-    const navigate = useNavigate();
     const { course, module } = useOutletContext();
     const { data: content } = useFetchAdminModuleContent(module.id);
 
     const addContent = useAddAdminContent();
     const updateContent = useUpdateAdminContent();
-    const fetchContent = useFetchAdminContent();
+    const fetchContent = useFetchContent();
     const deleteContent = useDeleteAdminContent();
 
     const fileInputRef = useRef();

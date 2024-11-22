@@ -10,6 +10,15 @@ const useFetchCourseModules = (courseId) => {
     });
 };
 
+const useFetchModule = (moduleId) => {
+    return useQuery({
+        queryKey: ["moduledetail", moduleId],
+        queryFn: () =>
+            axios.get(`/api/module/${moduleId}`)
+                .then((resp) => resp.data),
+    });
+};
+
 const useFetchAdminCourseModules = (courseId) => {
     return useQuery({
         queryKey: ["modules", courseId],
@@ -61,6 +70,7 @@ const useDeleteAdminModule = () => {
 
 export {
     useFetchCourseModules,
+    useFetchModule,
     useFetchAdminCourseModules,
     useFetchAdminModule,
     useAddAdminModule,
