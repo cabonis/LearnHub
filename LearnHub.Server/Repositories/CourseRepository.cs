@@ -17,18 +17,21 @@ namespace LearnHub.Server.Repositories
 			_mapper = mapper;
 		}
 
-		public async Task<List<CoruseInstructorInfo>> GetAllByUserAsync(string userName)
+		public async Task<List<CoruseModuleInfo>> GetAllByUserAsync(string userName)
 		{
 			DateOnly now = DateOnly.FromDateTime(DateTime.Now);
 
 			return await _dbContext.Courses
 				.Include(c => c.Instructor)
 				.Include(c => c.Modules.Where(m => m.StartDate <= now))
+					.ThenInclude(m => m.Content)
+				.Include(c => c.Modules.Where(m => m.StartDate <= now))
+					.ThenInclude(m => m.Lectures)
 				.Include(c => c.Announcements)
 				.Include(c => c.Users)
 				.Where(c => c.Users.Any(u => u.UserName == userName)
 					&& c.StartDate <= now && c.EndDate.AddMonths(1) >= now)
-				.Select(c => _mapper.Map<CoruseInstructorInfo>(c))
+				.Select(c => _mapper.Map<CoruseModuleInfo>(c))
 				.ToListAsync();
 		}
 
@@ -53,7 +56,7 @@ namespace LearnHub.Server.Repositories
 			return details;
 		}
 
-		public async Task<List<CoruseInstructorInfo>> GetAllAsync(string? instructor)
+		public async Task<List<CoruseModuleInfo>> GetAllAsync(string? instructor)
 		{
 			return await _dbContext.Courses
 				.Include(c => c.Instructor)
@@ -61,7 +64,7 @@ namespace LearnHub.Server.Repositories
 				.Include(c => c.Announcements)
 				.Include(c => c.Users)
 				.Where(c => (string.IsNullOrEmpty(instructor) || c.Instructor.UserName == instructor))
-				.Select(c => _mapper.Map<CoruseInstructorInfo>(c))
+				.Select(c => _mapper.Map<CoruseModuleInfo>(c))
 				.ToListAsync();
 		}
 
@@ -111,11 +114,11 @@ namespace LearnHub.Server.Repositories
 
 	public interface ICourseRepository
 	{
-		Task<List<CoruseInstructorInfo>> GetAllAsync(string? instructor);
+		Task<List<CoruseModuleInfo>> GetAllAsync(string? instructor);
 
 		Task<CourseInfoDto?> GetByIdAsync(int id, string? instructor);
 
-		Task<List<CoruseInstructorInfo>> GetAllByUserAsync(string userName);
+		Task<List<CoruseModuleInfo>> GetAllByUserAsync(string userName);
 
 		Task<CourseDetailDto?> GetDetailByIdAndUserAsync(int id, string userName);
 

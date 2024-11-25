@@ -1,10 +1,10 @@
-import { List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 import SquareIcon from '@mui/icons-material/Square';
 
 const CourseLegend = ({ courses }) => {
     return (
-        <>
-            <Typography variant="h4" sx={{ textAlign: "center" }}>Courses</Typography>
+        <Box display="flex" flexDirection="column" alignItems="center">
+            <Typography variant="h3" mb="10px" sx={{ textAlign: "center" }}>Courses</Typography>
             <List dense>
                 {courses.map((course) => (
                     <ListItem
@@ -22,7 +22,7 @@ const CourseLegend = ({ courses }) => {
                     </ListItem>
                 ))}
             </List>
-        </>
+        </Box>
     )
 }
 
