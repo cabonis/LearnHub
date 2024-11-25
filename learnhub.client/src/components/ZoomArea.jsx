@@ -1,25 +1,24 @@
 import { useTheme } from "@mui/material";
 import Zoom from '@mui/material/Zoom';
+import { animationDuration } from "../styles";
 
-const ZoomArea = ({ isShown, children }) => {
+const ZoomArea = ({ isShown, children, duration = animationDuration }) => {
 
-    const theme = useTheme();
+  const transitionDuration = {
+    enter: duration,
+    exit: duration,
+  };
 
-    const transitionDuration = {
-        enter: theme.transitions.duration.enteringScreen,
-        exit: theme.transitions.duration.leavingScreen,
-      };
-     
-  return (    
-    <Zoom        
-        in={isShown}
-        timeout={transitionDuration}
-        style={{
+  return (
+    <Zoom
+      in={isShown}
+      timeout={transitionDuration}
+      style={{
         transitionDelay: `${isShown ? transitionDuration.exit : 0}ms`,
-        }}
-        unmountOnExit
+      }}
+      unmountOnExit
     >
-        {children}
+      {children}
     </Zoom>
   );
 };

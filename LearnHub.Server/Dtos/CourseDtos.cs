@@ -14,16 +14,16 @@
 		public int AnnouncementCount { get; init; }
 	}
 
-	public record CoruseInstructorInfo : CourseInfoDto
+	public record CoruseModuleInfo : CourseInfoDto
 	{
 		public UserInfoDto Instructor { get; init; }
-	}
-
-	public record CourseDetailDto : CoruseInstructorInfo
-	{
-		public List<UserInfoDto> Users { get; init; }
 
 		public List<ModuleInfoDto> Modules { get; init; }
+	}
+
+	public record CourseDetailDto : CoruseModuleInfo
+	{
+		public List<UserInfoDto> Users { get; init; }
 
 		public List<AnnouncementDto> Announcements { get; init; }
 	}

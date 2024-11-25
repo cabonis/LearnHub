@@ -11,13 +11,13 @@ const iconStyle = {
 }
 
 
-const ModuleCard = ({ module, color }) => {
+const ModuleCard = ({ module, color, minHeight = "125px" }) => {
 
     const navigate = useNavigate();
 
     return (
         <Box
-            minHeight="125px"
+            minHeight={minHeight}
             borderRadius="10px"
             m="20px"
             color="black"

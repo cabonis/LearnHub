@@ -9,14 +9,14 @@ const SaveCancel = ({ isSaveShown, isCancelShown, saveClicked, cancelClicked, sx
 
     return (
         <Box m="30px" display="flex" justifyContent="right" sx={sx}>
-            <ZoomArea isShown={isSaveShown}>
+            <ZoomArea isShown={isSaveShown} duration={300}>
                 <Tooltip title="Save">
                     <Fab color="secondary" aria-label="save" sx={{ m: 1, p: 4 }} onClick={() => saveClicked()}>
                         <CheckOutlinedIcon />
                     </Fab>
                 </Tooltip>
             </ZoomArea>
-            <ZoomArea isShown={isCancelShown}>
+            <ZoomArea isShown={isCancelShown} duration={300}>
                 <Tooltip title="Undo Changes">
                     <Fab color="neutral" aria-label="cancel" sx={{ m: 1, p: 4 }} onClick={() => cancelClicked()}>
                         <ClearOutlinedIcon />

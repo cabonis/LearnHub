@@ -30,4 +30,4 @@ export const buttonHoverStyle = {
     }
 }
 
-export const animationDuration = 600;
+export const animationDuration = 700;
