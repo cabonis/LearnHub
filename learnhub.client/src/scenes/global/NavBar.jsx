@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import Tooltip from '@mui/material/Tooltip';
 import { Link } from "react-router-dom";
 import LearnHubLogo from "../../components/LearnHubLogo";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
@@ -15,14 +16,18 @@ import { useAuthenticatedUser } from "../../hooks/useAuthorization";
 const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
 
     return (
-        <MenuItem
-            active={selected === title}
-            onClick={() => setSelected(title)}
-            icon={icon}
-            component={(<Link to={to} />)}
-        >
-            <Typography>{title}</Typography>
-        </MenuItem>
+        <Tooltip title={title}>
+            <div>
+                <MenuItem
+                    active={selected === title}
+                    onClick={() => setSelected(title)}
+                    icon={icon}
+                    component={(<Link to={to} />)}
+                >
+                    <Typography>{title}</Typography>
+                </MenuItem>
+            </div>
+        </Tooltip>
     );
 };
 
@@ -68,7 +73,7 @@ const NavBar = () => {
             },
         }
     };
-
+    console.log(`Rendering with IsCollapsed = ${isCollapsed}`);
     return (
         <Sidebar collapsed={isCollapsed} backgroundColor={theme.palette.primary.light}>
 

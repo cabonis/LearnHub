@@ -19,7 +19,7 @@ const PieChart = ({ data, value }) => {
                             }
                         },
                         text: {
-                            fontSize: 14,
+                            fontSize: 16,
                             fontWeight: "bold"
                         }
                     }}

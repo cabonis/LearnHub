@@ -19,7 +19,7 @@ const ModuleCard = ({ module, color, minHeight = "125px" }) => {
         <Box
             minHeight={minHeight}
             borderRadius="10px"
-            m="20px"
+            m="15px"
             color="black"
             backgroundColor="primary.light"
             display="flex"
@@ -45,7 +45,7 @@ const ModuleCard = ({ module, color, minHeight = "125px" }) => {
                 display="flex"
             >
                 <Box
-                    minWidth="150px"
+                    minWidth="100px"
                 >
                     <Typography variant="h5" color="neutral.light" fontWeight="bold" mb="5px">
                         {module.title}

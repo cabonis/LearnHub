@@ -31,6 +31,12 @@ const CourseDetail = () => {
         <Scene
             title={course.title}
             subtitle={` ${course.instructor.firstName} ${course.instructor.lastName}`}
+            breadcrumbs={[{
+                title: "My Courses",
+                link: "/courses"
+            }, {
+                title: course.title
+            }]}
         >
 
             <Box
