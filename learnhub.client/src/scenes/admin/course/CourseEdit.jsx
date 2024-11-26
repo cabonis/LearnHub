@@ -17,6 +17,12 @@ const CourseEdit = () => {
     <Scene
       title="Course Editor"
       subtitle={title}
+      breadcrumbs={[{
+        title: "Course Catalog",
+        link: "/admin/course"
+      }, {
+        title: course.title
+      }]}
     >
       <Box height="100%" display="flex" flexDirection="column" justifyContent="start" >
 

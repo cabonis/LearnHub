@@ -8,6 +8,6 @@ const router = createBrowserRouter(createRoutesFromElements(<Route path='*' elem
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-        <RouterProvider router={router} />
+    <RouterProvider router={router} />
   </StrictMode>,
 )

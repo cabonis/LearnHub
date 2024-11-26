@@ -90,6 +90,15 @@ const ModuleDetail = () => {
         <Scene
             title={module.title}
             subtitle={course.title}
+            breadcrumbs={[{
+                title: "My Courses",
+                link: "/courses"
+            }, {
+                title: course.title,
+                link: `/course/${course.id}`
+            }, {
+                title: module.title
+            }]}
         >
             <Box
                 height="74vh"

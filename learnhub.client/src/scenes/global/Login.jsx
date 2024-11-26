@@ -38,6 +38,8 @@ const Login = () => {
             });
     };
 
+    console.log(document.cookie.indexOf('__Host-spa'));
+
     return (
 
         <LoginContainer>

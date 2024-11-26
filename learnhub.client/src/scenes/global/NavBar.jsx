@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import Tooltip from '@mui/material/Tooltip';
 import { Link } from "react-router-dom";
 import LearnHubLogo from "../../components/LearnHubLogo";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
@@ -12,17 +13,21 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import { useAuthenticatedUser } from "../../hooks/useAuthorization";
 
-const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
+const NavMenuItem = ({ title, to, icon, selected, setSelected, isCollapsed }) => {
 
     return (
-        <MenuItem
-            active={selected === title}
-            onClick={() => setSelected(title)}
-            icon={icon}
-            component={(<Link to={to} />)}
-        >
-            <Typography>{title}</Typography>
-        </MenuItem>
+        <Tooltip title={isCollapsed ? title : ""}>
+            <div>
+                <MenuItem
+                    active={selected === title}
+                    onClick={() => setSelected(title)}
+                    icon={icon}
+                    component={(<Link to={to} />)}
+                >
+                    <Typography>{title}</Typography>
+                </MenuItem>
+            </div>
+        </Tooltip>
     );
 };
 
@@ -68,7 +73,7 @@ const NavBar = () => {
             },
         }
     };
-
+    console.log(`Rendering with IsCollapsed = ${isCollapsed}`);
     return (
         <Sidebar collapsed={isCollapsed} backgroundColor={theme.palette.primary.light}>
 
@@ -130,6 +135,7 @@ const NavBar = () => {
                     icon={<HomeOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 <Typography
@@ -146,6 +152,7 @@ const NavBar = () => {
                     icon={<LocalLibraryOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 <NavMenuItem
@@ -154,6 +161,7 @@ const NavBar = () => {
                     icon={<AnnouncementOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 <NavMenuItem
@@ -162,6 +170,7 @@ const NavBar = () => {
                     icon={<CalendarTodayOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 {(user.isAdmin || user.isInstructor) && (
@@ -181,6 +190,7 @@ const NavBar = () => {
                                 icon={<PersonOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
+                                isCollapsed={isCollapsed}
                             />
                         )}
 
@@ -190,6 +200,7 @@ const NavBar = () => {
                             icon={<LibraryBooksOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
+                            isCollapsed={isCollapsed}
                         />
                     </>
                 )}

@@ -70,7 +70,7 @@ const Dashboard = () => {
 					flexDirection="column"
 				>
 					<Box>
-						<Typography textAlign="start" color="neutral.light" variant="h4">Current Modules</Typography>
+						<Typography textAlign="start" color="neutral.light" variant="h3">Latest Modules</Typography>
 					</Box>
 					<Box flex="1" display="flex" flexWrap="wrap" overflow="auto">
 						<Slide in={true} timeout={animationDuration}>
@@ -92,7 +92,7 @@ const Dashboard = () => {
 					gridColumn="span 2"
 					gridRow="span 1"
 				>
-					<Box mt="20px" display="flex" justifyContent="start">
+					<Box display="flex" justifyContent="start">
 						<CourseLegend courses={courses} />
 					</Box>
 
@@ -109,7 +109,7 @@ const Dashboard = () => {
 				>
 					<ZoomArea isShown={true}>
 						<Box height="100%" flex="1" p="10px">
-							<Typography textAlign="center" color="neutral.light" variant="h4">Lectures</Typography>
+							<Typography textAlign="center" color="neutral.light" variant="h3">Lectures</Typography>
 							<PieChart data={courses} value="lecturesCount" />
 						</Box>
 					</ZoomArea>
@@ -123,7 +123,7 @@ const Dashboard = () => {
 				>
 					<ZoomArea isShown={true}>
 						<Box height="100%" flex="1" p="10px">
-							<Typography textAlign="center" color="neutral.light" variant="h4">Content</Typography>
+							<Typography textAlign="center" color="neutral.light" variant="h3">Content</Typography>
 
 							<PieChart data={courses} value="contentCount" />
 
@@ -139,7 +139,7 @@ const Dashboard = () => {
 				>
 					<ZoomArea isShown={true}>
 						<Box height="100%" flex="1" p="10px">
-							<Typography textAlign="center" color="neutral.light" variant="h4">Announcements</Typography>
+							<Typography textAlign="center" color="neutral.light" variant="h3">Announcements</Typography>
 							<PieChart data={courses} value="announcementCount" />
 						</Box>
 					</ZoomArea>

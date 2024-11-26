@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Header from "../../../components/Header";
+import Scene from '../../global/Scene';
 import TabViewRouted from "../../../components/TabViewRouted";
 
 const CourseAdd = () => {
@@ -12,20 +13,29 @@ const CourseAdd = () => {
     }
 
     return (
-        <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
+        <Scene
+            title="Course Editor"
+            subtitle="Add Course"
+            breadcrumbs={[{
+                title: "Course Catalog",
+                link: "/admin/course"
+            }, {
+                title: "Add Course"
+            }]}
+        >
+            <Box height="100%" display="flex" flexDirection="column" justifyContent="start" >
 
-            <Header title="Course Editor" subtitle="Add a new course" />
+                <TabViewRouted tabs={[
+                    { label: "Information", path: "add" }, ,
+                ]}
+                />
 
-            <TabViewRouted tabs={[
-                { label: "Information", path: "add" }, ,
-            ]}
-            />
+                <Outlet context={{
+                    setUpdatedCourse: setUpdatedCourse
+                }} />
 
-            <Outlet context={{
-                setUpdatedCourse: setUpdatedCourse
-            }} />
-
-        </Box>
+            </Box>
+        </Scene >
     );
 }
 
