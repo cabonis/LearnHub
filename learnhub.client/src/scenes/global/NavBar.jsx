@@ -13,10 +13,10 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import { useAuthenticatedUser } from "../../hooks/useAuthorization";
 
-const NavMenuItem = ({ title, to, icon, selected, setSelected }) => {
+const NavMenuItem = ({ title, to, icon, selected, setSelected, isCollapsed }) => {
 
     return (
-        <Tooltip title={title}>
+        <Tooltip title={isCollapsed ? title : ""}>
             <div>
                 <MenuItem
                     active={selected === title}
@@ -135,6 +135,7 @@ const NavBar = () => {
                     icon={<HomeOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 <Typography
@@ -151,6 +152,7 @@ const NavBar = () => {
                     icon={<LocalLibraryOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 <NavMenuItem
@@ -159,6 +161,7 @@ const NavBar = () => {
                     icon={<AnnouncementOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 <NavMenuItem
@@ -167,6 +170,7 @@ const NavBar = () => {
                     icon={<CalendarTodayOutlinedIcon />}
                     selected={selected}
                     setSelected={setSelected}
+                    isCollapsed={isCollapsed}
                 />
 
                 {(user.isAdmin || user.isInstructor) && (
@@ -186,6 +190,7 @@ const NavBar = () => {
                                 icon={<PersonOutlinedIcon />}
                                 selected={selected}
                                 setSelected={setSelected}
+                                isCollapsed={isCollapsed}
                             />
                         )}
 
@@ -195,6 +200,7 @@ const NavBar = () => {
                             icon={<LibraryBooksOutlinedIcon />}
                             selected={selected}
                             setSelected={setSelected}
+                            isCollapsed={isCollapsed}
                         />
                     </>
                 )}

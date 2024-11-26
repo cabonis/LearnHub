@@ -39,8 +39,8 @@ const Application = () => {
     const { QueryFeedback, queryClient } = useFeedbackQuery();
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <AuthenticatedView>
+        <AuthenticatedView>
+            <QueryClientProvider client={queryClient}>
                 <div className="app">
                     <NavBar />
                     <div className="content">
@@ -51,8 +51,8 @@ const Application = () => {
                     </div>
                     <QueryFeedback />
                 </div>
-            </AuthenticatedView>
-        </QueryClientProvider>
+            </QueryClientProvider>
+        </AuthenticatedView>
     );
 }
 
@@ -61,6 +61,7 @@ function App() {
     const [theme, colorMode] = useMode();
 
     return (
+
         <ColorModeContext.Provider value={colorMode}>
             <ThemeProvider theme={theme}>
                 <CssBaseline />
