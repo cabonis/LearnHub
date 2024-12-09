@@ -72,7 +72,7 @@ const CourseGrid = () => {
     },
     {
       field: "endDate",
-      headerName: "Start Date",
+      headerName: "End Date",
       minWidth: 150,
       renderCell: (params) => (
         <Box>

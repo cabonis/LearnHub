@@ -47,6 +47,13 @@ const Dashboard = () => {
 
 
 	if (!courses) return (<Working />)
+	if (courses.length === 0) return (
+		<Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" height="100%">
+			<Typography variant="h3">
+				No Courses Enrolled!
+			</Typography>
+		</Box>
+	)
 	return (
 		<Scene
 			title="Dashboard"

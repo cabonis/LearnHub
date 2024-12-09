@@ -29,8 +29,6 @@ const ModuleAdd = () => {
         >
             <Box m="10px" sx={{ display: "flex", flexDirection: "column" }}>
 
-                <Header title="Module Editor" subtitle="Add a new module" />
-
                 <TabViewRouted tabs={[
                     { label: "Information", path: "add" },
                 ]}

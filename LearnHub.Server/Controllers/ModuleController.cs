@@ -35,7 +35,7 @@ namespace LearnHub.Server.Controllers
 		}
 
 		[HttpGet("{id}")]
-		[Authorize(AuthPolicies.InstructorPolicy)]
+		[Authorize]
 		[ProducesResponseType(StatusCodes.Status200OK)]
 		[ProducesResponseType(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetMyAsync(int id)
